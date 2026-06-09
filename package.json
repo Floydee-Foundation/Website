@@ -9,10 +9,18 @@
   "scripts": {
     "dev": "concurrently \"npm run dev -w @floydee/web\" \"npm run dev -w @floydee/api\"",
     "build": "npm run build -w @floydee/shared && npm run build -w @floydee/api && npm run build -w @floydee/web",
-    "typecheck": "npm run typecheck -w @floydee/shared && npm run typecheck -w @floydee/api && npm run typecheck -w @floydee/web"
+    "typecheck": "npm run build -w @floydee/shared && npm run typecheck -w @floydee/api && npm run typecheck -w @floydee/web",
+    "translations:extract": "node scripts/extract-translations.mjs",
+    "translations:translate": "node scripts/translate-catalog.mjs",
+    "translations:workbook": "node scripts/create-translation-workbook.mjs",
+    "translations:import": "node scripts/import-translations.mjs",
+    "translations:test": "node scripts/test-translation-import.mjs"
   },
   "devDependencies": {
     "concurrently": "^9.1.2",
     "typescript": "^5.7.3"
+  },
+  "dependencies": {
+    "xlsx": "^0.18.5"
   }
 }
