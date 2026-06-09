@@ -1,4 +1,5 @@
-export type ProgramSlug = "health-wellness" | "emotional-wellbeing" | "education-skill";
+export type ProgramSlug = "aarohi" | "sakhi" | "vidya";
+export type ProgramFocus = "AAROHI" | "SAKHI" | "VIDYA" | "Where needed most";
 
 export interface ImpactMetric {
   label: string;
@@ -34,5 +35,6 @@ export interface DonationInquiry {
   email: string;
   frequency: "One-time" | "Monthly";
   amount: number;
-  program: ProgramSlug | "where-needed-most";
+  program: ProgramFocus;
+  consentStatus: string;
 }
