@@ -1,6 +1,7 @@
 import { Router, type Response } from "express";
 import { env } from "../config/env.js";
 import { sendMail } from "../services/mailer.js";
+import { isLocale, translate } from "@floydee/shared";
 
 export const inquiriesRouter = Router();
 
@@ -58,6 +59,7 @@ function sendError(response: Response, error: unknown) {
 }
 
 inquiriesRouter.post("/api/donation-inquiries", async (request, response) => {
+  const locale = isLocale(request.body.locale) ? request.body.locale : "en";
   const name = getString(request.body.name);
   const email = getEmail(request.body.email);
   const frequency = getString(request.body.frequency);
@@ -74,20 +76,20 @@ inquiriesRouter.post("/api/donation-inquiries", async (request, response) => {
   }
 
   const donorText = [
-    `Dear ${name},`,
+    `${translate(locale, "Dear")} ${name},`,
     "",
-    "Thank you for supporting Floydee Future Foundation.",
-    "We have received your donation enquiry. Our team will connect with donation/payment details and 80G receipt information.",
+    translate(locale, "Thank you for supporting Floydee Future Foundation."),
+    translate(locale, "We have received your donation enquiry. Our team will connect with donation/payment details and 80G receipt information."),
     "",
-    "With gratitude,",
+    translate(locale, "With gratitude,"),
     "Floydee Future Foundation"
   ].join("\n");
 
   const donorHtml = `
-    <p>Dear ${escapeHtml(name)},</p>
-    <p>Thank you for supporting Floydee Future Foundation.</p>
-    <p>We have received your donation enquiry. Our team will connect with donation/payment details and 80G receipt information.</p>
-    <p>With gratitude,<br />Floydee Future Foundation</p>
+    <p>${escapeHtml(translate(locale, "Dear"))} ${escapeHtml(name)},</p>
+    <p>${escapeHtml(translate(locale, "Thank you for supporting Floydee Future Foundation."))}</p>
+    <p>${escapeHtml(translate(locale, "We have received your donation enquiry. Our team will connect with donation/payment details and 80G receipt information."))}</p>
+    <p>${escapeHtml(translate(locale, "With gratitude,"))}<br />Floydee Future Foundation</p>
   `;
 
   const internalFields: Array<[string, string | number]> = [
@@ -109,7 +111,7 @@ inquiriesRouter.post("/api/donation-inquiries", async (request, response) => {
     await Promise.all([
       sendMail({
         to: email,
-        subject: "Thank you for supporting Floydee Future Foundation",
+        subject: translate(locale, "Thank you for supporting Floydee Future Foundation"),
         text: donorText,
         html: donorHtml
       }),
@@ -123,7 +125,7 @@ inquiriesRouter.post("/api/donation-inquiries", async (request, response) => {
 
     response.json({
       ok: true,
-      message: "Thank you. We emailed your confirmation and the Floydee team will connect with donation details."
+      message: translate(locale, "Thank you. We emailed your confirmation and the Floydee team will connect with donation details.")
     });
   } catch (error) {
     sendError(response, error);
@@ -131,6 +133,7 @@ inquiriesRouter.post("/api/donation-inquiries", async (request, response) => {
 });
 
 inquiriesRouter.post("/api/contact-inquiries", async (request, response) => {
+  const locale = isLocale(request.body.locale) ? request.body.locale : "en";
   const name = getString(request.body.name);
   const email = getEmail(request.body.email);
   const intent = getString(request.body.intent);
@@ -145,20 +148,20 @@ inquiriesRouter.post("/api/contact-inquiries", async (request, response) => {
   }
 
   const visitorText = [
-    `Dear ${name},`,
+    `${translate(locale, "Dear")} ${name},`,
     "",
-    "Thank you for contacting Floydee Future Foundation.",
-    "We have received your enquiry and our team will get in touch soon.",
+    translate(locale, "Thank you for contacting Floydee Future Foundation."),
+    translate(locale, "We have received your enquiry and our team will get in touch soon."),
     "",
-    "Warmly,",
+    translate(locale, "Warmly,"),
     "Floydee Future Foundation"
   ].join("\n");
 
   const visitorHtml = `
-    <p>Dear ${escapeHtml(name)},</p>
-    <p>Thank you for contacting Floydee Future Foundation.</p>
-    <p>We have received your enquiry and our team will get in touch soon.</p>
-    <p>Warmly,<br />Floydee Future Foundation</p>
+    <p>${escapeHtml(translate(locale, "Dear"))} ${escapeHtml(name)},</p>
+    <p>${escapeHtml(translate(locale, "Thank you for contacting Floydee Future Foundation."))}</p>
+    <p>${escapeHtml(translate(locale, "We have received your enquiry and our team will get in touch soon."))}</p>
+    <p>${escapeHtml(translate(locale, "Warmly,"))}<br />Floydee Future Foundation</p>
   `;
 
   const internalFields: Array<[string, string]> = [
@@ -178,7 +181,7 @@ inquiriesRouter.post("/api/contact-inquiries", async (request, response) => {
     await Promise.all([
       sendMail({
         to: email,
-        subject: "Thank you for contacting Floydee Future Foundation",
+        subject: translate(locale, "Thank you for contacting Floydee Future Foundation"),
         text: visitorText,
         html: visitorHtml
       }),
@@ -192,7 +195,7 @@ inquiriesRouter.post("/api/contact-inquiries", async (request, response) => {
 
     response.json({
       ok: true,
-      message: "Thank you. We emailed your confirmation and the Floydee team will get in touch soon."
+      message: translate(locale, "Thank you. We emailed your confirmation and the Floydee team will get in touch soon.")
     });
   } catch (error) {
     sendError(response, error);

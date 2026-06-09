@@ -1,3 +1,5 @@
+import type { Locale } from "./i18n.js";
+
 export type ProgramSlug = "aarohi" | "sakhi" | "vidya";
 export type ProgramFocus = "AAROHI" | "SAKHI" | "VIDYA" | "Where needed most";
 
@@ -28,6 +30,7 @@ export interface ContactInquiry {
   email: string;
   intent: "Partner with the foundation" | "Volunteer" | "Book a program" | "Request media information";
   message: string;
+  locale?: Locale;
 }
 
 export interface DonationInquiry {
@@ -37,4 +40,7 @@ export interface DonationInquiry {
   amount: number;
   program: ProgramFocus;
   consentStatus: string;
+  locale?: Locale;
 }
+
+export * from "./i18n.js";

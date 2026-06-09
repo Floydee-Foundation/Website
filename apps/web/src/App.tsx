@@ -7,22 +7,20 @@ import healthCamp2 from "./assets/health-camp-2.png";
 import healthCamp3 from "./assets/health-camp-3.png";
 import studentSanika from "./assets/student-sanika.jpg";
 import programMapping from "./assets/program-mapping.png";
+import { LanguageSelector, useLocale } from "./LocaleProvider";
 
 type NavLink = [label: string, href: string, className?: string];
 type NavGroup = {
   label: string;
+  href?: string;
   links: NavLink[];
 };
 
 const navGroups: NavGroup[] = [
   {
     label: "DONATE",
-    links: [
-      ["DONATE NOW", "/donate"],
-      ["DONATE MONTHLY", "/donate/monthly"],
-      ["CAMPAIGNS", "/donate/campaigns"],
-      ["WHERE NEEDED MOST", "/donate/where-needed-most"]
-    ]
+    href: "/donate",
+    links: []
   },
   {
     label: "WHAT WE DO",
@@ -31,7 +29,6 @@ const navGroups: NavGroup[] = [
       ["AAROHI", "/programs/aarohi"],
       ["SAKHI", "/programs/sakhi"],
       ["VIDYA", "/programs/vidya"],
-      ["INITIATIVES", "/initiatives"],
       ["OUR IMPACT", "/impact"],
       ["WHERE WE WORK", "/where-we-work"]
     ]
@@ -58,10 +55,7 @@ const navGroups: NavGroup[] = [
     label: "WHO WE ARE",
     links: [
       ["ABOUT US", "/about"],
-      ["MISSION", "/mission"],
-      ["HISTORY", "/history"],
-      ["LEADERSHIP", "/leadership"],
-      ["TRUST CENTRE", "/trust-centre"]
+      ["MISSION", "/mission"]
     ]
   },
   {
@@ -319,11 +313,18 @@ function Header() {
         setMobileOpen(false);
       }
     };
+    const closeDropdownOutside = (event: PointerEvent) => {
+      if (!(event.target as Element | null)?.closest(".nav-group")) {
+        setActiveMenu(null);
+      }
+    };
 
     document.addEventListener("keydown", close);
+    document.addEventListener("pointerdown", closeDropdownOutside);
     return () => {
       document.body.classList.remove("menu-open", "dropdown-open");
       document.removeEventListener("keydown", close);
+      document.removeEventListener("pointerdown", closeDropdownOutside);
     };
   }, [mobileOpen, activeMenu]);
 
@@ -339,51 +340,57 @@ function Header() {
         <span className="brand-title"><span>Floydee</span> <span className="brand-title-gold">Foundation</span></span>
       </a>
 
-      <button
-        className="nav-toggle"
-        type="button"
-        aria-expanded={mobileOpen}
-        aria-controls="main-navigation"
-        onClick={() => {
-          setMobileOpen((isOpen) => !isOpen);
-          setActiveMenu(null);
-        }}
-      >
-        <span></span>
-        <span></span>
-        <span></span>
-        <span className="sr-only">Open menu</span>
-      </button>
-
       <nav className={`main-nav${mobileOpen ? " open" : ""}`} id="main-navigation" aria-label="Primary navigation">
         {navGroups.map((group) => (
           <div
             className={`nav-group${activeMenu === group.label ? " is-open" : ""}`}
             key={group.label}
-            onMouseEnter={() => setActiveMenu(group.label)}
-            onFocus={() => setActiveMenu(group.label)}
           >
-            <button
-              className="nav-trigger"
-              type="button"
-              aria-expanded={activeMenu === group.label}
-              onClick={(event) => {
-                event.stopPropagation();
-                setActiveMenu((current) => (current === group.label ? null : group.label));
-              }}
-            >
-              {group.label}
-            </button>
-            <div className="nav-menu">
-              {group.links.map(([label, href, className]) => (
-                <a className={className} href={href} key={label} onClick={closeMenus}>
-                  {label}
-                </a>
-              ))}
-            </div>
+            {group.href ? (
+              <a className="nav-trigger nav-trigger-link" href={group.href} onClick={closeMenus}>{group.label}</a>
+            ) : (
+              <>
+                <button
+                  className="nav-trigger"
+                  type="button"
+                  aria-expanded={activeMenu === group.label}
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    setActiveMenu((current) => (current === group.label ? null : group.label));
+                  }}
+                >
+                  {group.label}
+                </button>
+                <div className="nav-menu">
+                  {group.links.map(([label, href, className]) => (
+                    <a className={className} href={href} key={label} onClick={closeMenus}>
+                      {label}
+                    </a>
+                  ))}
+                </div>
+              </>
+            )}
           </div>
         ))}
       </nav>
+      <div className="header-actions">
+        <LanguageSelector />
+        <button
+          className="nav-toggle"
+          type="button"
+          aria-expanded={mobileOpen}
+          aria-controls="main-navigation"
+          onClick={() => {
+            setMobileOpen((isOpen) => !isOpen);
+            setActiveMenu(null);
+          }}
+        >
+          <span></span>
+          <span></span>
+          <span></span>
+          <span className="sr-only">Open menu</span>
+        </button>
+      </div>
     </header>
   );
 }
@@ -394,6 +401,7 @@ type SupportFormProps = {
 };
 
 function SupportForm({ defaultFrequency = "One-time", defaultProgram = "" }: SupportFormProps) {
+  const { locale } = useLocale();
   const [frequency, setFrequency] = useState(defaultFrequency);
   const [amount, setAmount] = useState("500");
   const [program, setProgram] = useState(defaultProgram);
@@ -431,7 +439,8 @@ function SupportForm({ defaultFrequency = "One-time", defaultProgram = "" }: Sup
         frequency,
         amount: Number(amount),
         program,
-        consentStatus: donationConsentText
+        consentStatus: donationConsentText,
+        locale
       });
 
       setStatus(message);
@@ -553,6 +562,7 @@ type ContactFormProps = {
 };
 
 function ContactForm({ defaultIntent = "" }: ContactFormProps) {
+  const { locale } = useLocale();
   const [intent, setIntent] = useState(defaultIntent);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
@@ -584,7 +594,8 @@ function ContactForm({ defaultIntent = "" }: ContactFormProps) {
         name: formData.get("name")?.toString() ?? "",
         email: formData.get("email")?.toString() ?? "",
         intent,
-        message: formData.get("message")?.toString() ?? ""
+        message: formData.get("message")?.toString() ?? "",
+        locale
       });
 
       setStatus(message);
@@ -1428,6 +1439,7 @@ function usePageMotion(path: string) {
 }
 
 export function App() {
+  const { locale, t } = useLocale();
   const [path, setPath] = useState(() => window.location.pathname);
 
   usePageMotion(path);
@@ -1487,6 +1499,13 @@ export function App() {
       document.removeEventListener("click", handleClick);
     };
   }, []);
+
+  useEffect(() => {
+    document.title = t("Floydee Future Foundation");
+    const description = t("Floydee Future Foundation supports girls, women, and youth through health, emotional well-being, education, and employability programs.");
+    document.querySelector('meta[name="description"]')?.setAttribute("content", description);
+    document.querySelector('meta[property="og:description"]')?.setAttribute("content", description);
+  }, [locale, t]);
 
   return (
     <>
