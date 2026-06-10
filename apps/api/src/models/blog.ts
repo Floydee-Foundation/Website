@@ -1,4 +1,4 @@
-import mongoose, { Schema } from "mongoose";
+import mongoose, { type Model, Schema } from "mongoose";
 import type { BlogProgramAssociation, BlogStatus } from "@floydee/shared";
 
 export interface BlogCategoryDocument {
@@ -82,7 +82,9 @@ const blogPostSchema = new Schema<BlogPostDocument>(
 );
 
 export const BlogCategoryModel =
-  mongoose.models.BlogCategory ?? mongoose.model<BlogCategoryDocument>("BlogCategory", blogCategorySchema);
+  (mongoose.models.BlogCategory as Model<BlogCategoryDocument> | undefined) ??
+  mongoose.model<BlogCategoryDocument>("BlogCategory", blogCategorySchema);
 
 export const BlogPostModel =
-  mongoose.models.BlogPost ?? mongoose.model<BlogPostDocument>("BlogPost", blogPostSchema);
+  (mongoose.models.BlogPost as Model<BlogPostDocument> | undefined) ??
+  mongoose.model<BlogPostDocument>("BlogPost", blogPostSchema);
