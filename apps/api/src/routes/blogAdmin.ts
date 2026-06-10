@@ -24,7 +24,9 @@ export const blogAdminRouter = Router();
 function sendDatabaseUnavailable(response: Response) {
   response.status(503).json({
     ok: false,
-    message: "Blog storage is not connected. Set MONGODB_URI and restart the API."
+    message: env.mongoUri
+      ? "Blog storage is temporarily unavailable. Please retry in a moment."
+      : "Blog storage is not configured. Set MONGODB_URI and restart the API."
   });
 }
 
@@ -135,6 +137,11 @@ async function buildPostPayload(body: Record<string, unknown>, existingStatus: B
   const heroImage = sanitizeImageMedia(body.heroImage);
   const blocks = sanitizeBlocks(body.blocks);
   const seo = body.seo && typeof body.seo === "object" ? body.seo as Record<string, unknown> : {};
+  const publishedAt = body.publishedAt instanceof Date
+    ? body.publishedAt
+    : body.publishedAt
+      ? new Date(getString(body.publishedAt))
+      : undefined;
   const errors: string[] = [];
 
   validateMedia(heroImage, errors, "Hero image URL");
@@ -147,7 +154,7 @@ async function buildPostPayload(body: Record<string, unknown>, existingStatus: B
     excerpt: getString(body.excerpt),
     heroImage,
     programAssociation: await inferProgramAssociation(activeCategorySlugs, fallbackProgram),
-    publishedAt: body.publishedAt ? new Date(getString(body.publishedAt)) : undefined,
+    publishedAt,
     seo: {
       description: getString(seo.description),
       keywords: getStringList(seo.keywords),

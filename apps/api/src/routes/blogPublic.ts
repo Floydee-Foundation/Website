@@ -6,6 +6,10 @@ import type { BlogCategory, BlogContentBlock, BlogPost } from "@floydee/shared";
 
 export const blogPublicRouter = Router();
 
+function storageUnavailableMessage() {
+  return "Blog storage is temporarily unavailable. Please retry in a moment.";
+}
+
 async function ensureMongoReady() {
   try {
     await connectMongo();
@@ -54,7 +58,7 @@ function serializePost(post: any): BlogPost {
 
 blogPublicRouter.get("/api/blog-categories", async (_request, response) => {
   if (!(await ensureMongoReady())) {
-    response.status(503).json({ categories: [], ok: false, message: "Blog storage is not connected." });
+    response.status(503).json({ categories: [], ok: false, message: storageUnavailableMessage() });
     return;
   }
 
@@ -64,7 +68,7 @@ blogPublicRouter.get("/api/blog-categories", async (_request, response) => {
 
 blogPublicRouter.get("/api/blog-posts", async (request, response) => {
   if (!(await ensureMongoReady())) {
-    response.status(503).json({ ok: false, posts: [], message: "Blog storage is not connected." });
+    response.status(503).json({ ok: false, posts: [], message: storageUnavailableMessage() });
     return;
   }
 
@@ -83,7 +87,7 @@ blogPublicRouter.get("/api/blog-posts", async (request, response) => {
 
 blogPublicRouter.get("/api/blog-posts/:slug", async (request, response) => {
   if (!(await ensureMongoReady())) {
-    response.status(503).json({ ok: false, message: "Blog storage is not connected." });
+    response.status(503).json({ ok: false, message: storageUnavailableMessage() });
     return;
   }
 

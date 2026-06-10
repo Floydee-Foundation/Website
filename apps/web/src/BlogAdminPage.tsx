@@ -415,12 +415,21 @@ export function BlogAdminPage({ path = "/admin/blogs" }: { path?: string }) {
 
   const loadContent = async (activeToken = token) => {
     if (!activeToken) return;
-    const [categoryResult, postResult] = await Promise.all([
-      apiRequest<{ categories: BlogCategory[] }>("/api/admin/blog-categories", activeToken),
-      apiRequest<{ posts: BlogPost[] }>("/api/admin/blog-posts", activeToken)
-    ]);
-    setCategories(categoryResult.categories);
-    setPosts(postResult.posts);
+
+    for (let attempt = 1; attempt <= 2; attempt += 1) {
+      try {
+        const [categoryResult, postResult] = await Promise.all([
+          apiRequest<{ categories: BlogCategory[] }>("/api/admin/blog-categories", activeToken),
+          apiRequest<{ posts: BlogPost[] }>("/api/admin/blog-posts", activeToken)
+        ]);
+        setCategories(categoryResult.categories);
+        setPosts(postResult.posts);
+        return;
+      } catch (error) {
+        if (attempt === 2) throw error;
+        await new Promise((resolve) => setTimeout(resolve, 700));
+      }
+    }
   };
 
   useEffect(() => {
