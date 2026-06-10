@@ -1,9 +1,19 @@
 import { Router } from "express";
+import { connectMongo } from "../config/mongo.js";
 import { BlogCategoryModel, BlogPostModel } from "../models/blog.js";
 import { getString, isMongoReady, isProgramAssociation, toSlug } from "../utils/blog.js";
 import type { BlogCategory, BlogContentBlock, BlogPost } from "@floydee/shared";
 
 export const blogPublicRouter = Router();
+
+async function ensureMongoReady() {
+  try {
+    await connectMongo();
+    return isMongoReady();
+  } catch {
+    return false;
+  }
+}
 
 function serializeCategory(category: any): BlogCategory {
   return {
@@ -43,7 +53,7 @@ function serializePost(post: any): BlogPost {
 }
 
 blogPublicRouter.get("/api/blog-categories", async (_request, response) => {
-  if (!isMongoReady()) {
+  if (!(await ensureMongoReady())) {
     response.status(503).json({ categories: [], ok: false, message: "Blog storage is not connected." });
     return;
   }
@@ -53,7 +63,7 @@ blogPublicRouter.get("/api/blog-categories", async (_request, response) => {
 });
 
 blogPublicRouter.get("/api/blog-posts", async (request, response) => {
-  if (!isMongoReady()) {
+  if (!(await ensureMongoReady())) {
     response.status(503).json({ ok: false, posts: [], message: "Blog storage is not connected." });
     return;
   }
@@ -72,7 +82,7 @@ blogPublicRouter.get("/api/blog-posts", async (request, response) => {
 });
 
 blogPublicRouter.get("/api/blog-posts/:slug", async (request, response) => {
-  if (!isMongoReady()) {
+  if (!(await ensureMongoReady())) {
     response.status(503).json({ ok: false, message: "Blog storage is not connected." });
     return;
   }

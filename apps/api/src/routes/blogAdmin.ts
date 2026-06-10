@@ -1,5 +1,6 @@
 import { Router, type NextFunction, type Request, type Response } from "express";
 import { env } from "../config/env.js";
+import { connectMongo } from "../config/mongo.js";
 import { BlogCategoryModel, BlogPostModel, type BlogPostDocument } from "../models/blog.js";
 import {
   getString,
@@ -26,7 +27,14 @@ function sendDatabaseUnavailable(response: Response) {
   });
 }
 
-function requireMongo(_request: Request, response: Response, next: NextFunction) {
+async function requireMongo(_request: Request, response: Response, next: NextFunction) {
+  try {
+    await connectMongo();
+  } catch {
+    sendDatabaseUnavailable(response);
+    return;
+  }
+
   if (!isMongoReady()) {
     sendDatabaseUnavailable(response);
     return;
