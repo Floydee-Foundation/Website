@@ -9,3 +9,11 @@ healthRouter.get("/health", (_request, response) => {
     timestamp: new Date().toISOString()
   });
 });
+
+healthRouter.get("/api/health", (_request, response) => {
+  response.json({
+    ok: true,
+    service: "floydee-api",
+    timestamp: new Date().toISOString()
+  });
+});
