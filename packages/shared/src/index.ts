@@ -43,4 +43,97 @@ export interface DonationInquiry {
   locale?: Locale;
 }
 
+export type BlogStatus = "draft" | "published" | "archived";
+
+export type BlogCategoryStatus = "active" | "archived";
+
+export type BlogProgramAssociation = ProgramSlug | "general";
+
+export interface BlogSeo {
+  title?: string;
+  description?: string;
+  keywords: string[];
+}
+
+export interface BlogImageMedia {
+  alt?: string;
+  caption?: string;
+  url: string;
+}
+
+export interface BlogBaseBlock {
+  id: string;
+}
+
+export interface BlogHeadingBlock extends BlogBaseBlock {
+  type: "heading";
+  level: 2 | 3;
+  text: string;
+}
+
+export interface BlogParagraphBlock extends BlogBaseBlock {
+  type: "paragraph";
+  text: string;
+}
+
+export interface BlogImageBlock extends BlogBaseBlock {
+  type: "image";
+  media: BlogImageMedia;
+}
+
+export interface BlogYoutubeBlock extends BlogBaseBlock {
+  type: "youtube";
+  title?: string;
+  url: string;
+}
+
+export interface BlogQuoteBlock extends BlogBaseBlock {
+  type: "quote";
+  attribution?: string;
+  text: string;
+}
+
+export interface BlogListBlock extends BlogBaseBlock {
+  type: "list";
+  style: "bullet" | "numbered";
+  items: string[];
+}
+
+export type BlogContentBlock =
+  | BlogHeadingBlock
+  | BlogParagraphBlock
+  | BlogImageBlock
+  | BlogYoutubeBlock
+  | BlogQuoteBlock
+  | BlogListBlock;
+
+export interface BlogCategory {
+  createdAt?: string;
+  description?: string;
+  id: string;
+  name: string;
+  programAssociation: BlogProgramAssociation;
+  slug: string;
+  status: BlogCategoryStatus;
+  updatedAt?: string;
+}
+
+export interface BlogPost {
+  author?: string;
+  blocks: BlogContentBlock[];
+  categorySlugs: string[];
+  createdAt?: string;
+  excerpt: string;
+  heroImage?: BlogImageMedia;
+  id: string;
+  programAssociation: BlogProgramAssociation;
+  publishedAt?: string;
+  seo: BlogSeo;
+  slug: string;
+  status: BlogStatus;
+  tags: string[];
+  title: string;
+  updatedAt?: string;
+}
+
 export * from "./i18n.js";

@@ -7,6 +7,7 @@ import healthCamp2 from "./assets/health-camp-2.png";
 import healthCamp3 from "./assets/health-camp-3.png";
 import studentSanika from "./assets/student-sanika.jpg";
 import programMapping from "./assets/program-mapping.png";
+import { BlogAdminPage } from "./BlogAdminPage";
 import { LanguageSelector, useLocale } from "./LocaleProvider";
 
 type NavLink = [label: string, href: string, className?: string];
@@ -67,7 +68,7 @@ const navGroups: NavGroup[] = [
   }
 ];
 
-const apiBaseUrl = import.meta.env.VITE_API_BASE_URL ?? "http://localhost:4000";
+const apiBaseUrl = import.meta.env.VITE_API_BASE_URL ?? (import.meta.env.DEV ? "http://localhost:4000" : "");
 const donationProgramOptions = ["AAROHI", "SAKHI", "VIDYA", "Where needed most"];
 const foundationPrograms = [
   ["AAROHI", "Care That Changes Lives"],
@@ -1368,6 +1369,7 @@ function NotFoundPage() {
 function renderRoute(path: string) {
   const canonicalPath = routeAliases[path] ?? path;
 
+  if (canonicalPath.startsWith("/admin/blogs")) return <BlogAdminPage path={canonicalPath} />;
   if (canonicalPath === "/") return <HomePage />;
   if (canonicalPath.startsWith("/donate")) return <><DonationPage path={canonicalPath} /><RouteFooter /></>;
   if (canonicalPath === "/programs") return <><ProgramsOverviewPage /><RouteFooter /></>;

@@ -23,5 +23,7 @@ export const env = {
     pass: process.env.SMTP_PASS
   },
   mailFrom: process.env.MAIL_FROM ?? process.env.SMTP_USER ?? "contact@floydeefoundation.org",
-  foundationNotifyEmail: process.env.FOUNDATION_NOTIFY_EMAIL ?? "contact@floydeefoundation.org"
+  foundationNotifyEmail: process.env.FOUNDATION_NOTIFY_EMAIL ?? "contact@floydeefoundation.org",
+  blogAdminPasscode: process.env.BLOG_ADMIN_PASSCODE,
+  blogAdminSessionSecret: process.env.BLOG_ADMIN_SESSION_SECRET ?? process.env.BLOG_ADMIN_PASSCODE
 };
