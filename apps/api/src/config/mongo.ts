@@ -12,7 +12,7 @@ export async function connectMongo() {
   if (mongoose.connection.readyState === 1) return;
 
   mongoConnection ??= mongoose.connect(env.mongoUri, {
-    serverSelectionTimeoutMS: 8000
+    serverSelectionTimeoutMS: 20000
   });
 
   await mongoConnection;

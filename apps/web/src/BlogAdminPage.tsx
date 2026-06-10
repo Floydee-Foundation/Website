@@ -371,8 +371,8 @@ export function BlogAdminPage({ path = "/admin/blogs" }: { path?: string }) {
     if (!token) return;
     loadContent().catch((error) => {
       setStatus(error instanceof Error ? error.message : "Could not load blog CMS content.");
-      sessionStorage.removeItem(sessionKey);
-      setToken("");
+      setCategories([]);
+      setPosts([]);
     });
   }, [token]);
 
