@@ -13,6 +13,9 @@ export async function connectMongo() {
 
   mongoConnection ??= mongoose.connect(env.mongoUri, {
     serverSelectionTimeoutMS: 20000
+  }).catch((error) => {
+    mongoConnection = undefined;
+    throw error;
   });
 
   await mongoConnection;
