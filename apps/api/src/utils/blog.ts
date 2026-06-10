@@ -59,6 +59,12 @@ export function isYoutubeUrl(value: string) {
   return host === "youtube.com" || host === "youtu.be" || host === "m.youtube.com";
 }
 
+export function isGoogleDriveUrl(value: string) {
+  if (!isValidHttpUrl(value)) return false;
+  const host = new URL(value).hostname.replace(/^www\./, "");
+  return host === "drive.google.com" || host === "docs.google.com";
+}
+
 export function sanitizeImageMedia(value: unknown): BlogImageMedia | undefined {
   if (!value || typeof value !== "object") return undefined;
   const media = value as Record<string, unknown>;
@@ -68,6 +74,7 @@ export function sanitizeImageMedia(value: unknown): BlogImageMedia | undefined {
   return {
     alt: getString(media.alt) || undefined,
     caption: getString(media.caption) || undefined,
+    publicAccessConfirmed: media.publicAccessConfirmed === true || undefined,
     url
   };
 }
@@ -101,7 +108,13 @@ export function sanitizeBlocks(value: unknown): BlogContentBlock[] {
     if (raw.type === "youtube") {
       const url = getString(raw.url);
       if (!url) return [];
-      return [{ id, title: getString(raw.title) || undefined, type: "youtube", url }];
+      return [{
+        id,
+        publicAccessConfirmed: raw.publicAccessConfirmed === true || undefined,
+        title: getString(raw.title) || undefined,
+        type: "youtube",
+        url
+      }];
     }
 
     if (raw.type === "quote") {

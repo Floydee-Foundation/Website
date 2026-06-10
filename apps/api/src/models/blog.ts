@@ -20,6 +20,7 @@ export interface BlogPostDocument {
   heroImage?: {
     alt?: string;
     caption?: string;
+    publicAccessConfirmed?: boolean;
     url: string;
   };
   programAssociation: BlogProgramAssociation;
@@ -60,6 +61,7 @@ const blogPostSchema = new Schema<BlogPostDocument>(
     heroImage: {
       alt: { trim: true, type: String },
       caption: { trim: true, type: String },
+      publicAccessConfirmed: { type: Boolean },
       url: { trim: true, type: String }
     },
     programAssociation: {

@@ -407,6 +407,35 @@
   min-height: 118px;
 }
 
+.admin-drive-confirmation {
+  align-items: flex-start;
+  background: #fff8dd;
+  border: 1px solid #e3c65a;
+  color: var(--ink);
+  display: flex;
+  gap: 10px;
+  grid-column: 1 / -1;
+  padding: 12px 14px;
+}
+
+.admin-drive-confirmation input {
+  flex: 0 0 auto;
+  margin-top: 3px;
+}
+
+.admin-drive-confirmation span {
+  display: grid;
+  font-size: 0.8rem;
+  gap: 3px;
+  line-height: 1.35;
+  text-transform: none;
+}
+
+.admin-drive-confirmation strong {
+  font-size: 0.76rem;
+  text-transform: uppercase;
+}
+
 .admin-editor-section {
   border-top: 1px solid var(--line);
   display: grid;

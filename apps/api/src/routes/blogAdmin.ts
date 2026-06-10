@@ -5,6 +5,7 @@ import { BlogCategoryModel, BlogPostModel, type BlogPostDocument } from "../mode
 import {
   getString,
   getStringList,
+  isGoogleDriveUrl,
   isBlogStatus,
   isMongoReady,
   isProgramAssociation,
@@ -108,12 +109,20 @@ async function inferProgramAssociation(slugs: string[], fallback: BlogProgramAss
 
 function validateMedia(media: BlogImageMedia | undefined, errors: string[], label: string) {
   if (media?.url && !isValidHttpUrl(media.url)) errors.push(`${label} must be a valid http or https URL.`);
+  if (media?.url && isGoogleDriveUrl(media.url) && !media.publicAccessConfirmed) {
+    errors.push(`${label} from Google Drive requires confirmation that anyone on the internet with the link can view.`);
+  }
 }
 
 function validateBlocks(blocks: BlogContentBlock[], errors: string[]) {
   blocks.forEach((block) => {
     if (block.type === "image") validateMedia(block.media, errors, "Image block URL");
-    if (block.type === "youtube" && !isYoutubeUrl(block.url)) errors.push("YouTube block URL must be a valid YouTube link.");
+    if (block.type === "youtube" && !isYoutubeUrl(block.url) && !isGoogleDriveUrl(block.url)) {
+      errors.push("Video block URL must be a valid YouTube or Google Drive link.");
+    }
+    if (block.type === "youtube" && isGoogleDriveUrl(block.url) && !block.publicAccessConfirmed) {
+      errors.push("Google Drive video requires confirmation that anyone on the internet with the link can view.");
+    }
   });
 }
 

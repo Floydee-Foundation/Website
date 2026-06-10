@@ -58,6 +58,7 @@ export interface BlogSeo {
 export interface BlogImageMedia {
   alt?: string;
   caption?: string;
+  publicAccessConfirmed?: boolean;
   url: string;
 }
 
@@ -83,6 +84,7 @@ export interface BlogImageBlock extends BlogBaseBlock {
 
 export interface BlogYoutubeBlock extends BlogBaseBlock {
   type: "youtube";
+  publicAccessConfirmed?: boolean;
   title?: string;
   url: string;
 }

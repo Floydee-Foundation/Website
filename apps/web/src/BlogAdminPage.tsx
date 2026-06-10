@@ -56,16 +56,16 @@ const blockLabels: Record<BlogContentBlock["type"], string> = {
   list: "List",
   paragraph: "Paragraph",
   quote: "Quote",
-  youtube: "YouTube"
+  youtube: "Video"
 };
 
 const blockDescriptions: Record<BlogContentBlock["type"], string> = {
   heading: "Break the story into readable sections.",
-  image: "Place a photo with alt text and a caption.",
+  image: "Place a photo from a public URL or Google Drive.",
   list: "Summarize actions, outcomes, or next steps.",
   paragraph: "Write the main story in clear body text.",
   quote: "Highlight a field voice or partner line.",
-  youtube: "Embed a video from a YouTube URL."
+  youtube: "Embed a YouTube video or a public Google Drive video."
 };
 
 const starterOutlines: Array<{ blocks: BlogContentBlock[]; description: string; name: string }> = [
@@ -147,6 +147,40 @@ function youtubeEmbedUrl(url: string) {
   }
 }
 
+function googleDriveFileId(url: string) {
+  try {
+    const parsed = new URL(url);
+    if (!["drive.google.com", "docs.google.com"].includes(parsed.hostname.replace(/^www\./, ""))) return "";
+    return parsed.pathname.match(/\/d\/([^/]+)/)?.[1] ?? parsed.searchParams.get("id") ?? "";
+  } catch {
+    return "";
+  }
+}
+
+function isGoogleDriveUrl(url: string) {
+  return Boolean(googleDriveFileId(url));
+}
+
+function imagePreviewUrl(url: string) {
+  const driveId = googleDriveFileId(url);
+  return driveId ? `https://drive.google.com/thumbnail?id=${driveId}&sz=w1600` : url;
+}
+
+function videoEmbedUrl(url: string) {
+  const driveId = googleDriveFileId(url);
+  return driveId ? `https://drive.google.com/file/d/${driveId}/preview` : youtubeEmbedUrl(url);
+}
+
+function driveMediaConfirmed(post: EditorPost) {
+  if (post.heroImage?.url && isGoogleDriveUrl(post.heroImage.url) && !post.heroImage.publicAccessConfirmed) return false;
+
+  return post.blocks.every((block) => {
+    if (block.type === "image" && isGoogleDriveUrl(block.media.url)) return Boolean(block.media.publicAccessConfirmed);
+    if (block.type === "youtube" && isGoogleDriveUrl(block.url)) return Boolean(block.publicAccessConfirmed);
+    return true;
+  });
+}
+
 async function apiRequest<T>(path: string, token: string, options: RequestInit = {}) {
   const response = await fetch(`${apiBaseUrl}${path}`, {
     ...options,
@@ -174,7 +208,7 @@ function Field({ children, label }: { children: ReactNode; label: string }) {
 }
 
 function BlogPreview({ post }: { post: EditorPost }) {
-  const hero = post.heroImage?.url;
+  const hero = post.heroImage?.url ? imagePreviewUrl(post.heroImage.url) : "";
 
   return (
     <article className="blog-preview">
@@ -211,14 +245,14 @@ function PreviewBlock({ block }: { block: BlogContentBlock }) {
   if (block.type === "image") {
     return (
       <figure>
-        <img src={block.media.url} alt={block.media.alt ?? ""} />
+        <img src={imagePreviewUrl(block.media.url)} alt={block.media.alt ?? ""} />
         {block.media.caption ? <figcaption>{block.media.caption}</figcaption> : null}
       </figure>
     );
   }
 
   if (block.type === "youtube") {
-    const embedUrl = youtubeEmbedUrl(block.url);
+    const embedUrl = videoEmbedUrl(block.url);
     return embedUrl ? (
       <div className="blog-preview-video">
         <iframe title={block.title || "Floydee blog video"} src={embedUrl} allowFullScreen />
@@ -283,8 +317,14 @@ function BlockEditor({
       ) : null}
       {block.type === "youtube" ? (
         <div className="admin-form-grid compact">
-          <Field label="YouTube URL"><input value={block.url} onChange={(event) => onChange({ ...block, url: event.target.value })} /></Field>
+          <Field label="YouTube or Google Drive video URL"><input value={block.url} onChange={(event) => onChange({ ...block, url: event.target.value })} /></Field>
           <Field label="Video title"><input value={block.title ?? ""} onChange={(event) => onChange({ ...block, title: event.target.value })} /></Field>
+          {isGoogleDriveUrl(block.url) ? (
+            <PublicDriveConfirmation
+              checked={Boolean(block.publicAccessConfirmed)}
+              onChange={(publicAccessConfirmed) => onChange({ ...block, publicAccessConfirmed })}
+            />
+          ) : null}
         </div>
       ) : null}
       {block.type === "quote" ? (
@@ -313,10 +353,25 @@ function BlockEditor({
 function MediaFields({ media, onChange }: { media: BlogImageMedia; onChange: (media: BlogImageMedia) => void }) {
   return (
     <div className="admin-form-grid compact">
-      <Field label="Image URL"><input value={media.url} onChange={(event) => onChange({ ...media, url: event.target.value })} /></Field>
+      <Field label="Image URL or Google Drive image link"><input value={media.url} onChange={(event) => onChange({ ...media, url: event.target.value })} /></Field>
       <Field label="Alt text"><input value={media.alt ?? ""} onChange={(event) => onChange({ ...media, alt: event.target.value })} /></Field>
       <Field label="Caption"><input value={media.caption ?? ""} onChange={(event) => onChange({ ...media, caption: event.target.value })} /></Field>
+      {isGoogleDriveUrl(media.url) ? (
+        <PublicDriveConfirmation
+          checked={Boolean(media.publicAccessConfirmed)}
+          onChange={(publicAccessConfirmed) => onChange({ ...media, publicAccessConfirmed })}
+        />
+      ) : null}
     </div>
+  );
+}
+
+function PublicDriveConfirmation({ checked, onChange }: { checked: boolean; onChange: (checked: boolean) => void }) {
+  return (
+    <label className="admin-drive-confirmation">
+      <input checked={checked} onChange={(event) => onChange(event.target.checked)} type="checkbox" />
+      <span><strong>Google Drive general access confirmed</strong>Anyone on the internet with the link can view.</span>
+    </label>
   );
 }
 
@@ -350,6 +405,7 @@ export function BlogAdminPage({ path = "/admin/blogs" }: { path?: string }) {
     ["Excerpt", Boolean(editorPost.excerpt.trim())],
     ["Category", editorPost.categorySlugs.length > 0],
     ["Content", editorPost.blocks.length > 0],
+    ["Drive access", driveMediaConfirmed(editorPost)],
     ["Hero alt text", !editorPost.heroImage?.url || Boolean(editorPost.heroImage.alt?.trim())],
     ["SEO summary", Boolean(editorPost.seo.description?.trim())]
   ] as const;
@@ -525,7 +581,7 @@ export function BlogAdminPage({ path = "/admin/blogs" }: { path?: string }) {
       type === "heading" ? { id: createId(), level: 2, text: "", type } :
       type === "paragraph" ? { id: createId(), text: "", type } :
       type === "image" ? { id: createId(), media: { alt: "", caption: "", url: "" }, type } :
-      type === "youtube" ? { id: createId(), title: "", url: "", type } :
+      type === "youtube" ? { id: createId(), publicAccessConfirmed: false, title: "", url: "", type } :
       type === "quote" ? { attribution: "", id: createId(), text: "", type } :
       { id: createId(), items: [""], style: "bullet", type };
 
@@ -634,7 +690,7 @@ export function BlogAdminPage({ path = "/admin/blogs" }: { path?: string }) {
           <div className="admin-reference-grid">
             {filteredPosts.map((post) => (
               <article className="admin-reference-card" key={post.id}>
-                {post.heroImage?.url ? <img src={post.heroImage.url} alt={post.heroImage.alt ?? ""} /> : <div className="admin-reference-empty">No image</div>}
+                {post.heroImage?.url ? <img src={imagePreviewUrl(post.heroImage.url)} alt={post.heroImage.alt ?? ""} /> : <div className="admin-reference-empty">No image</div>}
                 <div>
                   <div className="blog-preview-meta">
                     <span>{post.categorySlugs.join(" / ") || "No category"}</span>
