@@ -12,6 +12,7 @@
   "scripts": {
     "dev": "concurrently \"npm run dev -w @floydee/web\" \"npm run dev -w @floydee/api\"",
     "build": "npm run build -w @floydee/shared && npm run build -w @floydee/api && npm run build -w @floydee/web",
+    "media:migrate": "npm run build -w @floydee/shared && npm run build -w @floydee/api && node scripts/migrate-blog-media.mjs",
     "typecheck": "npm run build -w @floydee/shared && npm run typecheck -w @floydee/api && npm run typecheck -w @floydee/web",
     "translations:extract": "node scripts/extract-translations.mjs",
     "translations:translate": "node scripts/translate-catalog.mjs",

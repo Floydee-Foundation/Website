@@ -1,8 +1,19 @@
 import { FormEvent, useEffect, useState } from "react";
-import type { BlogCategory, BlogCategoryKind, BlogContentBlock, BlogPost, BlogProgramAssociation } from "@floydee/shared";
+import type { BlogCategory, BlogCategoryKind, BlogContentBlock, BlogImageMedia, BlogPost, BlogProgramAssociation } from "@floydee/shared";
 
 const apiBaseUrl = import.meta.env.VITE_API_BASE_URL ?? (import.meta.env.DEV ? "http://localhost:4000" : "");
 const pageSize = 9;
+const storyCachePrefix = "floydee_story_cache_v1:";
+const storyCacheTtlMs = 1000 * 60 * 60 * 24;
+
+class HttpError extends Error {
+  status: number;
+
+  constructor(message: string, status: number) {
+    super(message);
+    this.status = status;
+  }
+}
 
 type BlogListResponse = {
   message?: string;
@@ -43,11 +54,49 @@ const programCtas: Record<BlogProgramAssociation, { href: string; label: string;
   vidya: { href: "/programs/vidya", label: "Explore VIDYA", text: "Build pathways from education and exposure to confident employment." }
 };
 
-async function getJson<T>(path: string, signal?: AbortSignal): Promise<T> {
-  const response = await fetch(`${apiBaseUrl}${path}`, { signal });
-  const result = (await response.json().catch(() => null)) as (T & { message?: string; ok?: boolean }) | null;
-  if (!response.ok || !result || result.ok === false) throw new Error(result?.message ?? "Stories could not be loaded.");
-  return result;
+function readStoryCache<T>(path: string) {
+  try {
+    const cached = JSON.parse(localStorage.getItem(`${storyCachePrefix}${path}`) ?? "null") as { savedAt?: number; value?: T } | null;
+    return cached?.savedAt && cached.value && Date.now() - cached.savedAt < storyCacheTtlMs ? cached.value : undefined;
+  } catch {
+    return undefined;
+  }
+}
+
+function writeStoryCache<T>(path: string, value: T) {
+  try {
+    localStorage.setItem(`${storyCachePrefix}${path}`, JSON.stringify({ savedAt: Date.now(), value }));
+  } catch {
+    // Storage can be unavailable in private browsing; live requests still work.
+  }
+}
+
+function retryableStatus(status: number) {
+  return status === 408 || status === 429 || status >= 500;
+}
+
+async function getJson<T>(path: string, signal?: AbortSignal, allowCache = true): Promise<T & { fromCache?: boolean }> {
+  let lastError: unknown;
+  for (let attempt = 0; attempt < 3; attempt += 1) {
+    try {
+      const response = await fetch(`${apiBaseUrl}${path}`, { signal });
+      const result = (await response.json().catch(() => null)) as (T & { message?: string; ok?: boolean }) | null;
+      if (!response.ok || !result || result.ok === false) {
+        throw new HttpError(result?.message ?? "Stories could not be loaded.", response.status);
+      }
+      writeStoryCache(path, result);
+      return result;
+    } catch (error) {
+      if (signal?.aborted) throw error;
+      lastError = error;
+      if (error instanceof HttpError && !retryableStatus(error.status)) break;
+      if (attempt < 2) await new Promise((resolve) => setTimeout(resolve, 350 * (2 ** attempt) + Math.random() * 180));
+    }
+  }
+  if (lastError instanceof HttpError && lastError.status === 404) throw lastError;
+  const cached = allowCache ? readStoryCache<T>(path) : undefined;
+  if (cached) return Object.assign(cached as T & { fromCache?: boolean }, { fromCache: true });
+  throw lastError;
 }
 
 function googleDriveFileId(url: string) {
@@ -63,6 +112,35 @@ function googleDriveFileId(url: string) {
 function imageUrl(url: string) {
   const driveId = googleDriveFileId(url);
   return driveId ? `https://drive.google.com/thumbnail?id=${driveId}&sz=w2000` : url;
+}
+
+function imageSrcSet(media: BlogImageMedia) {
+  return media.variants?.length ? media.variants.map((variant) => `${variant.url} ${variant.width}w`).join(", ") : undefined;
+}
+
+function StoryImage({
+  eager = false,
+  media,
+  sizes
+}: {
+  eager?: boolean;
+  media: BlogImageMedia;
+  sizes: string;
+}) {
+  return (
+    <img
+      alt={media.alt ?? ""}
+      decoding="async"
+      fetchPriority={eager ? "high" : "auto"}
+      height={media.height}
+      loading={eager ? "eager" : "lazy"}
+      onError={(event) => { event.currentTarget.classList.add("story-image-failed"); }}
+      sizes={sizes}
+      src={imageUrl(media.url)}
+      srcSet={imageSrcSet(media)}
+      width={media.width}
+    />
+  );
 }
 
 function videoEmbedUrl(url: string) {
@@ -178,7 +256,7 @@ function StoryCard({ categories, post }: { categories: BlogCategory[]; post: Blo
   return (
     <article className={`story-card${post.heroImage?.url ? "" : " story-card-text"}`}>
       <a className="story-card-media" href={`/stories/${post.slug}`} aria-label={`Read ${post.title}`}>
-        {post.heroImage?.url ? <img src={imageUrl(post.heroImage.url)} alt={post.heroImage.alt ?? ""} /> : <span>{programLabels[post.programAssociation]}</span>}
+        {post.heroImage?.url ? <StoryImage media={post.heroImage} sizes="(max-width: 760px) 100vw, (max-width: 1080px) 50vw, 33vw" /> : <span>{programLabels[post.programAssociation]}</span>}
       </a>
       <div className="story-card-copy">
         <p className="story-meta">{postMeta(post, categories)}</p>
@@ -194,7 +272,7 @@ function FeaturedStory({ categories, post }: { categories: BlogCategory[]; post:
   return (
     <section className={`stories-feature${post.heroImage?.url ? "" : " stories-feature-text"}`} aria-labelledby="featured-story-title">
       <div className="stories-feature-media">
-        {post.heroImage?.url ? <img src={imageUrl(post.heroImage.url)} alt={post.heroImage.alt ?? ""} /> : <span>{programLabels[post.programAssociation]}</span>}
+        {post.heroImage?.url ? <StoryImage eager media={post.heroImage} sizes="(max-width: 1080px) 100vw, 65vw" /> : <span>{programLabels[post.programAssociation]}</span>}
       </div>
       <div className="stories-feature-copy">
         <p className="section-label">Featured story</p>
@@ -207,6 +285,19 @@ function FeaturedStory({ categories, post }: { categories: BlogCategory[]; post:
   );
 }
 
+function StoriesSkeleton() {
+  return (
+    <div aria-label="Loading stories" className="stories-grid stories-skeleton-grid" role="status">
+      {Array.from({ length: 6 }, (_, index) => (
+        <div className="story-skeleton" key={index}>
+          <span className="story-skeleton-media" />
+          <span /><span /><span />
+        </div>
+      ))}
+    </div>
+  );
+}
+
 export function StoriesHubPage() {
   const [categories, setCategories] = useState<BlogCategory[]>([]);
   const [filters, setFilters] = useState<Filters>(parseFilters);
@@ -216,6 +307,8 @@ export function StoriesHubPage() {
   const [pagination, setPagination] = useState({ page: 1, total: 0, totalPages: 1 });
   const [status, setStatus] = useState("loading");
   const [message, setMessage] = useState("");
+  const [notice, setNotice] = useState("");
+  const [retryTick, setRetryTick] = useState(0);
 
   const isUnfiltered = !filters.q && !filters.categoryKind && !filters.categorySlug && !filters.programSlug && filters.sort === "latest";
   const showFeatured = isUnfiltered && filters.page === 1 && featured;
@@ -236,26 +329,49 @@ export function StoriesHubPage() {
   }, []);
 
   useEffect(() => {
-    const controller = new AbortController();
-    getJson<{ categories: BlogCategory[]; ok: boolean }>("/api/blog-categories", controller.signal)
-      .then((result) => setCategories(result.categories))
-      .catch(() => setCategories([]));
-    return () => controller.abort();
+    const retry = () => setRetryTick((current) => current + 1);
+    const retryWhenVisible = () => {
+      if (document.visibilityState === "visible") retry();
+    };
+    window.addEventListener("online", retry);
+    document.addEventListener("visibilitychange", retryWhenVisible);
+    return () => {
+      window.removeEventListener("online", retry);
+      document.removeEventListener("visibilitychange", retryWhenVisible);
+    };
   }, []);
 
   useEffect(() => {
+    if (!notice && status !== "error") return;
+    const timer = window.setTimeout(() => setRetryTick((current) => current + 1), 15_000);
+    return () => window.clearTimeout(timer);
+  }, [notice, status]);
+
+  useEffect(() => {
     const controller = new AbortController();
-    setStatus("loading");
+    getJson<{ categories: BlogCategory[]; ok: boolean }>("/api/blog-categories", controller.signal)
+      .then((result) => {
+        setCategories(result.categories);
+        if (result.fromCache) setNotice("Showing saved story information while connectivity recovers.");
+      })
+      .catch(() => undefined);
+    return () => controller.abort();
+  }, [retryTick]);
+
+  useEffect(() => {
+    const controller = new AbortController();
+    setStatus(posts.length ? "refreshing" : "loading");
     setMessage("");
+    setNotice("");
 
     const load = async () => {
       let lead = featured;
       if (isUnfiltered && !lead) {
-        const leadResult = await getJson<BlogListResponse>("/api/blog-posts?featured=true&pageSize=1", controller.signal);
-        lead = leadResult.posts[0];
+        const leadResult = await getJson<BlogListResponse>("/api/blog-posts?featured=true&pageSize=1", controller.signal).catch(() => null);
+        lead = leadResult?.posts[0];
         if (!lead) {
-          const fallbackResult = await getJson<BlogListResponse>("/api/blog-posts?pageSize=24", controller.signal);
-          lead = fallbackResult.posts.find((post) => post.heroImage?.url) ?? fallbackResult.posts[0];
+          const fallbackResult = await getJson<BlogListResponse>("/api/blog-posts?pageSize=24", controller.signal).catch(() => null);
+          lead = fallbackResult?.posts.find((post) => post.heroImage?.url) ?? fallbackResult?.posts[0];
         }
       }
 
@@ -274,17 +390,22 @@ export function StoriesHubPage() {
       setFeatured(lead);
       setPosts(result.posts);
       setPagination({ page: result.page, total: result.total, totalPages: result.totalPages });
+      setNotice(result.fromCache ? "Showing saved stories while connectivity recovers." : "");
       setStatus("ready");
     };
 
     load().catch((error) => {
       if (controller.signal.aborted) return;
-      setPosts([]);
       setMessage(error instanceof Error ? error.message : "Stories could not be loaded.");
-      setStatus("error");
+      if (posts.length) {
+        setNotice("Stories could not refresh. Showing the last available view while we reconnect.");
+        setStatus("ready");
+      } else {
+        setStatus("error");
+      }
     });
     return () => controller.abort();
-  }, [filters]);
+  }, [filters, retryTick]);
 
   const updateFilters = (patch: Partial<Filters>) => {
     const next = { ...filters, ...patch };
@@ -299,7 +420,7 @@ export function StoriesHubPage() {
     updateFilters({ page: 1, q: searchText.trim() });
   };
 
-  const resultLabel = status === "loading" ? "Loading stories" : `${pagination.total} ${pagination.total === 1 ? "story" : "stories"} found`;
+  const resultLabel = status === "loading" ? "Loading stories" : status === "refreshing" ? "Updating stories" : `${pagination.total} ${pagination.total === 1 ? "story" : "stories"} found`;
 
   return (
     <main className="page stories-page">
@@ -328,10 +449,11 @@ export function StoriesHubPage() {
           {(filters.q || filters.categoryKind || filters.categorySlug || filters.programSlug || filters.sort === "oldest") ? <button className="stories-clear" onClick={() => { setSearchText(""); updateFilters({ categoryKind: "", categorySlug: "", page: 1, programSlug: "", q: "", sort: "latest" }); }} type="button">Clear filters</button> : null}
         </form>
 
-        {status === "loading" ? <div className="stories-state"><span className="stories-loader"></span><h3>Gathering stories from the field.</h3></div> : null}
-        {status === "error" ? <div className="stories-state"><h3>Stories are temporarily unavailable.</h3><p>{message}</p><button className="button button-secondary" onClick={() => setFilters({ ...filters })} type="button">Try again</button></div> : null}
+        {notice ? <div aria-live="polite" className="stories-connectivity"><span className="stories-loader" />{notice}<button onClick={() => setRetryTick((current) => current + 1)} type="button">Retry now</button></div> : null}
+        {status === "loading" ? <StoriesSkeleton /> : null}
+        {status === "error" ? <div className="stories-connectivity stories-connectivity-empty"><span className="stories-loader" /><span>Reconnecting to stories. {message}</span><button onClick={() => setRetryTick((current) => current + 1)} type="button">Retry now</button></div> : null}
         {status === "ready" && !posts.length ? <div className="stories-state"><h3>No stories match this view.</h3><p>Try a broader search or clear the current filters.</p><button className="button button-secondary" onClick={() => { setSearchText(""); updateFilters({ categoryKind: "", categorySlug: "", page: 1, programSlug: "", q: "", sort: "latest" }); }} type="button">Show all stories</button></div> : null}
-        {status === "ready" && posts.length ? <div className="stories-grid">{posts.map((post) => <StoryCard categories={categories} key={post.id} post={post} />)}</div> : null}
+        {(status === "ready" || status === "refreshing") && posts.length ? <div className={`stories-grid${status === "refreshing" ? " is-refreshing" : ""}`}>{posts.map((post) => <StoryCard categories={categories} key={post.id} post={post} />)}</div> : null}
 
         {status === "ready" && pagination.totalPages > 1 ? (
           <nav aria-label="Stories pagination" className="stories-pagination">
@@ -353,7 +475,7 @@ function ArticleBlock({ block }: { block: BlogContentBlock }) {
     const List = block.style === "numbered" ? "ol" : "ul";
     return <List>{block.items.map((item) => <li key={item}>{item}</li>)}</List>;
   }
-  if (block.type === "image") return <figure><img src={imageUrl(block.media.url)} alt={block.media.alt ?? ""} />{block.media.caption ? <figcaption>{block.media.caption}</figcaption> : null}</figure>;
+  if (block.type === "image") return <figure><StoryImage media={block.media} sizes="(max-width: 760px) 100vw, 900px" />{block.media.caption ? <figcaption>{block.media.caption}</figcaption> : null}</figure>;
   const embed = videoEmbedUrl(block.url);
   return embed ? <div className="story-article-video"><iframe allowFullScreen src={embed} title={block.title || "Floydee story video"} /></div> : null;
 }
@@ -383,6 +505,7 @@ export function StoryArticlePage({ slug }: { slug: string }) {
   const [status, setStatus] = useState("loading");
   const [message, setMessage] = useState("");
   const [shareStatus, setShareStatus] = useState("");
+  const [retryTick, setRetryTick] = useState(0);
   useArticleMeta(post);
 
   useEffect(() => {
@@ -390,10 +513,10 @@ export function StoryArticlePage({ slug }: { slug: string }) {
     setStatus("loading");
     Promise.all([
       getJson<{ ok: boolean; post: BlogPost }>(`/api/blog-posts/${encodeURIComponent(slug)}`, controller.signal),
-      getJson<{ categories: BlogCategory[]; ok: boolean }>("/api/blog-categories", controller.signal)
+      getJson<{ categories: BlogCategory[]; ok: boolean }>("/api/blog-categories", controller.signal).catch(() => null)
     ]).then(async ([postResult, categoryResult]) => {
       setPost(postResult.post);
-      setCategories(categoryResult.categories);
+      setCategories(categoryResult?.categories ?? []);
       const paths = [
         postResult.post.categoryKind !== "general" && postResult.post.categorySlug
           ? `/api/blog-posts?programSlug=${postResult.post.programAssociation}&categoryKind=${postResult.post.categoryKind}&categorySlug=${encodeURIComponent(postResult.post.categorySlug)}&excludeSlug=${encodeURIComponent(slug)}&pageSize=3`
@@ -404,14 +527,21 @@ export function StoryArticlePage({ slug }: { slug: string }) {
       const unique = new Map<string, BlogPost>();
       relatedResults.forEach((result) => result?.posts.forEach((item) => unique.set(item.slug, item)));
       setRelated(Array.from(unique.values()).slice(0, 3));
+      setMessage(postResult.fromCache ? "Showing a saved copy while connectivity recovers." : "");
       setStatus("ready");
     }).catch((error) => {
       if (controller.signal.aborted) return;
       setMessage(error instanceof Error ? error.message : "This story could not be loaded.");
-      setStatus("error");
+      setStatus(error instanceof HttpError && error.status === 404 ? "not-found" : "error");
     });
     return () => controller.abort();
-  }, [slug]);
+  }, [retryTick, slug]);
+
+  useEffect(() => {
+    const retry = () => setRetryTick((current) => current + 1);
+    window.addEventListener("online", retry);
+    return () => window.removeEventListener("online", retry);
+  }, []);
 
   const shareUrl = post ? `${window.location.origin}/stories/${post.slug}` : window.location.href;
   const share = async () => {
@@ -428,7 +558,8 @@ export function StoryArticlePage({ slug }: { slug: string }) {
   };
 
   if (status === "loading") return <main className="page"><div className="stories-state story-article-state"><span className="stories-loader"></span><h1>Opening story.</h1></div></main>;
-  if (status === "error" || !post) return <main className="page"><div className="stories-state story-article-state"><p className="section-label">Story not found</p><h1>This story is not available.</h1><p>{message}</p><a className="button button-primary" href="/stories">Explore stories</a></div></main>;
+  if (status === "not-found") return <main className="page"><div className="stories-state story-article-state"><p className="section-label">Story not found</p><h1>This story is not available.</h1><p>{message}</p><a className="button button-primary" href="/stories">Explore stories</a></div></main>;
+  if (status === "error" || !post) return <main className="page"><div className="stories-connectivity stories-connectivity-empty story-article-state"><span className="stories-loader" /><span>Reconnecting to this story. {message}</span><button onClick={() => setRetryTick((current) => current + 1)} type="button">Retry now</button></div></main>;
 
   const cta = programCtas[post.programAssociation];
   const encodedUrl = encodeURIComponent(shareUrl);
@@ -437,6 +568,7 @@ export function StoryArticlePage({ slug }: { slug: string }) {
   return (
     <main className="page story-article-page">
       <ReadingProgress />
+      {message ? <div className="stories-connectivity story-article-notice">{message}</div> : null}
       <article>
         <header className={`story-article-hero${post.heroImage?.url ? "" : " story-article-hero-text"}`}>
           <div className="story-article-heading">
@@ -446,7 +578,7 @@ export function StoryArticlePage({ slug }: { slug: string }) {
             <p className="story-article-excerpt">{post.excerpt}</p>
             <div className="story-byline"><strong>{post.author || "Floydee Team"}</strong><span>{formatDate(post.publishedAt)}</span><span>{readingTime(post)} min read</span></div>
           </div>
-          {post.heroImage?.url ? <figure><img src={imageUrl(post.heroImage.url)} alt={post.heroImage.alt ?? ""} />{post.heroImage.caption ? <figcaption>{post.heroImage.caption}</figcaption> : null}</figure> : <div className="story-article-program">{programLabels[post.programAssociation]}</div>}
+          {post.heroImage?.url ? <figure><StoryImage eager media={post.heroImage} sizes="(max-width: 1080px) 100vw, 50vw" />{post.heroImage.caption ? <figcaption>{post.heroImage.caption}</figcaption> : null}</figure> : <div className="story-article-program">{programLabels[post.programAssociation]}</div>}
         </header>
 
         <div className="story-article-layout">

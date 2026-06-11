@@ -1,6 +1,10 @@
 import dotenv from "dotenv";
 
 dotenv.config({
+  path: new URL("../../../../.env.local", import.meta.url),
+  override: false
+});
+dotenv.config({
   path: new URL("../../../../.env", import.meta.url),
   override: false
 });
@@ -14,6 +18,7 @@ const corsOrigins = (process.env.CORS_ORIGIN ?? "http://localhost:5173,http://12
 export const env = {
   port: Number(process.env.PORT ?? 4000),
   mongoUri: process.env.MONGODB_URI,
+  blobReadWriteToken: process.env.BLOB_READ_WRITE_TOKEN,
   corsOrigins,
   smtp: {
     host: process.env.SMTP_HOST,
