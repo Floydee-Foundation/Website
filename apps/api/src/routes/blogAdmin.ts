@@ -81,6 +81,7 @@ function serializePost(post: any): BlogPost {
     categorySlugs: post.categorySlugs ?? [],
     createdAt: post.createdAt?.toISOString?.(),
     excerpt: post.excerpt ?? "",
+    featured: post.featured === true || undefined,
     heroImage: post.heroImage?.url ? post.heroImage : undefined,
     id: String(post._id),
     programAssociation: post.programAssociation ?? "general",
@@ -152,6 +153,7 @@ async function buildPostPayload(body: Record<string, unknown>, existingStatus: B
     blocks,
     categorySlugs: activeCategorySlugs,
     excerpt: getString(body.excerpt),
+    featured: body.featured === true,
     heroImage,
     programAssociation: await inferProgramAssociation(activeCategorySlugs, fallbackProgram),
     publishedAt,
@@ -298,6 +300,9 @@ blogAdminRouter.post("/api/admin/blog-posts", requireAdmin, requireMongo, async 
 
   try {
     const post = await BlogPostModel.create(payload);
+    if (post.status === "published" && post.featured) {
+      await BlogPostModel.updateMany({ _id: { $ne: post._id }, featured: true }, { $set: { featured: false } });
+    }
     response.status(201).json({ ok: true, post: serializePost(post) });
   } catch (error) {
     response.status(409).json({
@@ -325,6 +330,9 @@ blogAdminRouter.patch("/api/admin/blog-posts/:id", requireAdmin, requireMongo, a
     if (!post) {
       response.status(404).json({ ok: false, message: "Blog post not found." });
       return;
+    }
+    if (post.status === "published" && post.featured) {
+      await BlogPostModel.updateMany({ _id: { $ne: post._id }, featured: true }, { $set: { featured: false } });
     }
     response.json({ ok: true, post: serializePost(post) });
   } catch {

@@ -9,6 +9,7 @@ import studentSanika from "./assets/student-sanika.jpg";
 import programMapping from "./assets/program-mapping.png";
 import { BlogAdminPage } from "./BlogAdminPage";
 import { LanguageSelector, useLocale } from "./LocaleProvider";
+import { StoryArticlePage, StoriesHubPage } from "./StoriesPage";
 
 type NavLink = [label: string, href: string, className?: string];
 type NavGroup = {
@@ -1385,7 +1386,8 @@ function renderRoute(path: string) {
   if (canonicalPath === "/book-a-program") return <><JoinPage kind="book" /><RouteFooter /></>;
   if (canonicalPath === "/campaign-with-us") return <><JoinPage kind="campaign" /><RouteFooter /></>;
   if (canonicalPath === "/latest") return <><LatestPage type="latest" /><RouteFooter /></>;
-  if (canonicalPath === "/stories") return <><LatestPage type="stories" /><RouteFooter /></>;
+  if (canonicalPath === "/stories") return <><StoriesHubPage /><RouteFooter /></>;
+  if (canonicalPath.startsWith("/stories/")) return <><StoryArticlePage slug={canonicalPath.replace("/stories/", "")} /><RouteFooter /></>;
   if (canonicalPath === "/news") return <><LatestPage type="news" /><RouteFooter /></>;
   if (canonicalPath === "/resources") return <><LatestPage type="resources" /><RouteFooter /></>;
   if (canonicalPath === "/gallery") return <><LatestPage type="gallery" /><RouteFooter /></>;
@@ -1503,11 +1505,12 @@ export function App() {
   }, []);
 
   useEffect(() => {
+    if (path.startsWith("/stories/")) return;
     document.title = t("Floydee Future Foundation");
     const description = t("Floydee Future Foundation supports girls, women, and youth through health, emotional well-being, education, and employability programs.");
     document.querySelector('meta[name="description"]')?.setAttribute("content", description);
     document.querySelector('meta[property="og:description"]')?.setAttribute("content", description);
-  }, [locale, t]);
+  }, [locale, path, t]);
 
   return (
     <>

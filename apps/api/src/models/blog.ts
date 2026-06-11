@@ -17,6 +17,7 @@ export interface BlogPostDocument {
   categorySlugs: string[];
   createdAt: Date;
   excerpt: string;
+  featured?: boolean;
   heroImage?: {
     alt?: string;
     caption?: string;
@@ -58,6 +59,7 @@ const blogPostSchema = new Schema<BlogPostDocument>(
     blocks: { default: [], type: Array },
     categorySlugs: { default: [], type: [String] },
     excerpt: { default: "", trim: true, type: String },
+    featured: { default: false, index: true, type: Boolean },
     heroImage: {
       alt: { trim: true, type: String },
       caption: { trim: true, type: String },

@@ -126,6 +126,7 @@ export interface BlogPost {
   categorySlugs: string[];
   createdAt?: string;
   excerpt: string;
+  featured?: boolean;
   heroImage?: BlogImageMedia;
   id: string;
   programAssociation: BlogProgramAssociation;

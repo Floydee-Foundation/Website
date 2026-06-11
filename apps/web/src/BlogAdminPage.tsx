@@ -30,6 +30,7 @@ const emptyPost: EditorPost = {
   blocks: [],
   categorySlugs: [],
   excerpt: "",
+  featured: false,
   heroImage: undefined,
   programAssociation: "general",
   seo: {
@@ -606,6 +607,7 @@ export function BlogAdminPage({ path = "/admin/blogs" }: { path?: string }) {
     setEditorPost({
       ...source,
       blocks: cloneBlocks(source.blocks),
+      featured: false,
       id: undefined,
       publishedAt: undefined,
       slug: slugify(copyTitle),
@@ -756,6 +758,10 @@ export function BlogAdminPage({ path = "/admin/blogs" }: { path?: string }) {
             <Field label="Tags"><input value={arrayToInput(editorPost.tags)} onChange={(event) => updateEditor({ tags: inputToArray(event.target.value) })} placeholder="health, education, field update" /></Field>
             <Field label="Publish date"><input type="date" value={editorPost.publishedAt?.slice(0, 10) ?? ""} onChange={(event) => updateEditor({ publishedAt: event.target.value || undefined })} /></Field>
           </div>
+          <label className="admin-drive-confirmation admin-featured-control">
+            <input checked={Boolean(editorPost.featured)} onChange={(event) => updateEditor({ featured: event.target.checked })} type="checkbox" />
+            <span><strong>Feature on Stories</strong>When published, this becomes the lead story and replaces the current featured post.</span>
+          </label>
 
           <section className="admin-editor-section">
             <div className="admin-panel-heading"><h3>Hero media</h3></div>
