@@ -1,10 +1,16 @@
-import { Router } from "express";
+import { Router, type Response } from "express";
 import { connectMongo } from "../config/mongo.js";
 import { BlogCategoryModel, BlogPostModel } from "../models/blog.js";
 import { getString, isBlogCategoryKind, isMongoReady, isProgramAssociation, toSlug } from "../utils/blog.js";
 import type { BlogCategory, BlogContentBlock, BlogPost } from "@floydee/shared";
 
 export const blogPublicRouter = Router();
+const publicCacheHeader = "public, s-maxage=60, stale-while-revalidate=86400, stale-if-error=604800";
+
+function sendSuccess(response: Response, payload: unknown) {
+  response.set("Cache-Control", publicCacheHeader);
+  response.json(payload);
+}
 
 function storageUnavailableMessage() {
   return "Blog storage is temporarily unavailable. Please retry in a moment.";
@@ -67,7 +73,7 @@ blogPublicRouter.get("/api/blog-categories", async (_request, response) => {
   }
 
   const categories = await BlogCategoryModel.find({ kind: { $in: ["workshop", "campaign"] }, status: "active" }).sort({ programAssociation: 1, kind: 1, name: 1 }).lean();
-  response.json({ categories: categories.map(serializeCategory), ok: true });
+  sendSuccess(response, { categories: categories.map(serializeCategory), ok: true });
 });
 
 blogPublicRouter.get("/api/blog-posts", async (request, response) => {
@@ -112,7 +118,7 @@ blogPublicRouter.get("/api/blog-posts", async (request, response) => {
     .limit(pageSize)
     .lean();
 
-  response.json({
+  sendSuccess(response, {
     ok: true,
     page: safePage,
     pageSize,
@@ -134,5 +140,5 @@ blogPublicRouter.get("/api/blog-posts/:slug", async (request, response) => {
     return;
   }
 
-  response.json({ ok: true, post: serializePost(post) });
+  sendSuccess(response, { ok: true, post: serializePost(post) });
 });

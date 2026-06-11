@@ -62,9 +62,25 @@ export interface BlogSeo {
 
 export interface BlogImageMedia {
   alt?: string;
+  byteSize?: number;
   caption?: string;
+  format?: "webp";
+  height?: number;
+  importStatus?: "ready" | "pending" | "failed";
+  pathname?: string;
   publicAccessConfirmed?: boolean;
+  sourceUrl?: string;
+  storageProvider?: "vercel-blob";
   url: string;
+  variants?: BlogImageVariant[];
+  width?: number;
+}
+
+export interface BlogImageVariant {
+  byteSize: number;
+  height: number;
+  url: string;
+  width: number;
 }
 
 export interface BlogBaseBlock {

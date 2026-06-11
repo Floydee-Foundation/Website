@@ -1,12 +1,12 @@
 import { FormEvent, KeyboardEvent as ReactKeyboardEvent, useEffect, useId, useRef, useState } from "react";
 import floydeeLogo from "./assets/floydee-logo.png";
 import floydeeMark from "./assets/floydee-mark.svg";
-import heroFoundation from "./assets/hero-foundation.png";
-import healthCamp1 from "./assets/health-camp-1.png";
-import healthCamp2 from "./assets/health-camp-2.png";
-import healthCamp3 from "./assets/health-camp-3.png";
-import studentSanika from "./assets/student-sanika.jpg";
-import programMapping from "./assets/program-mapping.png";
+import heroFoundation from "./assets/hero-foundation.webp";
+import healthCamp1 from "./assets/health-camp-1.webp";
+import healthCamp2 from "./assets/health-camp-2.webp";
+import healthCamp3 from "./assets/health-camp-3.webp";
+import studentSanika from "./assets/student-sanika.webp";
+import programMapping from "./assets/program-mapping.webp";
 import { BlogAdminPage } from "./BlogAdminPage";
 import { LanguageSelector, useLocale } from "./LocaleProvider";
 import { StoryArticlePage, StoriesHubPage } from "./StoriesPage";

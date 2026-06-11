@@ -1,7 +1,8 @@
-import { Router, type NextFunction, type Request, type Response } from "express";
+import { raw, Router, type NextFunction, type Request, type Response } from "express";
 import { env } from "../config/env.js";
 import { connectMongo } from "../config/mongo.js";
 import { BlogCategoryModel, BlogPostModel, type BlogPostDocument } from "../models/blog.js";
+import { deleteStoredMedia, downloadDriveImage, optimizeAndStoreImage } from "../services/blogMedia.js";
 import {
   getString,
   getStringList,
@@ -160,16 +161,19 @@ async function resolveNamedCategory(
   return category?.slug ?? slug;
 }
 
-function validateMedia(media: BlogImageMedia | undefined, errors: string[], label: string) {
+function validateMedia(media: BlogImageMedia | undefined, errors: string[], label: string, requireInternal = false) {
   if (media?.url && !isValidHttpUrl(media.url)) errors.push(`${label} must be a valid http or https URL.`);
   if (media?.url && isGoogleDriveUrl(media.url) && !media.publicAccessConfirmed) {
     errors.push(`${label} from Google Drive requires confirmation that anyone on the internet with the link can view.`);
   }
+  if (media?.url && requireInternal && (media.storageProvider !== "vercel-blob" || media.importStatus !== "ready")) {
+    errors.push(`${label} must be imported and optimized before publishing.`);
+  }
 }
 
-function validateBlocks(blocks: BlogContentBlock[], errors: string[]) {
+function validateBlocks(blocks: BlogContentBlock[], errors: string[], requireInternal = false) {
   blocks.forEach((block) => {
-    if (block.type === "image") validateMedia(block.media, errors, "Image block URL");
+    if (block.type === "image") validateMedia(block.media, errors, "Image block URL", requireInternal);
     if (block.type === "youtube" && !isYoutubeUrl(block.url) && !isGoogleDriveUrl(block.url)) {
       errors.push("Video block URL must be a valid YouTube or Google Drive link.");
     }
@@ -194,8 +198,8 @@ async function buildPostPayload(body: Record<string, unknown>, existingStatus: B
       : undefined;
   const errors: string[] = [];
 
-  validateMedia(heroImage, errors, "Hero image URL");
-  validateBlocks(blocks, errors);
+  validateMedia(heroImage, errors, "Hero image URL", status === "published");
+  validateBlocks(blocks, errors, status === "published");
   const categorySlug = await resolveNamedCategory(body, programAssociation, categoryKind, errors);
   const activeCategorySlugs = categorySlug ? [categorySlug] : [];
 
@@ -262,6 +266,63 @@ blogAdminRouter.post("/api/admin/session", (request, response) => {
     ok: true,
     token: signAdminToken(sessionSecret)
   });
+});
+
+blogAdminRouter.post("/api/admin/media/import-drive", requireAdmin, async (request, response) => {
+  const sourceUrl = getString(request.body.sourceUrl);
+  if (!isGoogleDriveUrl(sourceUrl) || request.body.publicAccessConfirmed !== true) {
+    response.status(400).json({ ok: false, message: "Paste a Google Drive image link and confirm general access first." });
+    return;
+  }
+
+  try {
+    const input = await downloadDriveImage(sourceUrl);
+    const media = await optimizeAndStoreImage(input, {
+      alt: getString(request.body.alt),
+      caption: getString(request.body.caption),
+      name: getString(request.body.name),
+      sourceUrl
+    });
+    response.status(201).json({ media, ok: true });
+  } catch (error) {
+    response.status(422).json({ ok: false, message: error instanceof Error ? error.message : "Image could not be imported." });
+  }
+});
+
+blogAdminRouter.post(
+  "/api/admin/media/upload",
+  requireAdmin,
+  raw({ limit: "15mb", type: ["image/*", "application/octet-stream"] }),
+  async (request, response) => {
+    if (!Buffer.isBuffer(request.body) || !request.body.length) {
+      response.status(400).json({ ok: false, message: "Choose an image to upload." });
+      return;
+    }
+    try {
+      const media = await optimizeAndStoreImage(request.body, {
+        alt: getString(request.headers["x-image-alt"]),
+        caption: getString(request.headers["x-image-caption"]),
+        name: getString(request.headers["x-image-name"])
+      });
+      response.status(201).json({ media, ok: true });
+    } catch (error) {
+      response.status(422).json({ ok: false, message: error instanceof Error ? error.message : "Image could not be uploaded." });
+    }
+  }
+);
+
+blogAdminRouter.post("/api/admin/media/delete", requireAdmin, async (request, response) => {
+  const media = sanitizeImageMedia(request.body.media);
+  if (!media || media.storageProvider !== "vercel-blob") {
+    response.status(400).json({ ok: false, message: "Stored media metadata is required." });
+    return;
+  }
+  try {
+    await deleteStoredMedia(media);
+    response.json({ ok: true });
+  } catch {
+    response.status(503).json({ ok: false, message: "Stored media could not be removed." });
+  }
 });
 
 blogAdminRouter.get("/api/admin/blog-categories", requireAdmin, requireMongo, async (_request, response) => {

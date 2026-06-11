@@ -78,9 +78,24 @@ export function sanitizeImageMedia(value: unknown): BlogImageMedia | undefined {
 
   return {
     alt: getString(media.alt) || undefined,
+    byteSize: typeof media.byteSize === "number" ? media.byteSize : undefined,
     caption: getString(media.caption) || undefined,
+    format: media.format === "webp" ? "webp" : undefined,
+    height: typeof media.height === "number" ? media.height : undefined,
+    importStatus: media.importStatus === "ready" || media.importStatus === "pending" || media.importStatus === "failed" ? media.importStatus : undefined,
+    pathname: getString(media.pathname) || undefined,
     publicAccessConfirmed: media.publicAccessConfirmed === true || undefined,
-    url
+    sourceUrl: getString(media.sourceUrl) || undefined,
+    storageProvider: media.storageProvider === "vercel-blob" ? "vercel-blob" : undefined,
+    url,
+    variants: Array.isArray(media.variants) ? media.variants.flatMap((variant) => {
+      if (!variant || typeof variant !== "object") return [];
+      const item = variant as Record<string, unknown>;
+      const variantUrl = getString(item.url);
+      if (!variantUrl || typeof item.width !== "number" || typeof item.height !== "number" || typeof item.byteSize !== "number") return [];
+      return [{ byteSize: item.byteSize, height: item.height, url: variantUrl, width: item.width }];
+    }) : undefined,
+    width: typeof media.width === "number" ? media.width : undefined
   };
 }
 

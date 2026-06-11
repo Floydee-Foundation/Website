@@ -23,9 +23,18 @@ export interface BlogPostDocument {
   featured?: boolean;
   heroImage?: {
     alt?: string;
+    byteSize?: number;
     caption?: string;
+    format?: "webp";
+    height?: number;
+    importStatus?: "ready" | "pending" | "failed";
+    pathname?: string;
     publicAccessConfirmed?: boolean;
+    sourceUrl?: string;
+    storageProvider?: "vercel-blob";
     url: string;
+    variants?: Array<{ byteSize: number; height: number; url: string; width: number }>;
+    width?: number;
   };
   programAssociation: BlogProgramAssociation;
   publishedAt?: Date;
@@ -68,9 +77,27 @@ const blogPostSchema = new Schema<BlogPostDocument>(
     featured: { default: false, index: true, type: Boolean },
     heroImage: {
       alt: { trim: true, type: String },
+      byteSize: { type: Number },
       caption: { trim: true, type: String },
+      format: { enum: ["webp"], type: String },
+      height: { type: Number },
+      importStatus: { enum: ["ready", "pending", "failed"], type: String },
+      pathname: { trim: true, type: String },
       publicAccessConfirmed: { type: Boolean },
-      url: { trim: true, type: String }
+      sourceUrl: { trim: true, type: String },
+      storageProvider: { enum: ["vercel-blob"], type: String },
+      url: { trim: true, type: String },
+      variants: {
+        default: undefined,
+        type: [{
+          _id: false,
+          byteSize: { required: true, type: Number },
+          height: { required: true, type: Number },
+          url: { required: true, trim: true, type: String },
+          width: { required: true, type: Number }
+        }]
+      },
+      width: { type: Number }
     },
     programAssociation: {
       default: "general",

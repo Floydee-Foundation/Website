@@ -6,6 +6,7 @@ const mongoConnectAttempts = 2;
 const mongoRetryDelayMs = 250;
 
 function startMongoConnection() {
+  if (mongoose.connection.readyState === 0 && mongoConnection) mongoConnection = undefined;
   mongoConnection ??= mongoose.connect(env.mongoUri!, {
     connectTimeoutMS: 4000,
     maxPoolSize: 5,
@@ -19,6 +20,14 @@ function startMongoConnection() {
   return mongoConnection;
 }
 
+mongoose.connection.on("disconnected", () => {
+  mongoConnection = undefined;
+});
+
+mongoose.connection.on("error", () => {
+  if (mongoose.connection.readyState === 0) mongoConnection = undefined;
+});
+
 export async function connectMongo() {
   if (!env.mongoUri) {
     console.warn("MONGODB_URI is not set. API will run without a database connection.");
@@ -26,6 +35,7 @@ export async function connectMongo() {
   }
 
   if (mongoose.connection.readyState === 1) return;
+  if (mongoose.connection.readyState === 0) mongoConnection = undefined;
 
   let lastError: unknown;
 

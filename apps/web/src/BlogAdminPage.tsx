@@ -187,11 +187,15 @@ function videoEmbedUrl(url: string) {
   return driveId ? `https://drive.google.com/file/d/${driveId}/preview` : youtubeEmbedUrl(url);
 }
 
+function mediaInternalized(media?: BlogImageMedia) {
+  return !media?.url || (media.storageProvider === "vercel-blob" && media.importStatus === "ready");
+}
+
 function driveMediaConfirmed(post: EditorPost) {
-  if (post.heroImage?.url && isGoogleDriveUrl(post.heroImage.url) && !post.heroImage.publicAccessConfirmed) return false;
+  if (!mediaInternalized(post.heroImage)) return false;
 
   return post.blocks.every((block) => {
-    if (block.type === "image" && isGoogleDriveUrl(block.media.url)) return Boolean(block.media.publicAccessConfirmed);
+    if (block.type === "image") return mediaInternalized(block.media);
     if (block.type === "youtube" && isGoogleDriveUrl(block.url)) return Boolean(block.publicAccessConfirmed);
     return true;
   });
@@ -288,17 +292,21 @@ function PreviewBlock({ block }: { block: BlogContentBlock }) {
 
 function BlockEditor({
   block,
+  imageName,
   index,
   onChange,
   onMove,
   onRemove,
+  token,
   total
 }: {
   block: BlogContentBlock;
+  imageName: string;
   index: number;
   onChange: (block: BlogContentBlock) => void;
   onMove: (direction: -1 | 1) => void;
   onRemove: () => void;
+  token: string;
   total: number;
 }) {
   const title = blockLabels[block.type];
@@ -331,7 +339,7 @@ function BlockEditor({
         <Field label="Paragraph"><textarea rows={5} value={block.text} onChange={(event) => onChange({ ...block, text: event.target.value })} /></Field>
       ) : null}
       {block.type === "image" ? (
-        <MediaFields media={block.media} onChange={(media) => onChange({ ...block, media })} />
+        <MediaFields imageName={imageName} media={block.media} onChange={(media) => onChange({ ...block, media })} token={token} />
       ) : null}
       {block.type === "youtube" ? (
         <div className="admin-form-grid compact">
@@ -368,18 +376,81 @@ function BlockEditor({
   );
 }
 
-function MediaFields({ media, onChange }: { media: BlogImageMedia; onChange: (media: BlogImageMedia) => void }) {
+function MediaFields({ imageName, media, onChange, token }: { imageName: string; media: BlogImageMedia; onChange: (media: BlogImageMedia) => void; token: string }) {
+  const [busy, setBusy] = useState(false);
+  const [status, setStatus] = useState("");
+  const sourceUrl = media.sourceUrl ?? (media.storageProvider === "vercel-blob" ? "" : media.url);
+
+  const importDrive = async () => {
+    setBusy(true);
+    setStatus("Importing and optimizing image...");
+    try {
+      const result = await apiRequest<{ media: BlogImageMedia }>("/api/admin/media/import-drive", token, {
+        body: JSON.stringify({
+          alt: media.alt,
+          caption: media.caption,
+          name: imageName,
+          publicAccessConfirmed: media.publicAccessConfirmed,
+          sourceUrl
+        }),
+        method: "POST"
+      });
+      onChange(result.media);
+      setStatus("Optimized WebP image stored internally.");
+    } catch (error) {
+      setStatus(error instanceof Error ? error.message : "Image could not be imported.");
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const upload = async (file?: File) => {
+    if (!file) return;
+    setBusy(true);
+    setStatus("Uploading and optimizing image...");
+    try {
+      const response = await fetch(`${apiBaseUrl}/api/admin/media/upload`, {
+        body: file,
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": file.type || "application/octet-stream",
+          "X-Image-Name": slugify(imageName)
+        },
+        method: "POST"
+      });
+      const result = (await response.json().catch(() => null)) as AdminResponse<{ media: BlogImageMedia }> | null;
+      if (!response.ok || !result?.ok) throw new Error(result?.message ?? "Image could not be uploaded.");
+      onChange({ ...result.media, alt: media.alt, caption: media.caption });
+      setStatus("Optimized WebP image stored internally.");
+    } catch (error) {
+      setStatus(error instanceof Error ? error.message : "Image could not be uploaded.");
+    } finally {
+      setBusy(false);
+    }
+  };
+
   return (
-    <div className="admin-form-grid compact">
-      <Field label="Image URL or Google Drive image link"><input value={media.url} onChange={(event) => onChange({ ...media, url: event.target.value })} /></Field>
+    <div className="admin-form-grid compact admin-media-fields">
+      <Field label="Google Drive image link"><input value={sourceUrl} onChange={(event) => onChange({ alt: media.alt, caption: media.caption, publicAccessConfirmed: false, sourceUrl: event.target.value, url: event.target.value })} /></Field>
       <Field label="Alt text"><input value={media.alt ?? ""} onChange={(event) => onChange({ ...media, alt: event.target.value })} /></Field>
       <Field label="Caption"><input value={media.caption ?? ""} onChange={(event) => onChange({ ...media, caption: event.target.value })} /></Field>
-      {isGoogleDriveUrl(media.url) ? (
+      {isGoogleDriveUrl(sourceUrl) ? (
         <PublicDriveConfirmation
           checked={Boolean(media.publicAccessConfirmed)}
           onChange={(publicAccessConfirmed) => onChange({ ...media, publicAccessConfirmed })}
         />
       ) : null}
+      <div className="admin-media-actions">
+        <button className="button button-secondary" disabled={busy || !isGoogleDriveUrl(sourceUrl) || !media.publicAccessConfirmed} onClick={importDrive} type="button">Import &amp; optimize</button>
+        <label className="button button-text">Upload image<input accept="image/jpeg,image/png,image/webp,image/avif,image/tiff,image/gif" disabled={busy} onChange={(event) => upload(event.target.files?.[0])} type="file" /></label>
+      </div>
+      {media.storageProvider === "vercel-blob" && media.importStatus === "ready" ? (
+        <div className="admin-media-ready">
+          <img src={media.url} alt="" />
+          <span>Internal WebP · {media.width}×{media.height} · {media.variants?.length ?? 1} responsive sizes</span>
+        </div>
+      ) : null}
+      <p className="form-status" role="status">{status}</p>
     </div>
   );
 }
@@ -450,7 +521,7 @@ export function BlogAdminPage({ path = "/admin/blogs" }: { path?: string }) {
     ["Category type", Boolean(editorPost.categoryKind)],
     ["Name", editorPost.categoryKind === "general" || Boolean(editorPost.categorySlug || newCategoryName.trim())],
     ["Content", editorPost.blocks.length > 0],
-    ["Drive access", driveMediaConfirmed(editorPost)],
+    ["Internal media", driveMediaConfirmed(editorPost)],
     ["Hero alt text", !editorPost.heroImage?.url || Boolean(editorPost.heroImage.alt?.trim())],
     ["SEO summary", Boolean(editorPost.seo.description?.trim())]
   ] as const;
@@ -895,7 +966,7 @@ export function BlogAdminPage({ path = "/admin/blogs" }: { path?: string }) {
 
           <section className="admin-editor-section">
             <div className="admin-panel-heading"><h3>Hero media</h3></div>
-            <MediaFields media={editorPost.heroImage ?? { alt: "", caption: "", url: "" }} onChange={(heroImage) => updateEditor({ heroImage })} />
+            <MediaFields imageName={`${editorPost.slug || editorPost.title || "story"}-hero`} media={editorPost.heroImage ?? { alt: "", caption: "", url: "" }} onChange={(heroImage) => updateEditor({ heroImage })} token={token} />
           </section>
 
           <section className="admin-editor-section">
@@ -924,11 +995,13 @@ export function BlogAdminPage({ path = "/admin/blogs" }: { path?: string }) {
               {editorPost.blocks.map((block, index) => (
                 <BlockEditor
                   block={block}
+                  imageName={`${editorPost.slug || editorPost.title || "story"}-${index + 1}`}
                   index={index}
                   key={block.id}
                   onChange={(nextBlock) => updateBlock(index, nextBlock)}
                   onMove={(direction) => moveBlock(index, direction)}
                   onRemove={() => updateEditor({ blocks: editorPost.blocks.filter((_, itemIndex) => itemIndex !== index) })}
+                  token={token}
                   total={editorPost.blocks.length}
                 />
               ))}
