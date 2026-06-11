@@ -38,12 +38,8 @@ const navGroups: NavGroup[] = [
   },
   {
     label: "JOIN US",
-    links: [
-      ["VOLUNTEER", "/volunteer"],
-      ["PARTNER WITH US", "/partner-with-us"],
-      ["BOOK A PROGRAM", "/book-a-program"],
-      ["CAMPAIGN WITH US", "/campaign-with-us"]
-    ]
+    href: "/join-us",
+    links: []
   },
   {
     label: "STORIES & LATEST",
@@ -1017,12 +1013,6 @@ function HomePage() {
               </div>
             </div>
           </div>
-        </section>
-
-        <section className="gallery" id="gallery" aria-label="Foundation gallery">
-          <img src={healthCamp1} alt="Floydee screening camp moment" />
-          <img src={healthCamp2} alt="Floydee health education session" />
-          <img src={healthCamp3} alt="Floydee adolescent girls health screening program" />
         </section>
 
         <section className="contact-section" id="contact" aria-labelledby="contact-title">
