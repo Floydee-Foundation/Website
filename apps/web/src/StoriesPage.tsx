@@ -1,5 +1,5 @@
 import { FormEvent, useEffect, useState } from "react";
-import type { BlogCategory, BlogContentBlock, BlogPost, BlogProgramAssociation } from "@floydee/shared";
+import type { BlogCategory, BlogCategoryKind, BlogContentBlock, BlogPost, BlogProgramAssociation } from "@floydee/shared";
 
 const apiBaseUrl = import.meta.env.VITE_API_BASE_URL ?? (import.meta.env.DEV ? "http://localhost:4000" : "");
 const pageSize = 9;
@@ -16,6 +16,7 @@ type BlogListResponse = {
 
 type Filters = {
   categorySlug: string;
+  categoryKind: BlogCategoryKind | "";
   page: number;
   programSlug: string;
   q: string;
@@ -27,6 +28,12 @@ const programLabels: Record<BlogProgramAssociation, string> = {
   general: "Foundation",
   sakhi: "SAKHI",
   vidya: "VIDYA"
+};
+
+const categoryKindLabels: Record<BlogCategoryKind, string> = {
+  campaign: "Campaign",
+  general: "General",
+  workshop: "Workshop"
 };
 
 const programCtas: Record<BlogProgramAssociation, { href: string; label: string; text: string }> = {
@@ -90,10 +97,14 @@ function readingTime(post: BlogPost) {
 }
 
 function categoryName(post: BlogPost, categories: BlogCategory[]) {
-  const matched = categories.filter((category) => post.categorySlugs.includes(category.slug));
-  return matched.find((category) => category.programAssociation === post.programAssociation)?.name
-    ?? matched[0]?.name
-    ?? programLabels[post.programAssociation];
+  const base = `${programLabels[post.programAssociation]} · ${categoryKindLabels[post.categoryKind]}`;
+  if (post.categoryKind === "general" || !post.categorySlug) return base;
+  const matched = categories.find((category) => (
+    category.programAssociation === post.programAssociation &&
+    category.kind === post.categoryKind &&
+    category.slug === post.categorySlug
+  ));
+  return matched ? `${base} · ${matched.name}` : base;
 }
 
 function postMeta(post: BlogPost, categories: BlogCategory[]) {
@@ -105,6 +116,7 @@ function parseFilters(): Filters {
   const requestedPage = Number.parseInt(params.get("page") ?? "", 10);
   return {
     categorySlug: params.get("category") ?? "",
+    categoryKind: (["workshop", "campaign", "general"].includes(params.get("type") ?? "") ? params.get("type") : "") as BlogCategoryKind | "",
     page: Number.isFinite(requestedPage) && requestedPage > 0 ? requestedPage : 1,
     programSlug: params.get("program") ?? "",
     q: params.get("q") ?? "",
@@ -115,6 +127,7 @@ function parseFilters(): Filters {
 function filtersToSearch(filters: Filters) {
   const params = new URLSearchParams();
   if (filters.q) params.set("q", filters.q);
+  if (filters.categoryKind) params.set("type", filters.categoryKind);
   if (filters.categorySlug) params.set("category", filters.categorySlug);
   if (filters.programSlug) params.set("program", filters.programSlug);
   if (filters.sort === "oldest") params.set("sort", "oldest");
@@ -204,8 +217,13 @@ export function StoriesHubPage() {
   const [status, setStatus] = useState("loading");
   const [message, setMessage] = useState("");
 
-  const isUnfiltered = !filters.q && !filters.categorySlug && !filters.programSlug && filters.sort === "latest";
+  const isUnfiltered = !filters.q && !filters.categoryKind && !filters.categorySlug && !filters.programSlug && filters.sort === "latest";
   const showFeatured = isUnfiltered && filters.page === 1 && featured;
+  const nameOptions = categories.filter((category) => (
+    (!filters.programSlug || category.programAssociation === filters.programSlug) &&
+    (filters.categoryKind === "workshop" || filters.categoryKind === "campaign") &&
+    category.kind === filters.categoryKind
+  ));
 
   useEffect(() => {
     const handlePopState = () => {
@@ -247,8 +265,9 @@ export function StoriesHubPage() {
         sort: filters.sort
       });
       if (filters.q) params.set("q", filters.q);
-      if (filters.categorySlug) params.set("categorySlug", filters.categorySlug);
       if (filters.programSlug) params.set("programSlug", filters.programSlug);
+      if (filters.categoryKind) params.set("categoryKind", filters.categoryKind);
+      if (filters.categorySlug) params.set("categorySlug", filters.categorySlug);
       if (isUnfiltered && lead) params.set("excludeSlug", lead.slug);
 
       const result = await getJson<BlogListResponse>(`/api/blog-posts?${params}`, controller.signal);
@@ -308,15 +327,18 @@ export function StoriesHubPage() {
             <span>Search stories</span>
             <div><input onChange={(event) => setSearchText(event.target.value)} placeholder="Search stories" value={searchText} /><button type="submit">Search</button></div>
           </label>
-          <label><span>Category</span><select value={filters.categorySlug} onChange={(event) => updateFilters({ categorySlug: event.target.value, page: 1 })}><option value="">All categories</option>{categories.map((category) => <option key={category.slug} value={category.slug}>{category.name}</option>)}</select></label>
-          <label><span>Program</span><select value={filters.programSlug} onChange={(event) => updateFilters({ page: 1, programSlug: event.target.value })}><option value="">All programs</option>{(["aarohi", "sakhi", "vidya", "general"] as const).map((program) => <option key={program} value={program}>{programLabels[program]}</option>)}</select></label>
+          <label><span>Program</span><select value={filters.programSlug} onChange={(event) => updateFilters({ categorySlug: "", page: 1, programSlug: event.target.value })}><option value="">All programs</option>{(["aarohi", "sakhi", "vidya", "general"] as const).map((program) => <option key={program} value={program}>{programLabels[program]}</option>)}</select></label>
+          <label><span>Category</span><select value={filters.categoryKind} onChange={(event) => updateFilters({ categoryKind: event.target.value as Filters["categoryKind"], categorySlug: "", page: 1 })}><option value="">All categories</option>{(["workshop", "campaign", "general"] as const).map((kind) => <option key={kind} value={kind}>{categoryKindLabels[kind]}</option>)}</select></label>
+          {filters.categoryKind === "workshop" || filters.categoryKind === "campaign" ? (
+            <label><span>Name</span><select value={filters.categorySlug} onChange={(event) => updateFilters({ categorySlug: event.target.value, page: 1 })}><option value="">All names</option>{nameOptions.map((category) => <option key={`${category.programAssociation}-${category.kind}-${category.slug}`} value={category.slug}>{category.name}</option>)}</select></label>
+          ) : null}
           <label><span>Sort by</span><select value={filters.sort} onChange={(event) => updateFilters({ page: 1, sort: event.target.value as Filters["sort"] })}><option value="latest">Latest first</option><option value="oldest">Oldest first</option></select></label>
-          {(filters.q || filters.categorySlug || filters.programSlug || filters.sort === "oldest") ? <button className="stories-clear" onClick={() => { setSearchText(""); updateFilters({ categorySlug: "", page: 1, programSlug: "", q: "", sort: "latest" }); }} type="button">Clear filters</button> : null}
+          {(filters.q || filters.categoryKind || filters.categorySlug || filters.programSlug || filters.sort === "oldest") ? <button className="stories-clear" onClick={() => { setSearchText(""); updateFilters({ categoryKind: "", categorySlug: "", page: 1, programSlug: "", q: "", sort: "latest" }); }} type="button">Clear filters</button> : null}
         </form>
 
         {status === "loading" ? <div className="stories-state"><span className="stories-loader"></span><h3>Gathering stories from the field.</h3></div> : null}
         {status === "error" ? <div className="stories-state"><h3>Stories are temporarily unavailable.</h3><p>{message}</p><button className="button button-secondary" onClick={() => setFilters({ ...filters })} type="button">Try again</button></div> : null}
-        {status === "ready" && !posts.length ? <div className="stories-state"><h3>No stories match this view.</h3><p>Try a broader search or clear the current filters.</p><button className="button button-secondary" onClick={() => { setSearchText(""); updateFilters({ categorySlug: "", page: 1, programSlug: "", q: "", sort: "latest" }); }} type="button">Show all stories</button></div> : null}
+        {status === "ready" && !posts.length ? <div className="stories-state"><h3>No stories match this view.</h3><p>Try a broader search or clear the current filters.</p><button className="button button-secondary" onClick={() => { setSearchText(""); updateFilters({ categoryKind: "", categorySlug: "", page: 1, programSlug: "", q: "", sort: "latest" }); }} type="button">Show all stories</button></div> : null}
         {status === "ready" && posts.length ? <div className="stories-grid">{posts.map((post) => <StoryCard categories={categories} key={post.id} post={post} />)}</div> : null}
 
         {status === "ready" && pagination.totalPages > 1 ? (
@@ -380,11 +402,10 @@ export function StoryArticlePage({ slug }: { slug: string }) {
     ]).then(async ([postResult, categoryResult]) => {
       setPost(postResult.post);
       setCategories(categoryResult.categories);
-      const matchedCategories = categoryResult.categories.filter((category) => postResult.post.categorySlugs.includes(category.slug));
-      const firstCategory = matchedCategories.find((category) => category.programAssociation === postResult.post.programAssociation)?.slug
-        ?? matchedCategories[0]?.slug;
       const paths = [
-        firstCategory ? `/api/blog-posts?categorySlug=${encodeURIComponent(firstCategory)}&excludeSlug=${encodeURIComponent(slug)}&pageSize=3` : "",
+        postResult.post.categoryKind !== "general" && postResult.post.categorySlug
+          ? `/api/blog-posts?programSlug=${postResult.post.programAssociation}&categoryKind=${postResult.post.categoryKind}&categorySlug=${encodeURIComponent(postResult.post.categorySlug)}&excludeSlug=${encodeURIComponent(slug)}&pageSize=3`
+          : "",
         `/api/blog-posts?programSlug=${postResult.post.programAssociation}&excludeSlug=${encodeURIComponent(slug)}&pageSize=3`
       ].filter(Boolean);
       const relatedResults = await Promise.all(paths.map((path) => getJson<BlogListResponse>(path, controller.signal).catch(() => null)));

@@ -10,6 +10,7 @@ import programMapping from "./assets/program-mapping.png";
 import { BlogAdminPage } from "./BlogAdminPage";
 import { LanguageSelector, useLocale } from "./LocaleProvider";
 import { StoryArticlePage, StoriesHubPage } from "./StoriesPage";
+import type { BlogCategory, BlogProgramAssociation } from "@floydee/shared";
 
 type NavLink = [label: string, href: string, className?: string];
 type NavGroup = {
@@ -71,6 +72,20 @@ const navGroups: NavGroup[] = [
 
 const apiBaseUrl = import.meta.env.VITE_API_BASE_URL ?? (import.meta.env.DEV ? "http://localhost:4000" : "");
 const donationProgramOptions = ["AAROHI", "SAKHI", "VIDYA", "Where needed most"];
+const namedDonationProgramOptions = ["AAROHI", "SAKHI", "VIDYA"];
+const donationTargetLabels = {
+  campaign: "Fund a campaign",
+  generic: "Generic donation",
+  program: "Fund a program",
+  workshop: "Fund a workshop"
+} as const;
+type DonationTargetType = keyof typeof donationTargetLabels;
+const programValueMap: Record<string, BlogProgramAssociation> = {
+  AAROHI: "aarohi",
+  SAKHI: "sakhi",
+  VIDYA: "vidya",
+  "Where needed most": "general"
+};
 const foundationPrograms = [
   ["AAROHI", "Care That Changes Lives"],
   ["SAKHI", "Your space to share, be heard, and feel supported"],
@@ -400,32 +415,58 @@ function Header() {
 type SupportFormProps = {
   defaultFrequency?: "One-time" | "Monthly";
   defaultProgram?: string;
+  defaultTargetType?: DonationTargetType;
 };
 
-function SupportForm({ defaultFrequency = "One-time", defaultProgram = "" }: SupportFormProps) {
+function SupportForm({ defaultFrequency = "One-time", defaultProgram = "", defaultTargetType = "program" }: SupportFormProps) {
   const { locale } = useLocale();
   const [frequency, setFrequency] = useState(defaultFrequency);
   const [amount, setAmount] = useState("500");
+  const [targetType, setTargetType] = useState<DonationTargetType>(defaultTargetType);
   const [program, setProgram] = useState(defaultProgram);
+  const [targetSlug, setTargetSlug] = useState("");
+  const [targetOptions, setTargetOptions] = useState<BlogCategory[]>([]);
   const [consentAccepted, setConsentAccepted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [status, setStatus] = useState("");
+  const selectedProgramSlug = programValueMap[program] ?? "";
+  const needsProgram = targetType === "program" || targetType === "campaign" || targetType === "workshop";
+  const needsTargetName = targetType === "campaign" || targetType === "workshop";
+  const availableTargets = targetOptions.filter((option) => (
+    needsTargetName &&
+    option.kind === targetType &&
+    option.programAssociation === selectedProgramSlug
+  ));
+  const selectedTarget = availableTargets.find((option) => option.slug === targetSlug);
 
   useEffect(() => {
     setFrequency(defaultFrequency);
+    setTargetType(defaultTargetType);
     setProgram(defaultProgram);
+    setTargetSlug("");
     setConsentAccepted(false);
     setStatus("");
     setSubmitted(false);
-  }, [defaultFrequency, defaultProgram]);
+  }, [defaultFrequency, defaultProgram, defaultTargetType]);
+
+  useEffect(() => {
+    const controller = new AbortController();
+    fetch(`${apiBaseUrl}/api/blog-categories`, { signal: controller.signal })
+      .then((response) => response.ok ? response.json() : null)
+      .then((result: { categories?: BlogCategory[] } | null) => setTargetOptions(result?.categories ?? []))
+      .catch(() => {
+        if (!controller.signal.aborted) setTargetOptions([]);
+      });
+    return () => controller.abort();
+  }, []);
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const form = event.currentTarget;
     setSubmitted(true);
 
-    if (!program || !amount || !consentAccepted || !form.checkValidity()) {
+    if ((needsProgram && !program) || (needsTargetName && !selectedTarget) || !amount || !consentAccepted || !form.checkValidity()) {
       setStatus("Please complete the required fields correctly.");
       form.reportValidity();
       return;
@@ -440,7 +481,10 @@ function SupportForm({ defaultFrequency = "One-time", defaultProgram = "" }: Sup
         email: new FormData(form).get("email")?.toString() ?? "",
         frequency,
         amount: Number(amount),
-        program,
+        program: needsProgram ? program : "",
+        targetName: selectedTarget?.name ?? "",
+        targetSlug: selectedTarget?.slug ?? "",
+        targetType,
         consentStatus: donationConsentText,
         locale
       });
@@ -449,7 +493,9 @@ function SupportForm({ defaultFrequency = "One-time", defaultProgram = "" }: Sup
       form.reset();
       setFrequency(defaultFrequency);
       setAmount("500");
+      setTargetType(defaultTargetType);
       setProgram(defaultProgram);
+      setTargetSlug("");
       setConsentAccepted(false);
       setSubmitted(false);
     } catch (error) {
@@ -512,6 +558,32 @@ function SupportForm({ defaultFrequency = "One-time", defaultProgram = "" }: Sup
         </label>
       </div>
       <input type="hidden" name="amount" value={amount} />
+      <section className="donation-target-panel" aria-labelledby="donation-target-title">
+        <h3 id="donation-target-title">Where should this gift go?</h3>
+        <div className="donation-target-grid">
+          {(Object.keys(donationTargetLabels) as DonationTargetType[]).map((type) => (
+            <button
+              className={`donation-target-card${targetType === type ? " active" : ""}`}
+              key={type}
+              onClick={() => {
+                setTargetType(type);
+                setProgram(type === "generic" ? "" : type === "program" ? defaultProgram : "");
+                setTargetSlug("");
+                setStatus("");
+              }}
+              type="button"
+            >
+              <strong>{donationTargetLabels[type]}</strong>
+              <span>
+                {type === "program" ? "Choose a program focus." :
+                  type === "campaign" ? "Choose program, then campaign." :
+                    type === "workshop" ? "Choose program, then workshop." :
+                      "Let the team route it where needed."}
+              </span>
+            </button>
+          ))}
+        </div>
+      </section>
       <div className="form-grid">
         <label>
           Name
@@ -521,18 +593,36 @@ function SupportForm({ defaultFrequency = "One-time", defaultProgram = "" }: Sup
           Email
           <input name="email" type="email" autoComplete="email" required />
         </label>
-        <CustomSelect
-          invalid={submitted && !program}
-          label="Program focus"
-          name="program"
-          onChange={(nextProgram) => {
-            setProgram(nextProgram);
-            setStatus("");
-          }}
-          options={donationProgramOptions}
-          placeholder="Select a program"
-          value={program}
-        />
+        {needsProgram ? (
+          <CustomSelect
+            invalid={submitted && !program}
+            label={needsTargetName ? "Parent program" : "Program focus"}
+            name="program"
+            onChange={(nextProgram) => {
+              setProgram(nextProgram);
+              setTargetSlug("");
+              setStatus("");
+            }}
+            options={needsTargetName ? namedDonationProgramOptions : donationProgramOptions}
+            placeholder="Select a program"
+            value={program}
+          />
+        ) : null}
+        {needsTargetName ? (
+          <CustomSelect
+            invalid={submitted && !selectedTarget}
+            label={targetType === "campaign" ? "Campaign name" : "Workshop name"}
+            name="targetSlug"
+            onChange={(nextName) => {
+              const matched = availableTargets.find((option) => option.name === nextName);
+              setTargetSlug(matched?.slug ?? "");
+              setStatus("");
+            }}
+            options={availableTargets.map((option) => option.name)}
+            placeholder={program ? `Select a ${targetType}` : "Select parent program first"}
+            value={selectedTarget?.name ?? ""}
+          />
+        ) : null}
         <button className="button button-primary" type="submit" disabled={isSubmitting}>
           {isSubmitting ? "Sending..." : "Donate Now"}
         </button>
@@ -1007,6 +1097,7 @@ function PageHero({ eyebrow, title, text, image, cta }: { eyebrow: string; title
 
 function DonationPage({ path }: { path: string }) {
   const isMonthly = path === "/donate/monthly";
+  const isCampaign = path === "/donate/campaigns";
   const isWhereNeeded = path === "/donate/where-needed-most";
 
   return (
@@ -1014,7 +1105,7 @@ function DonationPage({ path }: { path: string }) {
       <PageHero
         eyebrow="Donate"
         title={isMonthly ? "Stand with access every month." : "Turn concern into access."}
-        text="Support health access, emotional well-being, education, employability, and community-rooted programs through a donation enquiry. The Floydee team will connect with payment and 80G receipt details."
+        text="Support a program, named campaign, workshop, or general foundation need through a donation enquiry. The Floydee team will connect with payment and 80G receipt details."
         image={healthCamp2}
       />
       <section className="page-section page-donation-layout" aria-labelledby="donation-page-title">
@@ -1027,13 +1118,16 @@ function DonationPage({ path }: { path: string }) {
             <article><strong>Campaign support</strong><span>Underwrite focused initiatives for schools, colleges, communities, and institutional partners.</span></article>
           </div>
         </div>
-        <SupportForm defaultFrequency={isMonthly ? "Monthly" : "One-time"} defaultProgram={isWhereNeeded ? "Where needed most" : ""} />
+        <SupportForm
+          defaultFrequency={isMonthly ? "Monthly" : "One-time"}
+          defaultTargetType={isCampaign ? "campaign" : isWhereNeeded ? "generic" : "program"}
+        />
       </section>
       <section className="page-band">
         <h2>Donation FAQs</h2>
         <div className="page-grid three">
           <article><h3>Will I receive 80G details?</h3><p>Yes. The foundation team will connect with donation, campaign, payment, and 80G receipt information after your enquiry.</p></article>
-          <article><h3>Can I choose a program?</h3><p>You can select `AAROHI`, `SAKHI`, `VIDYA`, or `Where needed most` in the donation form.</p></article>
+          <article><h3>Can I choose where it goes?</h3><p>Yes. You can fund a program, select a campaign or workshop under a program, or make a generic donation.</p></article>
           <article><h3>Is this a payment gateway?</h3><p>No. This phase keeps donation as an enquiry flow so the team can confirm details directly.</p></article>
         </div>
       </section>

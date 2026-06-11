@@ -38,7 +38,10 @@ export interface DonationInquiry {
   email: string;
   frequency: "One-time" | "Monthly";
   amount: number;
-  program: ProgramFocus;
+  program?: ProgramFocus;
+  targetName?: string;
+  targetSlug?: string;
+  targetType: "program" | "campaign" | "workshop" | "generic";
   consentStatus: string;
   locale?: Locale;
 }
@@ -48,6 +51,8 @@ export type BlogStatus = "draft" | "published" | "archived";
 export type BlogCategoryStatus = "active" | "archived";
 
 export type BlogProgramAssociation = ProgramSlug | "general";
+
+export type BlogCategoryKind = "workshop" | "campaign" | "general";
 
 export interface BlogSeo {
   title?: string;
@@ -113,6 +118,7 @@ export interface BlogCategory {
   createdAt?: string;
   description?: string;
   id: string;
+  kind: BlogCategoryKind;
   name: string;
   programAssociation: BlogProgramAssociation;
   slug: string;
@@ -123,6 +129,8 @@ export interface BlogCategory {
 export interface BlogPost {
   author?: string;
   blocks: BlogContentBlock[];
+  categoryKind: BlogCategoryKind;
+  categorySlug?: string;
   categorySlugs: string[];
   createdAt?: string;
   excerpt: string;

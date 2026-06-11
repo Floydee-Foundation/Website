@@ -13,6 +13,7 @@ const donationPrograms = new Set([
 ]);
 
 const donationFrequencies = new Set(["One-time", "Monthly"]);
+const donationTargetTypes = new Set(["program", "campaign", "workshop", "generic"]);
 
 const contactIntents = new Set([
   "Partner with the foundation",
@@ -65,9 +66,22 @@ inquiriesRouter.post("/api/donation-inquiries", async (request, response) => {
   const frequency = getString(request.body.frequency);
   const amount = getPositiveAmount(request.body.amount);
   const program = getString(request.body.program);
+  const targetName = getString(request.body.targetName);
+  const targetSlug = getString(request.body.targetSlug);
+  const targetType = getString(request.body.targetType) || "program";
   const consentStatus = getString(request.body.consentStatus) || "Accepted by submitting the donation enquiry form.";
+  const needsProgram = targetType === "program" || targetType === "campaign" || targetType === "workshop";
+  const needsTargetName = targetType === "campaign" || targetType === "workshop";
 
-  if (!name || !email || !donationFrequencies.has(frequency) || !amount || !donationPrograms.has(program)) {
+  if (
+    !name ||
+    !email ||
+    !donationFrequencies.has(frequency) ||
+    !amount ||
+    !donationTargetTypes.has(targetType) ||
+    (needsProgram && !donationPrograms.has(program)) ||
+    (needsTargetName && (!targetName || !targetSlug))
+  ) {
     response.status(400).json({
       ok: false,
       message: "Please complete the required donation fields correctly."
@@ -97,7 +111,10 @@ inquiriesRouter.post("/api/donation-inquiries", async (request, response) => {
     ["Email", email],
     ["Frequency", frequency],
     ["Amount", `Rs ${amount}`],
-    ["Program focus", program],
+    ["Giving target", targetType],
+    ["Program focus", program || "Generic donation"],
+    ...(targetName ? [["Target name", targetName] as [string, string | number]] : []),
+    ...(targetSlug ? [["Target slug", targetSlug] as [string, string | number]] : []),
     ["Consent status", consentStatus]
   ];
 

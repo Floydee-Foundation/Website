@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { connectMongo } from "../config/mongo.js";
 import { BlogCategoryModel, BlogPostModel } from "../models/blog.js";
-import { getString, isMongoReady, isProgramAssociation, toSlug } from "../utils/blog.js";
+import { getString, isBlogCategoryKind, isMongoReady, isProgramAssociation, toSlug } from "../utils/blog.js";
 import type { BlogCategory, BlogContentBlock, BlogPost } from "@floydee/shared";
 
 export const blogPublicRouter = Router();
@@ -24,6 +24,7 @@ function serializeCategory(category: any): BlogCategory {
     createdAt: category.createdAt?.toISOString?.(),
     description: category.description || undefined,
     id: String(category._id),
+    kind: category.kind ?? "general",
     name: category.name,
     programAssociation: category.programAssociation,
     slug: category.slug,
@@ -36,6 +37,8 @@ function serializePost(post: any): BlogPost {
   return {
     author: post.author || undefined,
     blocks: (post.blocks ?? []) as BlogContentBlock[],
+    categoryKind: post.categoryKind ?? "general",
+    categorySlug: post.categoryKind && post.categoryKind !== "general" ? post.categorySlug || undefined : undefined,
     categorySlugs: post.categorySlugs ?? [],
     createdAt: post.createdAt?.toISOString?.(),
     excerpt: post.excerpt ?? "",
@@ -63,7 +66,7 @@ blogPublicRouter.get("/api/blog-categories", async (_request, response) => {
     return;
   }
 
-  const categories = await BlogCategoryModel.find({ status: "active" }).sort({ name: 1 }).lean();
+  const categories = await BlogCategoryModel.find({ kind: { $in: ["workshop", "campaign"] }, status: "active" }).sort({ programAssociation: 1, kind: 1, name: 1 }).lean();
   response.json({ categories: categories.map(serializeCategory), ok: true });
 });
 
@@ -74,6 +77,7 @@ blogPublicRouter.get("/api/blog-posts", async (request, response) => {
   }
 
   const filter: Record<string, unknown> = { status: "published" };
+  const categoryKind = getString(request.query.categoryKind);
   const categorySlug = toSlug(request.query.categorySlug);
   const excludeSlug = toSlug(request.query.excludeSlug);
   const featured = getString(request.query.featured);
@@ -86,7 +90,8 @@ blogPublicRouter.get("/api/blog-posts", async (request, response) => {
   const page = Number.isFinite(requestedPage) && requestedPage > 0 ? requestedPage : 1;
   const pageSize = Number.isFinite(requestedPageSize) ? Math.min(Math.max(requestedPageSize, 1), 24) : 9;
 
-  if (categorySlug) filter.categorySlugs = categorySlug;
+  if (isBlogCategoryKind(categoryKind)) filter.categoryKind = categoryKind;
+  if (categorySlug) filter.categorySlug = categorySlug;
   if (excludeSlug) filter.slug = { $ne: excludeSlug };
   if (featured === "true") filter.featured = true;
   if (isProgramAssociation(programSlug)) filter.programAssociation = programSlug;

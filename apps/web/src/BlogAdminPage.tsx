@@ -1,6 +1,7 @@
 import { FormEvent, ReactNode, useEffect, useMemo, useState } from "react";
 import type {
   BlogCategory,
+  BlogCategoryKind,
   BlogContentBlock,
   BlogImageMedia,
   BlogPost,
@@ -28,6 +29,8 @@ type AdminView = "categories" | "editor" | "library";
 const emptyPost: EditorPost = {
   author: "",
   blocks: [],
+  categoryKind: "general",
+  categorySlug: undefined,
   categorySlugs: [],
   excerpt: "",
   featured: false,
@@ -50,6 +53,14 @@ const programLabels: Record<BlogProgramAssociation, string> = {
   sakhi: "SAKHI",
   vidya: "VIDYA"
 };
+
+const categoryKindLabels: Record<BlogCategoryKind, string> = {
+  campaign: "Campaign",
+  general: "General",
+  workshop: "Workshop"
+};
+
+const namedCategoryKinds: BlogCategoryKind[] = ["workshop", "campaign"];
 
 const blockLabels: Record<BlogContentBlock["type"], string> = {
   heading: "Heading",
@@ -212,8 +223,9 @@ function Field({ children, label }: { children: ReactNode; label: string }) {
   return <label className="admin-field"><span>{label}</span>{children}</label>;
 }
 
-function BlogPreview({ post }: { post: EditorPost }) {
+function BlogPreview({ categories, post }: { categories: BlogCategory[]; post: EditorPost }) {
   const hero = post.heroImage?.url ? imagePreviewUrl(post.heroImage.url) : "";
+  const category = categories.find((item) => item.programAssociation === post.programAssociation && item.kind === post.categoryKind && item.slug === post.categorySlug);
 
   return (
     <article className="blog-preview">
@@ -226,8 +238,9 @@ function BlogPreview({ post }: { post: EditorPost }) {
         <div className="blog-preview-empty">Hero image preview</div>
       )}
       <div className="blog-preview-meta">
-        <span>{post.categorySlugs.join(" / ") || "category"}</span>
         <span>{programLabels[post.programAssociation]}</span>
+        <span>{categoryKindLabels[post.categoryKind]}</span>
+        {category ? <span>{category.name}</span> : null}
       </div>
       <h1>{post.title || "Untitled blog draft"}</h1>
       <p className="blog-preview-excerpt">{post.excerpt || "Write a short excerpt that gives readers a reason to open the story."}</p>
@@ -387,10 +400,19 @@ export function BlogAdminPage({ path = "/admin/blogs" }: { path?: string }) {
   const [categories, setCategories] = useState<BlogCategory[]>([]);
   const [posts, setPosts] = useState<BlogPost[]>([]);
   const [editorPost, setEditorPost] = useState<EditorPost>(emptyPost);
-  const [categoryForm, setCategoryForm] = useState({ description: "", name: "", programAssociation: "general" as BlogProgramAssociation, slug: "" });
+  const [categoryForm, setCategoryForm] = useState({
+    description: "",
+    kind: "workshop" as BlogCategoryKind,
+    name: "",
+    programAssociation: "general" as BlogProgramAssociation,
+    slug: ""
+  });
   const [editingCategoryId, setEditingCategoryId] = useState("");
+  const [newCategoryName, setNewCategoryName] = useState("");
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState<BlogStatus | "all">("all");
+  const [programFilter, setProgramFilter] = useState<BlogProgramAssociation | "all">("all");
+  const [categoryKindFilter, setCategoryKindFilter] = useState<BlogCategoryKind | "all">("all");
   const [categoryFilter, setCategoryFilter] = useState("all");
   const [status, setStatus] = useState("");
   const [busy, setBusy] = useState(false);
@@ -400,15 +422,33 @@ export function BlogAdminPage({ path = "/admin/blogs" }: { path?: string }) {
   const filteredPosts = useMemo(() => posts.filter((post) => {
     const matchesSearch = !search || `${post.title} ${post.excerpt}`.toLowerCase().includes(search.toLowerCase());
     const matchesStatus = statusFilter === "all" || post.status === statusFilter;
-    const matchesCategory = categoryFilter === "all" || post.categorySlugs.includes(categoryFilter);
-    return matchesSearch && matchesStatus && matchesCategory;
-  }), [categoryFilter, posts, search, statusFilter]);
+    const matchesProgram = programFilter === "all" || post.programAssociation === programFilter;
+    const matchesKind = categoryKindFilter === "all" || post.categoryKind === categoryKindFilter;
+    const matchesCategory = categoryFilter === "all" || post.categorySlug === categoryFilter;
+    return matchesSearch && matchesStatus && matchesProgram && matchesKind && matchesCategory;
+  }), [categoryFilter, categoryKindFilter, posts, programFilter, search, statusFilter]);
+
+  const visibleNamedCategories = useMemo(() => categories.filter((category) => (
+    category.status === "active" &&
+    namedCategoryKinds.includes(category.kind) &&
+    category.programAssociation === editorPost.programAssociation &&
+    category.kind === editorPost.categoryKind
+  )), [categories, editorPost.categoryKind, editorPost.programAssociation]);
+
+  const filteredNameOptions = useMemo(() => categories.filter((category) => (
+    category.status === "active" &&
+    namedCategoryKinds.includes(category.kind) &&
+    (programFilter === "all" || category.programAssociation === programFilter) &&
+    (categoryKindFilter === "all" || category.kind === categoryKindFilter)
+  )), [categories, categoryKindFilter, programFilter]);
 
   const publishChecks = [
     ["Title", Boolean(editorPost.title.trim())],
     ["Slug", Boolean(editorPost.slug.trim())],
     ["Excerpt", Boolean(editorPost.excerpt.trim())],
-    ["Category", editorPost.categorySlugs.length > 0],
+    ["Program", Boolean(editorPost.programAssociation)],
+    ["Category type", Boolean(editorPost.categoryKind)],
+    ["Name", editorPost.categoryKind === "general" || Boolean(editorPost.categorySlug || newCategoryName.trim())],
     ["Content", editorPost.blocks.length > 0],
     ["Drive access", driveMediaConfirmed(editorPost)],
     ["Hero alt text", !editorPost.heroImage?.url || Boolean(editorPost.heroImage.alt?.trim())],
@@ -416,7 +456,11 @@ export function BlogAdminPage({ path = "/admin/blogs" }: { path?: string }) {
   ] as const;
 
   const readyCount = publishChecks.filter(([, ready]) => ready).length;
-  const selectedCategories = categories.filter((category) => editorPost.categorySlugs.includes(category.slug));
+  const selectedCategory = categories.find((category) => (
+    category.programAssociation === editorPost.programAssociation &&
+    category.kind === editorPost.categoryKind &&
+    category.slug === editorPost.categorySlug
+  ));
 
   const loadContent = async (activeToken = token) => {
     if (!activeToken) return;
@@ -458,12 +502,14 @@ export function BlogAdminPage({ path = "/admin/blogs" }: { path?: string }) {
 
   const startNewPost = () => {
     setEditorPost(emptyPost);
+    setNewCategoryName("");
     setSlugEdited(false);
     goToAdmin("/admin/blogs/new");
   };
 
   const selectPost = (post: BlogPost) => {
     setEditorPost(post);
+    setNewCategoryName("");
     setSlugEdited(true);
     goToAdmin(`/admin/blogs/edit/${post.id}`);
   };
@@ -478,6 +524,7 @@ export function BlogAdminPage({ path = "/admin/blogs" }: { path?: string }) {
       const selectedPost = posts.find((post) => post.id === route.editId);
       if (selectedPost) {
         setEditorPost(selectedPost);
+        setNewCategoryName("");
         setSlugEdited(true);
       }
     }
@@ -527,7 +574,7 @@ export function BlogAdminPage({ path = "/admin/blogs" }: { path?: string }) {
         });
         setStatus("Category created.");
       }
-      setCategoryForm({ description: "", name: "", programAssociation: "general", slug: "" });
+      setCategoryForm({ description: "", kind: "workshop", name: "", programAssociation: "general", slug: "" });
       setCategorySlugEdited(false);
       setEditingCategoryId("");
       await loadContent();
@@ -542,6 +589,7 @@ export function BlogAdminPage({ path = "/admin/blogs" }: { path?: string }) {
     setEditingCategoryId(category.id);
     setCategoryForm({
       description: category.description ?? "",
+      kind: namedCategoryKinds.includes(category.kind) ? category.kind : "workshop",
       name: category.name,
       programAssociation: category.programAssociation,
       slug: category.slug
@@ -570,6 +618,8 @@ export function BlogAdminPage({ path = "/admin/blogs" }: { path?: string }) {
     setStatus("");
     const payload = {
       ...editorPost,
+      categoryName: editorPost.categoryKind === "general" ? "" : newCategoryName.trim(),
+      categorySlug: editorPost.categoryKind === "general" ? "" : editorPost.categorySlug,
       slug: editorPost.slug || slugify(editorPost.title),
       status: nextStatus
     };
@@ -580,6 +630,7 @@ export function BlogAdminPage({ path = "/admin/blogs" }: { path?: string }) {
         : await apiRequest<{ post: BlogPost }>("/api/admin/blog-posts", token, { body: JSON.stringify(payload), method: "POST" });
 
       setEditorPost(result.post);
+      setNewCategoryName("");
       if (!editorPost.id) goToAdmin(`/admin/blogs/edit/${result.post.id}`);
       setStatus(nextStatus === "published" ? "Blog published." : nextStatus === "archived" ? "Blog archived." : "Draft saved.");
       await loadContent();
@@ -611,6 +662,7 @@ export function BlogAdminPage({ path = "/admin/blogs" }: { path?: string }) {
     setEditorPost({
       ...source,
       blocks: cloneBlocks(source.blocks),
+      categorySlug: source.categoryKind === "general" ? undefined : source.categorySlug,
       featured: false,
       id: undefined,
       publishedAt: undefined,
@@ -697,9 +749,17 @@ export function BlogAdminPage({ path = "/admin/blogs" }: { path?: string }) {
               <option value="published">Published</option>
               <option value="archived">Archived</option>
             </select>
+            <select value={programFilter} onChange={(event) => { setProgramFilter(event.target.value as BlogProgramAssociation | "all"); setCategoryFilter("all"); }}>
+              <option value="all">All programs</option>
+              {Object.entries(programLabels).map(([value, label]) => <option key={value} value={value}>{label}</option>)}
+            </select>
+            <select value={categoryKindFilter} onChange={(event) => { setCategoryKindFilter(event.target.value as BlogCategoryKind | "all"); setCategoryFilter("all"); }}>
+              <option value="all">All category types</option>
+              {Object.entries(categoryKindLabels).map(([value, label]) => <option key={value} value={value}>{label}</option>)}
+            </select>
             <select value={categoryFilter} onChange={(event) => setCategoryFilter(event.target.value)}>
-              <option value="all">All categories</option>
-              {categories.filter((category) => category.status === "active").map((category) => <option key={category.slug} value={category.slug}>{category.name}</option>)}
+              <option value="all">All names</option>
+              {filteredNameOptions.map((category) => <option key={`${category.programAssociation}-${category.kind}-${category.slug}`} value={category.slug}>{programLabels[category.programAssociation]} / {categoryKindLabels[category.kind]} / {category.name}</option>)}
             </select>
           </div>
           <div className="admin-reference-grid">
@@ -708,7 +768,8 @@ export function BlogAdminPage({ path = "/admin/blogs" }: { path?: string }) {
                 {post.heroImage?.url ? <img src={imagePreviewUrl(post.heroImage.url)} alt={post.heroImage.alt ?? ""} /> : <div className="admin-reference-empty">No image</div>}
                 <div>
                   <div className="blog-preview-meta">
-                    <span>{post.categorySlugs.join(" / ") || "No category"}</span>
+                    <span>{programLabels[post.programAssociation]}</span>
+                    <span>{categoryKindLabels[post.categoryKind]}</span>
                     <StatusPill status={post.status} />
                   </div>
                   <h3>{post.title || "Untitled draft"}</h3>
@@ -737,7 +798,10 @@ export function BlogAdminPage({ path = "/admin/blogs" }: { path?: string }) {
           </div>
           <div className="writing-brief">
             <strong>Writing focus</strong>
-            <span>{selectedCategories.length ? selectedCategories.map((category) => category.name).join(" / ") : "Choose a category so this post can route to the right website section."}</span>
+            <span>
+              {programLabels[editorPost.programAssociation]} / {categoryKindLabels[editorPost.categoryKind]}
+              {editorPost.categoryKind !== "general" ? ` / ${selectedCategory?.name ?? (newCategoryName.trim() || "Choose or add a name")}` : ""}
+            </span>
           </div>
           <div className="admin-form-grid two">
             <Field label="Title">
@@ -749,16 +813,47 @@ export function BlogAdminPage({ path = "/admin/blogs" }: { path?: string }) {
             <Field label="Slug"><input value={editorPost.slug} onChange={(event) => { setSlugEdited(true); updateEditor({ slug: slugify(event.target.value) }); }} /></Field>
             <Field label="Excerpt"><textarea rows={3} value={editorPost.excerpt} onChange={(event) => updateEditor({ excerpt: event.target.value })} /></Field>
             <Field label="Author"><input value={editorPost.author ?? ""} onChange={(event) => updateEditor({ author: event.target.value })} /></Field>
-            <Field label="Categories">
-              <select multiple value={editorPost.categorySlugs} onChange={(event) => updateEditor({ categorySlugs: Array.from(event.target.selectedOptions).map((option) => option.value) })}>
-                {categories.filter((category) => category.status === "active").map((category) => <option key={category.slug} value={category.slug}>{category.name}</option>)}
-              </select>
-            </Field>
-            <Field label="Program association">
-              <select value={editorPost.programAssociation} onChange={(event) => updateEditor({ programAssociation: event.target.value as BlogProgramAssociation })}>
+            <Field label="Program">
+              <select value={editorPost.programAssociation} onChange={(event) => {
+                updateEditor({ categorySlug: undefined, programAssociation: event.target.value as BlogProgramAssociation });
+                setNewCategoryName("");
+              }}>
                 {Object.entries(programLabels).map(([value, label]) => <option key={value} value={value}>{label}</option>)}
               </select>
             </Field>
+            <Field label="Category type">
+              <select value={editorPost.categoryKind} onChange={(event) => {
+                const categoryKind = event.target.value as BlogCategoryKind;
+                updateEditor({ categoryKind, categorySlug: undefined });
+                setNewCategoryName("");
+              }}>
+                {Object.entries(categoryKindLabels).map(([value, label]) => <option key={value} value={value}>{label}</option>)}
+              </select>
+            </Field>
+            {editorPost.categoryKind !== "general" ? (
+              <>
+                <Field label={`${categoryKindLabels[editorPost.categoryKind]} name`}>
+                  <select value={editorPost.categorySlug ?? ""} onChange={(event) => {
+                    updateEditor({ categorySlug: event.target.value || undefined });
+                    setNewCategoryName("");
+                  }}>
+                    <option value="">Add a new name or select existing</option>
+                    {visibleNamedCategories.map((category) => <option key={`${category.programAssociation}-${category.kind}-${category.slug}`} value={category.slug}>{category.name}</option>)}
+                  </select>
+                </Field>
+                <Field label={`New ${categoryKindLabels[editorPost.categoryKind].toLowerCase()} name`}>
+                  <input
+                    disabled={Boolean(editorPost.categorySlug)}
+                    value={newCategoryName}
+                    onChange={(event) => {
+                      setNewCategoryName(event.target.value);
+                      updateEditor({ categorySlug: undefined });
+                    }}
+                    placeholder={editorPost.categorySlug ? "Using existing name" : "Type a new name"}
+                  />
+                </Field>
+              </>
+            ) : null}
             <Field label="Tags"><input value={arrayToInput(editorPost.tags)} onChange={(event) => updateEditor({ tags: inputToArray(event.target.value) })} placeholder="health, education, field update" /></Field>
             <Field label="Publish date"><input type="date" value={editorPost.publishedAt?.slice(0, 10) ?? ""} onChange={(event) => updateEditor({ publishedAt: event.target.value || undefined })} /></Field>
           </div>
@@ -829,7 +924,7 @@ export function BlogAdminPage({ path = "/admin/blogs" }: { path?: string }) {
               ))}
             </div>
           </section>
-          <BlogPreview post={editorPost} />
+          <BlogPreview categories={categories} post={editorPost} />
         </aside>
       </section>
       ) : null}
@@ -839,10 +934,10 @@ export function BlogAdminPage({ path = "/admin/blogs" }: { path?: string }) {
           <section className="category-manager admin-category-page">
             <div className="admin-panel-heading">
               <div>
-                <h2>Categories</h2>
-                <span className="admin-helper">Use categories to route stories into AAROHI, SAKHI, VIDYA, or general website sections.</span>
+                <h2>Campaign and workshop names</h2>
+                <span className="admin-helper">Create named campaign and workshop options under a parent program. General has no name.</span>
               </div>
-              {editingCategoryId ? <button className="admin-small-button" onClick={() => { setEditingCategoryId(""); setCategorySlugEdited(false); setCategoryForm({ description: "", name: "", programAssociation: "general", slug: "" }); }} type="button">Cancel edit</button> : null}
+              {editingCategoryId ? <button className="admin-small-button" onClick={() => { setEditingCategoryId(""); setCategorySlugEdited(false); setCategoryForm({ description: "", kind: "workshop", name: "", programAssociation: "general", slug: "" }); }} type="button">Cancel edit</button> : null}
             </div>
             <form className="admin-category-form" onSubmit={saveCategory}>
               <Field label="Name">
@@ -852,6 +947,11 @@ export function BlogAdminPage({ path = "/admin/blogs" }: { path?: string }) {
                 }} />
               </Field>
               <Field label="Slug"><input value={categoryForm.slug} onChange={(event) => { setCategorySlugEdited(true); setCategoryForm((current) => ({ ...current, slug: slugify(event.target.value) })); }} /></Field>
+              <Field label="Type">
+                <select value={categoryForm.kind} onChange={(event) => setCategoryForm((current) => ({ ...current, kind: event.target.value as BlogCategoryKind }))}>
+                  {namedCategoryKinds.map((kind) => <option key={kind} value={kind}>{categoryKindLabels[kind]}</option>)}
+                </select>
+              </Field>
               <Field label="Program">
                 <select value={categoryForm.programAssociation} onChange={(event) => setCategoryForm((current) => ({ ...current, programAssociation: event.target.value as BlogProgramAssociation }))}>
                   {Object.entries(programLabels).map(([value, label]) => <option key={value} value={value}>{label}</option>)}
@@ -862,11 +962,11 @@ export function BlogAdminPage({ path = "/admin/blogs" }: { path?: string }) {
               <p className="form-status" role="status">{status}</p>
             </form>
             <div className="category-list">
-              {categories.map((category) => (
+              {categories.filter((category) => namedCategoryKinds.includes(category.kind)).map((category) => (
                 <article key={category.id}>
                   <div>
                     <strong>{category.name}</strong>
-                    <span>{category.slug} / {programLabels[category.programAssociation]}</span>
+                    <span>{programLabels[category.programAssociation]} / {categoryKindLabels[category.kind]} / {category.slug}</span>
                   </div>
                   <div>
                     <button className="admin-small-button" onClick={() => editCategory(category)} type="button">Edit</button>
@@ -878,12 +978,12 @@ export function BlogAdminPage({ path = "/admin/blogs" }: { path?: string }) {
           </section>
           <aside className="admin-guide-panel">
             <h2>Category guide</h2>
-            <p>Attach one program association to each category. Public pages can later ask for posts by program or category without manual curation.</p>
+            <p>Attach each campaign or workshop name to a parent program. General posts use only the program and category type.</p>
             <div>
               {Object.entries(programLabels).map(([value, label]) => (
                 <article key={value}>
                   <strong>{label}</strong>
-                  <span>{categories.filter((category) => category.programAssociation === value && category.status === "active").length} active categories</span>
+                  <span>{categories.filter((category) => category.programAssociation === value && category.status === "active" && namedCategoryKinds.includes(category.kind)).length} active names</span>
                 </article>
               ))}
             </div>

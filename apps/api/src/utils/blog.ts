@@ -1,6 +1,7 @@
 import crypto from "node:crypto";
 import mongoose from "mongoose";
 import type {
+  BlogCategoryKind,
   BlogContentBlock,
   BlogImageMedia,
   BlogProgramAssociation,
@@ -38,6 +39,10 @@ export function toSlug(value: unknown) {
 
 export function isProgramAssociation(value: unknown): value is BlogProgramAssociation {
   return value === "aarohi" || value === "sakhi" || value === "vidya" || value === "general";
+}
+
+export function isBlogCategoryKind(value: unknown): value is BlogCategoryKind {
+  return value === "workshop" || value === "campaign" || value === "general";
 }
 
 export function isBlogStatus(value: unknown): value is BlogStatus {

@@ -5,6 +5,7 @@ import { BlogCategoryModel, BlogPostModel, type BlogPostDocument } from "../mode
 import {
   getString,
   getStringList,
+  isBlogCategoryKind,
   isGoogleDriveUrl,
   isBlogStatus,
   isMongoReady,
@@ -17,7 +18,7 @@ import {
   toSlug,
   verifyAdminToken
 } from "../utils/blog.js";
-import type { BlogCategory, BlogContentBlock, BlogImageMedia, BlogPost, BlogProgramAssociation, BlogStatus } from "@floydee/shared";
+import type { BlogCategory, BlogCategoryKind, BlogContentBlock, BlogImageMedia, BlogPost, BlogProgramAssociation, BlogStatus } from "@floydee/shared";
 
 export const blogAdminRouter = Router();
 
@@ -66,6 +67,7 @@ function serializeCategory(category: any): BlogCategory {
     createdAt: category.createdAt?.toISOString?.(),
     description: category.description || undefined,
     id: String(category._id),
+    kind: category.kind ?? "general",
     name: category.name,
     programAssociation: category.programAssociation,
     slug: category.slug,
@@ -78,6 +80,8 @@ function serializePost(post: any): BlogPost {
   return {
     author: post.author || undefined,
     blocks: (post.blocks ?? []) as BlogContentBlock[],
+    categoryKind: post.categoryKind ?? "general",
+    categorySlug: post.categoryKind && post.categoryKind !== "general" ? post.categorySlug || undefined : undefined,
     categorySlugs: post.categorySlugs ?? [],
     createdAt: post.createdAt?.toISOString?.(),
     excerpt: post.excerpt ?? "",
@@ -105,9 +109,55 @@ async function getActiveCategorySlugs(slugs: string[]) {
   return categories.map((category) => category.slug);
 }
 
-async function inferProgramAssociation(slugs: string[], fallback: BlogProgramAssociation) {
-  const categories = await BlogCategoryModel.find({ slug: { $in: slugs }, status: "active" }).lean();
-  return categories.find((category) => category.programAssociation !== "general")?.programAssociation ?? fallback;
+async function resolveNamedCategory(
+  body: Record<string, unknown>,
+  programAssociation: BlogProgramAssociation,
+  categoryKind: BlogCategoryKind,
+  errors: string[]
+) {
+  if (categoryKind === "general") return "";
+
+  const requestedSlug = toSlug(body.categorySlug);
+  const requestedName = getString(body.categoryName);
+  const slug = requestedSlug || toSlug(requestedName);
+
+  if (!slug) {
+    errors.push(`${categoryKind === "campaign" ? "Campaign" : "Workshop"} name is required.`);
+    return "";
+  }
+
+  const existing = await BlogCategoryModel.findOne({
+    kind: categoryKind,
+    programAssociation,
+    slug,
+    status: "active"
+  }).lean();
+
+  if (existing) return existing.slug;
+
+  if (!requestedName) {
+    errors.push(`${categoryKind === "campaign" ? "Campaign" : "Workshop"} name must match an active option or include a new name.`);
+    return "";
+  }
+
+  const category = await BlogCategoryModel.findOneAndUpdate(
+    { kind: categoryKind, programAssociation, slug },
+    {
+      $set: {
+        description: getString(body.categoryDescription),
+        name: requestedName,
+        status: "active"
+      },
+      $setOnInsert: {
+        kind: categoryKind,
+        programAssociation,
+        slug
+      }
+    },
+    { new: true, upsert: true }
+  ).lean();
+
+  return category?.slug ?? slug;
 }
 
 function validateMedia(media: BlogImageMedia | undefined, errors: string[], label: string) {
@@ -132,9 +182,8 @@ function validateBlocks(blocks: BlogContentBlock[], errors: string[]) {
 async function buildPostPayload(body: Record<string, unknown>, existingStatus: BlogStatus = "draft") {
   const title = getString(body.title);
   const status = isBlogStatus(body.status) ? body.status : existingStatus;
-  const categorySlugs = getStringList(body.categorySlugs).map(toSlug).filter(Boolean);
-  const activeCategorySlugs = await getActiveCategorySlugs(categorySlugs);
-  const fallbackProgram = isProgramAssociation(body.programAssociation) ? body.programAssociation : "general";
+  const programAssociation = isProgramAssociation(body.programAssociation) ? body.programAssociation : "general";
+  const categoryKind = isBlogCategoryKind(body.categoryKind) ? body.categoryKind : "general";
   const heroImage = sanitizeImageMedia(body.heroImage);
   const blocks = sanitizeBlocks(body.blocks);
   const seo = body.seo && typeof body.seo === "object" ? body.seo as Record<string, unknown> : {};
@@ -147,15 +196,19 @@ async function buildPostPayload(body: Record<string, unknown>, existingStatus: B
 
   validateMedia(heroImage, errors, "Hero image URL");
   validateBlocks(blocks, errors);
+  const categorySlug = await resolveNamedCategory(body, programAssociation, categoryKind, errors);
+  const activeCategorySlugs = categorySlug ? [categorySlug] : [];
 
   const payload = {
     author: getString(body.author),
     blocks,
+    categoryKind,
+    categorySlug: categorySlug || undefined,
     categorySlugs: activeCategorySlugs,
     excerpt: getString(body.excerpt),
     featured: body.featured === true,
     heroImage,
-    programAssociation: await inferProgramAssociation(activeCategorySlugs, fallbackProgram),
+    programAssociation,
     publishedAt,
     seo: {
       description: getString(seo.description),
@@ -174,7 +227,9 @@ async function buildPostPayload(body: Record<string, unknown>, existingStatus: B
   if (status === "published") {
     if (!payload.title) errors.push("Title is required before publishing.");
     if (!payload.excerpt) errors.push("Excerpt is required before publishing.");
-    if (!payload.categorySlugs.length) errors.push("At least one active category is required before publishing.");
+    if (!payload.programAssociation) errors.push("Program is required before publishing.");
+    if (!payload.categoryKind) errors.push("Category type is required before publishing.");
+    if (payload.categoryKind !== "general" && !payload.categorySlug) errors.push("Workshop or campaign name is required before publishing.");
     if (!payload.blocks.length) errors.push("At least one content block is required before publishing.");
     payload.publishedAt ??= new Date();
   }
@@ -217,16 +272,18 @@ blogAdminRouter.get("/api/admin/blog-categories", requireAdmin, requireMongo, as
 blogAdminRouter.post("/api/admin/blog-categories", requireAdmin, requireMongo, async (request, response) => {
   const name = getString(request.body.name);
   const slug = toSlug(request.body.slug) || toSlug(name);
+  const kind = isBlogCategoryKind(request.body.kind) && request.body.kind !== "general" ? request.body.kind : undefined;
   const programAssociation = isProgramAssociation(request.body.programAssociation) ? request.body.programAssociation : "general";
 
-  if (!name || !slug) {
-    response.status(400).json({ ok: false, message: "Category name and slug are required." });
+  if (!name || !slug || !kind) {
+    response.status(400).json({ ok: false, message: "Workshop or campaign name, type, and slug are required." });
     return;
   }
 
   try {
     const category = await BlogCategoryModel.create({
       description: getString(request.body.description),
+      kind,
       name,
       programAssociation,
       slug,
@@ -246,6 +303,7 @@ blogAdminRouter.patch("/api/admin/blog-categories/:id", requireAdmin, requireMon
   const update: Record<string, unknown> = {};
   if ("name" in request.body) update.name = getString(request.body.name);
   if ("description" in request.body) update.description = getString(request.body.description);
+  if ("kind" in request.body && isBlogCategoryKind(request.body.kind) && request.body.kind !== "general") update.kind = request.body.kind;
   if ("programAssociation" in request.body && isProgramAssociation(request.body.programAssociation)) update.programAssociation = request.body.programAssociation;
   if ("slug" in request.body) update.slug = toSlug(request.body.slug);
   if ("status" in request.body) update.status = request.body.status === "archived" ? "archived" : "active";
@@ -270,11 +328,15 @@ blogAdminRouter.patch("/api/admin/blog-categories/:id", requireAdmin, requireMon
 blogAdminRouter.get("/api/admin/blog-posts", requireAdmin, requireMongo, async (request, response) => {
   const filter: Record<string, unknown> = {};
   const status = getString(request.query.status);
-  const category = toSlug(request.query.categorySlug);
+  const categoryKind = getString(request.query.categoryKind);
+  const categorySlug = toSlug(request.query.categorySlug);
+  const programSlug = getString(request.query.programSlug);
   const search = getString(request.query.search);
 
   if (isBlogStatus(status)) filter.status = status;
-  if (category) filter.categorySlugs = category;
+  if (isProgramAssociation(programSlug)) filter.programAssociation = programSlug;
+  if (isBlogCategoryKind(categoryKind)) filter.categoryKind = categoryKind;
+  if (categorySlug) filter.categorySlug = categorySlug;
   if (search) filter.$or = [{ title: new RegExp(search, "i") }, { excerpt: new RegExp(search, "i") }];
 
   const posts = await BlogPostModel.find(filter).sort({ updatedAt: -1 }).lean();
