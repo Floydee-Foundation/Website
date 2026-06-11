@@ -80,6 +80,7 @@ const donationTargetLabels = {
   workshop: "Fund a workshop"
 } as const;
 type DonationTargetType = keyof typeof donationTargetLabels;
+const donationTargetOptions: DonationTargetType[] = ["program", "campaign", "workshop", "generic"];
 const programValueMap: Record<string, BlogProgramAssociation> = {
   AAROHI: "aarohi",
   SAKHI: "sakhi",
@@ -438,13 +439,14 @@ function SupportForm({ defaultFrequency = "One-time", defaultProgram = "", defau
     option.kind === targetType &&
     option.programAssociation === selectedProgramSlug
   ));
+  const allTargetSelected = needsTargetName && targetSlug === "all";
   const selectedTarget = availableTargets.find((option) => option.slug === targetSlug);
 
   useEffect(() => {
     setFrequency(defaultFrequency);
     setTargetType(defaultTargetType);
     setProgram(defaultProgram);
-    setTargetSlug("");
+    setTargetSlug(defaultTargetType === "campaign" || defaultTargetType === "workshop" ? "all" : "");
     setConsentAccepted(false);
     setStatus("");
     setSubmitted(false);
@@ -466,7 +468,7 @@ function SupportForm({ defaultFrequency = "One-time", defaultProgram = "", defau
     const form = event.currentTarget;
     setSubmitted(true);
 
-    if ((needsProgram && !program) || (needsTargetName && !selectedTarget) || !amount || !consentAccepted || !form.checkValidity()) {
+    if ((needsProgram && !program) || (needsTargetName && !allTargetSelected && !selectedTarget) || !amount || !consentAccepted || !form.checkValidity()) {
       setStatus("Please complete the required fields correctly.");
       form.reportValidity();
       return;
@@ -482,8 +484,8 @@ function SupportForm({ defaultFrequency = "One-time", defaultProgram = "", defau
         frequency,
         amount: Number(amount),
         program: needsProgram ? program : "",
-        targetName: selectedTarget?.name ?? "",
-        targetSlug: selectedTarget?.slug ?? "",
+        targetName: allTargetSelected ? `All ${targetType === "campaign" ? "campaigns" : "workshops"}` : selectedTarget?.name ?? "",
+        targetSlug: allTargetSelected ? "all" : selectedTarget?.slug ?? "",
         targetType,
         consentStatus: donationConsentText,
         locale
@@ -495,7 +497,7 @@ function SupportForm({ defaultFrequency = "One-time", defaultProgram = "", defau
       setAmount("500");
       setTargetType(defaultTargetType);
       setProgram(defaultProgram);
-      setTargetSlug("");
+      setTargetSlug(defaultTargetType === "campaign" || defaultTargetType === "workshop" ? "all" : "");
       setConsentAccepted(false);
       setSubmitted(false);
     } catch (error) {
@@ -558,17 +560,17 @@ function SupportForm({ defaultFrequency = "One-time", defaultProgram = "", defau
         </label>
       </div>
       <input type="hidden" name="amount" value={amount} />
-      <section className="donation-target-panel" aria-labelledby="donation-target-title">
+      <div className="donation-target-panel" aria-labelledby="donation-target-title">
         <h3 id="donation-target-title">Where should this gift go?</h3>
         <div className="donation-target-grid">
-          {(Object.keys(donationTargetLabels) as DonationTargetType[]).map((type) => (
+          {donationTargetOptions.map((type) => (
             <button
               className={`donation-target-card${targetType === type ? " active" : ""}`}
               key={type}
               onClick={() => {
                 setTargetType(type);
                 setProgram(type === "generic" ? "" : type === "program" ? defaultProgram : "");
-                setTargetSlug("");
+                setTargetSlug(type === "campaign" || type === "workshop" ? "all" : "");
                 setStatus("");
               }}
               type="button"
@@ -583,7 +585,7 @@ function SupportForm({ defaultFrequency = "One-time", defaultProgram = "", defau
             </button>
           ))}
         </div>
-      </section>
+      </div>
       <div className="form-grid">
         <label>
           Name
@@ -596,11 +598,11 @@ function SupportForm({ defaultFrequency = "One-time", defaultProgram = "", defau
         {needsProgram ? (
           <CustomSelect
             invalid={submitted && !program}
-            label={needsTargetName ? "Parent program" : "Program focus"}
+            label={needsTargetName ? "Program" : "Program focus"}
             name="program"
             onChange={(nextProgram) => {
               setProgram(nextProgram);
-              setTargetSlug("");
+              setTargetSlug(needsTargetName ? "all" : "");
               setStatus("");
             }}
             options={needsTargetName ? namedDonationProgramOptions : donationProgramOptions}
@@ -610,17 +612,22 @@ function SupportForm({ defaultFrequency = "One-time", defaultProgram = "", defau
         ) : null}
         {needsTargetName ? (
           <CustomSelect
-            invalid={submitted && !selectedTarget}
+            invalid={submitted && !allTargetSelected && !selectedTarget}
             label={targetType === "campaign" ? "Campaign name" : "Workshop name"}
             name="targetSlug"
             onChange={(nextName) => {
+              if (nextName === "All") {
+                setTargetSlug("all");
+                setStatus("");
+                return;
+              }
               const matched = availableTargets.find((option) => option.name === nextName);
               setTargetSlug(matched?.slug ?? "");
               setStatus("");
             }}
-            options={availableTargets.map((option) => option.name)}
-            placeholder={program ? `Select a ${targetType}` : "Select parent program first"}
-            value={selectedTarget?.name ?? ""}
+            options={["All", ...availableTargets.map((option) => option.name)]}
+            placeholder={program ? "All" : "Select parent program first"}
+            value={allTargetSelected ? "All" : selectedTarget?.name ?? ""}
           />
         ) : null}
         <button className="button button-primary" type="submit" disabled={isSubmitting}>
@@ -913,19 +920,19 @@ function HomePage() {
               <span className="pillar-number">1</span>
               <h3>Health, Dignity & Well-being</h3>
               <p>This pillar ensures that care is not just delivered but delivered with dignity through AAROHI and SAKHI.</p>
-              <a className="button button-secondary" href="#contact">Know More</a>
+              <a className="button button-secondary" href="/programs/aarohi">Know More</a>
             </article>
             <article className="pillar-card" id="education">
               <span className="pillar-number">2</span>
               <h3>Skills, Education & Employability</h3>
               <p>This pillar builds capability with confidence so youth are prepared not just to work, but to lead through VIDYA.</p>
-              <a className="button button-secondary" href="#contact">Know More</a>
+              <a className="button button-secondary" href="/programs/vidya">Know More</a>
             </article>
             <article className="pillar-card" id="community">
               <span className="pillar-number">3</span>
               <h3>Community Engagement & Scalable Impact</h3>
               <p>Our programs are rooted in real communities and designed for partnerships that can scale with trust.</p>
-              <a className="button button-secondary" href="#partners">Know More</a>
+              <a className="button button-secondary" href="/programs">Know More</a>
             </article>
           </div>
         </section>
@@ -949,7 +956,7 @@ function HomePage() {
             <h2 id="initiative-title">Menstrual health screening camp</h2>
             <p>Through partnership engagements, Floydee Future Foundation launched a menstrual health screening initiative at Government Girls High School, Rajarhat, supporting adolescent girls with health education, screening, and practical guidance.</p>
             <div className="mini-metrics"><span><strong>150</strong> girls reached</span><span><strong>1</strong> school camp</span><span><strong>3</strong> health focus areas</span></div>
-            <a className="button button-primary" href="#latest">See latest initiatives</a>
+            <a className="button button-primary" href="/latest">See latest initiatives</a>
           </div>
           <img src={healthCamp3} alt="Floydee menstrual health screening camp participants" />
         </section>
@@ -1012,18 +1019,6 @@ function HomePage() {
           </div>
         </section>
 
-        <section className="stories" id="stories" aria-labelledby="stories-title">
-          <div className="section-heading align-left">
-            <p className="section-label">Latest</p>
-            <h2 id="stories-title">Proof from the field, built to be shared.</h2>
-          </div>
-          <div className="story-grid" id="latest">
-            <article><img src={studentSanika} alt="Indian learner testimonial portrait" /><div><p>Story</p><h3>From hesitation to confidence</h3><span>A field story format for beneficiary journeys, learner voices, and consent-safe updates.</span></div></article>
-            <article><img src={healthCamp1} alt="Floydee health camp update from Rajarhat" /><div><p>News</p><h3>Health camp update</h3><span>Program news can include dates, partners, outcomes, images, and media contact.</span></div></article>
-            <article id="resources"><img src={programMapping} alt="Floydee program mapping across India" /><div><p>Resource</p><h3>Reports and media centre</h3><span>Resources can be tagged by health, wellness, education, skill, women, youth, and partners.</span></div></article>
-          </div>
-        </section>
-
         <section className="gallery" id="gallery" aria-label="Foundation gallery">
           <img src={healthCamp1} alt="Floydee screening camp moment" />
           <img src={healthCamp2} alt="Floydee health education session" />
@@ -1049,7 +1044,7 @@ function HomePage() {
         </div>
         <div><h2>Join Us</h2><a href="#donate">Donate</a><a href="#partners">Partner With Us</a><a href="#volunteer">Volunteer</a><a href="#book">Book a Program</a></div>
         <div><h2>Programs</h2><a href="#aarohi">AAROHI</a><a href="#sakhi">SAKHI</a><a href="#vidya">VIDYA</a><a href="#programs">Pillars of Development</a></div>
-        <div><h2>Resources</h2><a href="#latest">News</a><a href="#stories">Stories</a><a href="#resources">Media Centre</a><a href="#gallery">Gallery</a></div>
+        <div><h2>Resources</h2><a href="/news">News</a><a href="/stories">Stories</a><a href="/resources">Media Centre</a><a href="#gallery">Gallery</a></div>
         <div><h2>Contact</h2><p>New Town, Kolkata-700156</p><p>+91 91477 48064</p><p>contact@floydeefoundation.org</p></div>
         <div className="footer-bottom"><span>© 2026 Floydee Future Foundation. All rights reserved.</span><span>Legal · Privacy Policy · Terms & Conditions</span></div>
       </footer>

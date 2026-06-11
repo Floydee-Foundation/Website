@@ -613,6 +613,25 @@ export function BlogAdminPage({ path = "/admin/blogs" }: { path?: string }) {
     }
   };
 
+  const removeNameFromDropdown = async (category: BlogCategory) => {
+    setBusy(true);
+    setStatus("");
+    try {
+      await apiRequest(`/api/admin/blog-categories/${category.id}`, token, {
+        body: JSON.stringify({ status: "archived" }),
+        method: "PATCH"
+      });
+      updateEditor({ categorySlug: undefined });
+      setNewCategoryName("");
+      setStatus(`${category.name} removed from the ${categoryKindLabels[category.kind].toLowerCase()} dropdown.`);
+      await loadContent();
+    } catch (error) {
+      setStatus(error instanceof Error ? error.message : "Name could not be removed from the dropdown.");
+    } finally {
+      setBusy(false);
+    }
+  };
+
   const savePost = async (nextStatus: BlogStatus = editorPost.status) => {
     setBusy(true);
     setStatus("");
@@ -833,13 +852,25 @@ export function BlogAdminPage({ path = "/admin/blogs" }: { path?: string }) {
             {editorPost.categoryKind !== "general" ? (
               <>
                 <Field label={`${categoryKindLabels[editorPost.categoryKind]} name`}>
-                  <select value={editorPost.categorySlug ?? ""} onChange={(event) => {
-                    updateEditor({ categorySlug: event.target.value || undefined });
-                    setNewCategoryName("");
-                  }}>
-                    <option value="">Add a new name or select existing</option>
-                    {visibleNamedCategories.map((category) => <option key={`${category.programAssociation}-${category.kind}-${category.slug}`} value={category.slug}>{category.name}</option>)}
-                  </select>
+                  <div className="admin-select-remove-row">
+                    <select value={editorPost.categorySlug ?? ""} onChange={(event) => {
+                      updateEditor({ categorySlug: event.target.value || undefined });
+                      setNewCategoryName("");
+                    }}>
+                      <option value="">Add a new name or select existing</option>
+                      {visibleNamedCategories.map((category) => <option key={`${category.programAssociation}-${category.kind}-${category.slug}`} value={category.slug}>{category.name}</option>)}
+                    </select>
+                    <button
+                      aria-label={selectedCategory ? `Remove ${selectedCategory.name} from dropdown` : "Remove selected name from dropdown"}
+                      className="admin-remove-name-button"
+                      disabled={busy || !selectedCategory}
+                      onClick={() => selectedCategory ? removeNameFromDropdown(selectedCategory) : undefined}
+                      title={selectedCategory ? `Remove ${selectedCategory.name} from dropdown` : "Select a name to remove"}
+                      type="button"
+                    >
+                      X
+                    </button>
+                  </div>
                 </Field>
                 <Field label={`New ${categoryKindLabels[editorPost.categoryKind].toLowerCase()} name`}>
                   <input

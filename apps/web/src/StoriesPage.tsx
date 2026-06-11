@@ -303,14 +303,6 @@ export function StoriesHubPage() {
 
   return (
     <main className="page stories-page">
-      <section className="stories-intro">
-        <div>
-          <p className="section-label">Stories</p>
-          <h1>Real voices. Practical change.</h1>
-        </div>
-        <p>Explore stories, field notes, resources, and progress from Floydee programs, partners, and communities.</p>
-      </section>
-
       {showFeatured ? <FeaturedStory categories={categories} post={featured} /> : null}
 
       <section className="stories-library" aria-labelledby="stories-library-title">
