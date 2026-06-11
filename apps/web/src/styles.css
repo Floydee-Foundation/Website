@@ -420,7 +420,12 @@
 
 .admin-drive-confirmation input {
   flex: 0 0 auto;
+  height: 18px;
   margin-top: 3px;
+  min-height: 18px;
+  padding: 0;
+  width: 18px;
+  accent-color: #1177ee;
 }
 
 .admin-drive-confirmation span {

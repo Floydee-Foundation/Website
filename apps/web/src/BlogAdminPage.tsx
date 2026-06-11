@@ -126,6 +126,10 @@ function inputToArray(value: string) {
   return Array.from(new Set(value.split(",").map((item) => item.trim()).filter(Boolean)));
 }
 
+function listInputToItems(value: string) {
+  return value.split("\n");
+}
+
 function cloneBlocks(blocks: BlogContentBlock[]) {
   return blocks.map((block) => ({ ...block, id: createId() })) as BlogContentBlock[];
 }
@@ -266,7 +270,7 @@ function PreviewBlock({ block }: { block: BlogContentBlock }) {
   }
 
   const ListTag = block.style === "numbered" ? "ol" : "ul";
-  return <ListTag>{block.items.map((item) => <li key={item}>{item}</li>)}</ListTag>;
+  return <ListTag>{block.items.filter((item) => item.trim()).map((item, index) => <li key={`${index}-${item}`}>{item}</li>)}</ListTag>;
 }
 
 function BlockEditor({
@@ -337,7 +341,7 @@ function BlockEditor({
       {block.type === "list" ? (
         <div className="admin-form-grid compact">
           <Field label="Items, one per line">
-            <textarea rows={5} value={block.items.join("\n")} onChange={(event) => onChange({ ...block, items: event.target.value.split("\n").map((item) => item.trim()).filter(Boolean) })} />
+            <textarea rows={5} value={block.items.join("\n")} onChange={(event) => onChange({ ...block, items: listInputToItems(event.target.value) })} />
           </Field>
           <Field label="Style">
             <select value={block.style} onChange={(event) => onChange({ ...block, style: event.target.value === "numbered" ? "numbered" : "bullet" })}>
