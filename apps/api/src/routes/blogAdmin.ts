@@ -248,6 +248,8 @@ async function buildPostPayload(body: Record<string, unknown>, existingStatus: B
     if (!payload.programAssociation) errors.push("Program is required before publishing.");
     if (!payload.categoryKind) errors.push("Category type is required before publishing.");
     if (payload.categoryKind !== "general" && !payload.categorySlug) errors.push("Workshop or campaign name is required before publishing.");
+    if (!payload.location) errors.push("Location is required before publishing.");
+    if (!payload.eventDate) errors.push("Event date is required before publishing.");
     if (!payload.blocks.length) errors.push("At least one content block is required before publishing.");
     payload.publishedAt ??= new Date();
   }

@@ -71,6 +71,11 @@ const channelLabels: Record<BlogChannel, string> = {
   news: "News"
 };
 
+const channelRouteLabels: Record<BlogChannel, string> = {
+  media: "/resources",
+  news: "/news"
+};
+
 const namedCategoryKinds: BlogCategoryKind[] = ["workshop", "campaign"];
 
 const blockLabels: Record<BlogContentBlock["type"], string> = {
@@ -248,6 +253,7 @@ function Field({ children, label }: { children: ReactNode; label: string }) {
 function BlogPreview({ categories, post }: { categories: BlogCategory[]; post: EditorPost }) {
   const hero = post.heroImage?.url ? imagePreviewUrl(post.heroImage.url) : "";
   const category = categories.find((item) => item.programAssociation === post.programAssociation && item.kind === post.categoryKind && item.slug === post.categorySlug);
+  const eventLabel = post.eventDate ? new Intl.DateTimeFormat("en-IN", { day: "numeric", month: "long", year: "numeric" }).format(new Date(post.eventDate)) : "";
 
   return (
     <article className="blog-preview">
@@ -264,6 +270,12 @@ function BlogPreview({ categories, post }: { categories: BlogCategory[]; post: E
         <span>{categoryKindLabels[post.categoryKind]}</span>
         {category ? <span>{category.name}</span> : null}
       </div>
+      {post.location || eventLabel ? (
+        <div className="blog-preview-facts">
+          {post.location ? <span><strong>Location</strong>{post.location}</span> : null}
+          {eventLabel ? <span><strong>Happened</strong>{eventLabel}</span> : null}
+        </div>
+      ) : null}
       <h1>{post.title || "Untitled blog draft"}</h1>
       <p className="blog-preview-excerpt">{post.excerpt || "Write a short excerpt that gives readers a reason to open the story."}</p>
       <div className="blog-preview-body">
@@ -539,6 +551,8 @@ export function BlogAdminPage({ path = "/admin/blogs" }: { path?: string }) {
     ["Program", Boolean(editorPost.programAssociation)],
     ["Category type", Boolean(editorPost.categoryKind)],
     ["Name", editorPost.categoryKind === "general" || Boolean(editorPost.categorySlug || newCategoryName.trim())],
+    ["Location", Boolean(editorPost.location?.trim())],
+    ["Event date", Boolean(editorPost.eventDate)],
     ["Content", editorPost.blocks.length > 0],
     ["Internal media", driveMediaConfirmed(editorPost)],
     ["Hero alt text", !editorPost.heroImage?.url || Boolean(editorPost.heroImage.alt?.trim())],
@@ -1004,7 +1018,7 @@ export function BlogAdminPage({ path = "/admin/blogs" }: { path?: string }) {
                   })}
                   type="checkbox"
                 />
-                <span><strong>Show in {label}</strong>Published posts appear on the {label.toLowerCase()} archive.</span>
+                <span><strong>Show in {label}</strong>Published posts appear on {channelRouteLabels[channel]}.</span>
               </label>
             ))}
           </div>
