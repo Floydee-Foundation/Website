@@ -1,7 +1,7 @@
 import { Router, type Response } from "express";
 import { connectMongo } from "../config/mongo.js";
 import { BlogCategoryModel, BlogPostModel } from "../models/blog.js";
-import { getString, isBlogCategoryKind, isMongoReady, isProgramAssociation, toSlug } from "../utils/blog.js";
+import { getString, isBlogCategoryKind, isBlogChannel, isMongoReady, isProgramAssociation, toSlug } from "../utils/blog.js";
 import type { BlogCategory, BlogContentBlock, BlogPost } from "@floydee/shared";
 
 export const blogPublicRouter = Router();
@@ -46,11 +46,14 @@ function serializePost(post: any): BlogPost {
     categoryKind: post.categoryKind ?? "general",
     categorySlug: post.categoryKind && post.categoryKind !== "general" ? post.categorySlug || undefined : undefined,
     categorySlugs: post.categorySlugs ?? [],
+    channels: post.channels?.filter(isBlogChannel) ?? [],
     createdAt: post.createdAt?.toISOString?.(),
+    eventDate: post.eventDate?.toISOString?.().slice(0, 10),
     excerpt: post.excerpt ?? "",
     featured: post.featured === true || undefined,
     heroImage: post.heroImage?.url ? post.heroImage : undefined,
     id: String(post._id),
+    location: post.location || undefined,
     programAssociation: post.programAssociation ?? "general",
     publishedAt: post.publishedAt?.toISOString?.(),
     seo: {
@@ -85,9 +88,12 @@ blogPublicRouter.get("/api/blog-posts", async (request, response) => {
   const filter: Record<string, unknown> = { status: "published" };
   const categoryKind = getString(request.query.categoryKind);
   const categorySlug = toSlug(request.query.categorySlug);
+  const channel = getString(request.query.channel);
+  const eventYear = Number.parseInt(getString(request.query.eventYear), 10);
   const excludeSlug = toSlug(request.query.excludeSlug);
   const featured = getString(request.query.featured);
   const programSlug = getString(request.query.programSlug);
+  const location = getString(request.query.location);
   const q = getString(request.query.q);
   const sort = getString(request.query.sort) === "oldest" ? "oldest" : "latest";
   const tag = getString(request.query.tag);
@@ -98,6 +104,7 @@ blogPublicRouter.get("/api/blog-posts", async (request, response) => {
 
   if (isBlogCategoryKind(categoryKind)) filter.categoryKind = categoryKind;
   if (categorySlug) filter.categorySlug = categorySlug;
+  if (isBlogChannel(channel)) filter.channels = channel;
   if (excludeSlug) filter.slug = { $ne: excludeSlug };
   if (featured === "true") filter.featured = true;
   if (isProgramAssociation(programSlug)) filter.programAssociation = programSlug;
@@ -108,6 +115,23 @@ blogPublicRouter.get("/api/blog-posts", async (request, response) => {
     filter.$or = [{ title: search }, { excerpt: search }, { author: search }, { tags: search }];
   }
 
+  const facetFilter = { ...filter };
+  if (location) filter.location = location;
+  if (Number.isFinite(eventYear) && eventYear >= 1900 && eventYear <= 2200) {
+    filter.eventDate = {
+      $gte: new Date(`${eventYear}-01-01T00:00:00.000Z`),
+      $lt: new Date(`${eventYear + 1}-01-01T00:00:00.000Z`)
+    };
+  }
+
+  const [locations, eventYears] = await Promise.all([
+    BlogPostModel.distinct("location", { ...facetFilter, location: { $nin: [null, ""] } }),
+    BlogPostModel.aggregate<{ _id: number }>([
+      { $match: { ...facetFilter, eventDate: { $type: "date" } } },
+      { $group: { _id: { $year: "$eventDate" } } },
+      { $sort: { _id: -1 } }
+    ])
+  ]);
   const total = await BlogPostModel.countDocuments(filter);
   const totalPages = Math.max(1, Math.ceil(total / pageSize));
   const safePage = Math.min(page, totalPages);
@@ -123,6 +147,10 @@ blogPublicRouter.get("/api/blog-posts", async (request, response) => {
     page: safePage,
     pageSize,
     posts: posts.map(serializePost),
+    facets: {
+      eventYears: eventYears.map((item) => item._id),
+      locations: locations.filter(Boolean).sort((a, b) => a.localeCompare(b))
+    },
     total,
     totalPages
   });

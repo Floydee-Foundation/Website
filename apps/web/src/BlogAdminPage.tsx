@@ -2,6 +2,7 @@ import { FormEvent, ReactNode, useEffect, useMemo, useState } from "react";
 import type {
   BlogCategory,
   BlogCategoryKind,
+  BlogChannel,
   BlogContentBlock,
   BlogImageMedia,
   BlogPost,
@@ -12,6 +13,8 @@ import floydeeLogo from "./assets/floydee-logo.png";
 
 const apiBaseUrl = import.meta.env.VITE_API_BASE_URL ?? (import.meta.env.DEV ? "http://localhost:4000" : "");
 const sessionKey = "floydee_blog_admin_token";
+const sessionExpiredEvent = "floydee-blog-admin-session-expired";
+const sessionExpiredMessage = "Your admin session expired. Enter the staff passcode again to continue.";
 
 type AdminResponse<T> = T & {
   errors?: string[];
@@ -32,9 +35,12 @@ const emptyPost: EditorPost = {
   categoryKind: "general",
   categorySlug: undefined,
   categorySlugs: [],
+  channels: [],
+  eventDate: undefined,
   excerpt: "",
   featured: false,
   heroImage: undefined,
+  location: "",
   programAssociation: "general",
   seo: {
     description: "",
@@ -58,6 +64,11 @@ const categoryKindLabels: Record<BlogCategoryKind, string> = {
   campaign: "Campaign",
   general: "General",
   workshop: "Workshop"
+};
+
+const channelLabels: Record<BlogChannel, string> = {
+  media: "Media",
+  news: "News"
 };
 
 const namedCategoryKinds: BlogCategoryKind[] = ["workshop", "campaign"];
@@ -201,6 +212,11 @@ function driveMediaConfirmed(post: EditorPost) {
   });
 }
 
+function expireAdminSession() {
+  sessionStorage.removeItem(sessionKey);
+  window.dispatchEvent(new Event(sessionExpiredEvent));
+}
+
 async function apiRequest<T>(path: string, token: string, options: RequestInit = {}) {
   const response = await fetch(`${apiBaseUrl}${path}`, {
     ...options,
@@ -211,6 +227,8 @@ async function apiRequest<T>(path: string, token: string, options: RequestInit =
     }
   });
   const result = (await response.json().catch(() => null)) as AdminResponse<T> | null;
+
+  if (response.status === 401 && token) expireAdminSession();
 
   if (!response.ok || !result?.ok) {
     throw new Error(result?.message ?? "The blog CMS could not complete that action.");
@@ -419,6 +437,7 @@ function MediaFields({ imageName, media, onChange, token }: { imageName: string;
         method: "POST"
       });
       const result = (await response.json().catch(() => null)) as AdminResponse<{ media: BlogImageMedia }> | null;
+      if (response.status === 401) expireAdminSession();
       if (!response.ok || !result?.ok) throw new Error(result?.message ?? "Image could not be uploaded.");
       onChange({ ...result.media, alt: media.alt, caption: media.caption });
       setStatus("Optimized WebP image stored internally.");
@@ -491,7 +510,7 @@ export function BlogAdminPage({ path = "/admin/blogs" }: { path?: string }) {
   const [categorySlugEdited, setCategorySlugEdited] = useState(false);
 
   const filteredPosts = useMemo(() => posts.filter((post) => {
-    const matchesSearch = !search || `${post.title} ${post.excerpt}`.toLowerCase().includes(search.toLowerCase());
+    const matchesSearch = !search || `${post.title} ${post.excerpt} ${post.location ?? ""}`.toLowerCase().includes(search.toLowerCase());
     const matchesStatus = statusFilter === "all" || post.status === statusFilter;
     const matchesProgram = programFilter === "all" || post.programAssociation === programFilter;
     const matchesKind = categoryKindFilter === "all" || post.categoryKind === categoryKindFilter;
@@ -560,6 +579,16 @@ export function BlogAdminPage({ path = "/admin/blogs" }: { path?: string }) {
       setPosts([]);
     });
   }, [token]);
+
+  useEffect(() => {
+    const handleSessionExpired = () => {
+      setToken("");
+      setStatus(sessionExpiredMessage);
+    };
+
+    window.addEventListener(sessionExpiredEvent, handleSessionExpired);
+    return () => window.removeEventListener(sessionExpiredEvent, handleSessionExpired);
+  }, []);
 
   const updateEditor = (patch: Partial<EditorPost>) => {
     setEditorPost((current) => ({ ...current, ...patch }));
@@ -860,10 +889,12 @@ export function BlogAdminPage({ path = "/admin/blogs" }: { path?: string }) {
                   <div className="blog-preview-meta">
                     <span>{programLabels[post.programAssociation]}</span>
                     <span>{categoryKindLabels[post.categoryKind]}</span>
+                    {post.channels.map((channel) => <span key={channel}>{channelLabels[channel]}</span>)}
                     <StatusPill status={post.status} />
                   </div>
                   <h3>{post.title || "Untitled draft"}</h3>
                   <p>{post.excerpt || "No excerpt yet."}</p>
+                  {post.location || post.eventDate ? <p className="admin-reference-event">{post.location || "Location not set"}{post.eventDate ? ` · ${post.eventDate}` : ""}</p> : null}
                 </div>
                 <div className="admin-card-actions">
                   <button className="admin-small-button" onClick={() => selectPost(post)} type="button">Edit</button>
@@ -958,6 +989,24 @@ export function BlogAdminPage({ path = "/admin/blogs" }: { path?: string }) {
             ) : null}
             <Field label="Tags"><input value={arrayToInput(editorPost.tags)} onChange={(event) => updateEditor({ tags: inputToArray(event.target.value) })} placeholder="health, education, field update" /></Field>
             <Field label="Publish date"><input type="date" value={editorPost.publishedAt?.slice(0, 10) ?? ""} onChange={(event) => updateEditor({ publishedAt: event.target.value || undefined })} /></Field>
+            <Field label="Location"><input value={editorPost.location ?? ""} onChange={(event) => updateEditor({ location: event.target.value })} placeholder="Kolkata, West Bengal" /></Field>
+            <Field label="Event date"><input type="date" value={editorPost.eventDate ?? ""} onChange={(event) => updateEditor({ eventDate: event.target.value || undefined })} /></Field>
+          </div>
+          <div className="admin-channel-controls" aria-label="Publishing channels">
+            {(Object.entries(channelLabels) as Array<[BlogChannel, string]>).map(([channel, label]) => (
+              <label className="admin-drive-confirmation" key={channel}>
+                <input
+                  checked={editorPost.channels.includes(channel)}
+                  onChange={(event) => updateEditor({
+                    channels: event.target.checked
+                      ? [...editorPost.channels, channel]
+                      : editorPost.channels.filter((item) => item !== channel)
+                  })}
+                  type="checkbox"
+                />
+                <span><strong>Show in {label}</strong>Published posts appear on the {label.toLowerCase()} archive.</span>
+              </label>
+            ))}
           </div>
           <label className="admin-drive-confirmation admin-featured-control">
             <input checked={Boolean(editorPost.featured)} onChange={(event) => updateEditor({ featured: event.target.checked })} type="checkbox" />

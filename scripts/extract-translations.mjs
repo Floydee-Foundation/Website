@@ -8,6 +8,8 @@ const traverse = traverseModule.default;
 const root = process.cwd();
 const sources = [
   ["website", "/", "apps/web/src/App.tsx", "Shared website content"],
+  ["website", "/stories, /news, /resources, /programs/*", "apps/web/src/StoriesPage.tsx", "Blog archives and articles"],
+  ["admin", "/admin/blogs", "apps/web/src/BlogAdminPage.tsx", "Blog administration"],
   ["website", "global", "apps/web/src/LocaleProvider.tsx", "Language selector"],
   ["metadata", "global", "apps/web/index.html", "Website metadata"],
   ["visitor email", "email", "apps/api/src/routes/inquiries.ts", "Visitor confirmation emails"]
@@ -124,7 +126,9 @@ for (const value of renderedDynamicCopy) {
 const protectedCopy = [
   "AAROHI", "SAKHI", "VIDYA", "Floydee", "Floydee Foundation", "Floydee Future Foundation",
   "PAN", "80G", "AAGCF6699F", "AAGCF6699FF20261", "contact@floydeefoundation.org",
-  "+91 91477 48064", "Kolkata", "Delhi", "Patna", "Lucknow", "Mumbai", "Bangalore"
+  "+91 91477 48064", "Kolkata", "Delhi", "Patna", "Lucknow", "Mumbai", "Bangalore",
+  "Subhodyuti Chakraborty", "Ipsito Ghosh", "Disha Mishra", "Sreeparna Roy", "Riya Banerjee",
+  "Dr. Himanshu Borase", "Dr. Suparna Biswas", "SC", "IG", "DM", "SR", "RB", "HB", "SB"
 ];
 for (const value of protectedCopy) {
   const entry = entries.get(value);

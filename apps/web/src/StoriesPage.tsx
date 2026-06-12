@@ -1,5 +1,5 @@
 import { FormEvent, useEffect, useState } from "react";
-import type { BlogCategory, BlogCategoryKind, BlogContentBlock, BlogImageMedia, BlogPost, BlogProgramAssociation } from "@floydee/shared";
+import type { BlogCategory, BlogCategoryKind, BlogChannel, BlogContentBlock, BlogImageMedia, BlogPost, BlogProgramAssociation } from "@floydee/shared";
 
 const apiBaseUrl = import.meta.env.VITE_API_BASE_URL ?? (import.meta.env.DEV ? "http://localhost:4000" : "");
 const pageSize = 9;
@@ -16,6 +16,10 @@ class HttpError extends Error {
 }
 
 type BlogListResponse = {
+  facets: {
+    eventYears: number[];
+    locations: string[];
+  };
   message?: string;
   ok: boolean;
   page: number;
@@ -28,6 +32,8 @@ type BlogListResponse = {
 type Filters = {
   categorySlug: string;
   categoryKind: BlogCategoryKind | "";
+  eventYear: string;
+  location: string;
   page: number;
   programSlug: string;
   q: string;
@@ -186,17 +192,25 @@ function categoryName(post: BlogPost, categories: BlogCategory[]) {
 }
 
 function postMeta(post: BlogPost, categories: BlogCategory[]) {
-  return `${categoryName(post, categories)} · ${formatDate(post.publishedAt)} · ${readingTime(post)} min read`;
+  return [
+    categoryName(post, categories),
+    post.location ? `Location: ${post.location}` : "",
+    post.eventDate ? `Event: ${formatDate(post.eventDate)}` : "",
+    `Published: ${formatDate(post.publishedAt)}`,
+    `${readingTime(post)} min read`
+  ].filter(Boolean).join(" · ");
 }
 
-function parseFilters(): Filters {
+function parseFilters(fixedProgram?: BlogProgramAssociation): Filters {
   const params = new URLSearchParams(window.location.search);
   const requestedPage = Number.parseInt(params.get("page") ?? "", 10);
   return {
     categorySlug: params.get("category") ?? "",
     categoryKind: (["workshop", "campaign", "general"].includes(params.get("type") ?? "") ? params.get("type") : "") as BlogCategoryKind | "",
+    eventYear: params.get("year") ?? "",
+    location: params.get("location") ?? "",
     page: Number.isFinite(requestedPage) && requestedPage > 0 ? requestedPage : 1,
-    programSlug: params.get("program") ?? "",
+    programSlug: fixedProgram ?? params.get("program") ?? "",
     q: params.get("q") ?? "",
     sort: params.get("sort") === "oldest" ? "oldest" : "latest"
   };
@@ -207,6 +221,8 @@ function filtersToSearch(filters: Filters) {
   if (filters.q) params.set("q", filters.q);
   if (filters.categoryKind) params.set("type", filters.categoryKind);
   if (filters.categorySlug) params.set("category", filters.categorySlug);
+  if (filters.eventYear) params.set("year", filters.eventYear);
+  if (filters.location) params.set("location", filters.location);
   if (filters.programSlug) params.set("program", filters.programSlug);
   if (filters.sort === "oldest") params.set("sort", "oldest");
   if (filters.page > 1) params.set("page", String(filters.page));
@@ -298,20 +314,33 @@ function StoriesSkeleton() {
   );
 }
 
-export function StoriesHubPage() {
+export function BlogArchive({
+  basePath = "/stories",
+  channel,
+  eyebrow = "From the field",
+  fixedProgram,
+  title = "Explore every story"
+}: {
+  basePath?: string;
+  channel?: BlogChannel;
+  eyebrow?: string;
+  fixedProgram?: BlogProgramAssociation;
+  title?: string;
+}) {
   const [categories, setCategories] = useState<BlogCategory[]>([]);
-  const [filters, setFilters] = useState<Filters>(parseFilters);
+  const [filters, setFilters] = useState<Filters>(() => parseFilters(fixedProgram));
   const [searchText, setSearchText] = useState(filters.q);
   const [posts, setPosts] = useState<BlogPost[]>([]);
   const [featured, setFeatured] = useState<BlogPost>();
   const [pagination, setPagination] = useState({ page: 1, total: 0, totalPages: 1 });
+  const [facets, setFacets] = useState<BlogListResponse["facets"]>({ eventYears: [], locations: [] });
   const [status, setStatus] = useState("loading");
   const [message, setMessage] = useState("");
   const [notice, setNotice] = useState("");
   const [retryTick, setRetryTick] = useState(0);
 
-  const isUnfiltered = !filters.q && !filters.categoryKind && !filters.categorySlug && !filters.programSlug && filters.sort === "latest";
-  const showFeatured = isUnfiltered && filters.page === 1 && featured;
+  const isUnfiltered = !filters.q && !filters.categoryKind && !filters.categorySlug && !filters.eventYear && !filters.location && !filters.programSlug && filters.sort === "latest";
+  const showFeatured = !channel && !fixedProgram && isUnfiltered && filters.page === 1 && featured;
   const nameOptions = categories.filter((category) => (
     (!filters.programSlug || category.programAssociation === filters.programSlug) &&
     (filters.categoryKind === "workshop" || filters.categoryKind === "campaign") &&
@@ -320,13 +349,13 @@ export function StoriesHubPage() {
 
   useEffect(() => {
     const handlePopState = () => {
-      const next = parseFilters();
+      const next = parseFilters(fixedProgram);
       setFilters(next);
       setSearchText(next.q);
     };
     window.addEventListener("popstate", handlePopState);
     return () => window.removeEventListener("popstate", handlePopState);
-  }, []);
+  }, [fixedProgram]);
 
   useEffect(() => {
     const retry = () => setRetryTick((current) => current + 1);
@@ -366,7 +395,7 @@ export function StoriesHubPage() {
 
     const load = async () => {
       let lead = featured;
-      if (isUnfiltered && !lead) {
+      if (!channel && !fixedProgram && isUnfiltered && !lead) {
         const leadResult = await getJson<BlogListResponse>("/api/blog-posts?featured=true&pageSize=1", controller.signal).catch(() => null);
         lead = leadResult?.posts[0];
         if (!lead) {
@@ -381,14 +410,18 @@ export function StoriesHubPage() {
         sort: filters.sort
       });
       if (filters.q) params.set("q", filters.q);
+      if (channel) params.set("channel", channel);
       if (filters.programSlug) params.set("programSlug", filters.programSlug);
       if (filters.categoryKind) params.set("categoryKind", filters.categoryKind);
       if (filters.categorySlug) params.set("categorySlug", filters.categorySlug);
+      if (filters.location) params.set("location", filters.location);
+      if (filters.eventYear) params.set("eventYear", filters.eventYear);
       if (isUnfiltered && lead) params.set("excludeSlug", lead.slug);
 
       const result = await getJson<BlogListResponse>(`/api/blog-posts?${params}`, controller.signal);
       setFeatured(lead);
       setPosts(result.posts);
+      setFacets(result.facets ?? { eventYears: [], locations: [] });
       setPagination({ page: result.page, total: result.total, totalPages: result.totalPages });
       setNotice(result.fromCache ? "Showing saved stories while connectivity recovers." : "");
       setStatus("ready");
@@ -405,12 +438,12 @@ export function StoriesHubPage() {
       }
     });
     return () => controller.abort();
-  }, [filters, retryTick]);
+  }, [channel, filters, fixedProgram, retryTick]);
 
   const updateFilters = (patch: Partial<Filters>) => {
     const next = { ...filters, ...patch };
-    const search = filtersToSearch(next);
-    window.history.pushState(null, "", `/stories${search ? `?${search}` : ""}`);
+    const search = filtersToSearch(fixedProgram ? { ...next, programSlug: "" } : next);
+    window.history.pushState(null, "", `${basePath}${search ? `?${search}` : ""}`);
     setFilters(next);
     window.scrollTo({ top: 0, behavior: "auto" });
   };
@@ -423,14 +456,14 @@ export function StoriesHubPage() {
   const resultLabel = status === "loading" ? "Loading stories" : status === "refreshing" ? "Updating stories" : `${pagination.total} ${pagination.total === 1 ? "story" : "stories"} found`;
 
   return (
-    <main className="page stories-page">
+    <section className="stories-page blog-archive">
       {showFeatured ? <FeaturedStory categories={categories} post={featured} /> : null}
 
       <section className="stories-library" aria-labelledby="stories-library-title">
         <div className="stories-library-heading">
           <div>
-            <p className="section-label">From the field</p>
-            <h2 id="stories-library-title">{filters.q ? `Results for “${filters.q}”` : "Explore every story"}</h2>
+            <p className="section-label">{eyebrow}</p>
+            <h2 id="stories-library-title">{filters.q ? `Results for “${filters.q}”` : title}</h2>
           </div>
           <p aria-live="polite" className="stories-result-count">{resultLabel}</p>
         </div>
@@ -440,19 +473,21 @@ export function StoriesHubPage() {
             <span>Search stories</span>
             <div><input onChange={(event) => setSearchText(event.target.value)} placeholder="Search stories" value={searchText} /><button type="submit">Search</button></div>
           </label>
-          <label><span>Program</span><select value={filters.programSlug} onChange={(event) => updateFilters({ categorySlug: "", page: 1, programSlug: event.target.value })}><option value="">All programs</option>{(["aarohi", "sakhi", "vidya", "general"] as const).map((program) => <option key={program} value={program}>{programLabels[program]}</option>)}</select></label>
+          {!fixedProgram ? <label><span>Program</span><select value={filters.programSlug} onChange={(event) => updateFilters({ categorySlug: "", page: 1, programSlug: event.target.value })}><option value="">All programs</option>{(["aarohi", "sakhi", "vidya", "general"] as const).map((program) => <option key={program} value={program}>{programLabels[program]}</option>)}</select></label> : null}
           <label><span>Category</span><select value={filters.categoryKind} onChange={(event) => updateFilters({ categoryKind: event.target.value as Filters["categoryKind"], categorySlug: "", page: 1 })}><option value="">All categories</option>{(["workshop", "campaign", "general"] as const).map((kind) => <option key={kind} value={kind}>{categoryKindLabels[kind]}</option>)}</select></label>
           {filters.categoryKind === "workshop" || filters.categoryKind === "campaign" ? (
             <label><span>Name</span><select value={filters.categorySlug} onChange={(event) => updateFilters({ categorySlug: event.target.value, page: 1 })}><option value="">All names</option>{nameOptions.map((category) => <option key={`${category.programAssociation}-${category.kind}-${category.slug}`} value={category.slug}>{category.name}</option>)}</select></label>
           ) : null}
+          <label><span>Location</span><select value={filters.location} onChange={(event) => updateFilters({ location: event.target.value, page: 1 })}><option value="">All locations</option>{facets.locations.map((location) => <option key={location} value={location}>{location}</option>)}</select></label>
+          <label><span>Event year</span><select value={filters.eventYear} onChange={(event) => updateFilters({ eventYear: event.target.value, page: 1 })}><option value="">All years</option>{facets.eventYears.map((year) => <option key={year} value={year}>{year}</option>)}</select></label>
           <label><span>Sort by</span><select value={filters.sort} onChange={(event) => updateFilters({ page: 1, sort: event.target.value as Filters["sort"] })}><option value="latest">Latest first</option><option value="oldest">Oldest first</option></select></label>
-          {(filters.q || filters.categoryKind || filters.categorySlug || filters.programSlug || filters.sort === "oldest") ? <button className="stories-clear" onClick={() => { setSearchText(""); updateFilters({ categoryKind: "", categorySlug: "", page: 1, programSlug: "", q: "", sort: "latest" }); }} type="button">Clear filters</button> : null}
+          {(filters.q || filters.categoryKind || filters.categorySlug || filters.eventYear || filters.location || (!fixedProgram && filters.programSlug) || filters.sort === "oldest") ? <button className="stories-clear" onClick={() => { setSearchText(""); updateFilters({ categoryKind: "", categorySlug: "", eventYear: "", location: "", page: 1, programSlug: fixedProgram ?? "", q: "", sort: "latest" }); }} type="button">Clear filters</button> : null}
         </form>
 
         {notice ? <div aria-live="polite" className="stories-connectivity"><span className="stories-loader" />{notice}<button onClick={() => setRetryTick((current) => current + 1)} type="button">Retry now</button></div> : null}
         {status === "loading" ? <StoriesSkeleton /> : null}
         {status === "error" ? <div className="stories-connectivity stories-connectivity-empty"><span className="stories-loader" /><span>Reconnecting to stories. {message}</span><button onClick={() => setRetryTick((current) => current + 1)} type="button">Retry now</button></div> : null}
-        {status === "ready" && !posts.length ? <div className="stories-state"><h3>No stories match this view.</h3><p>Try a broader search or clear the current filters.</p><button className="button button-secondary" onClick={() => { setSearchText(""); updateFilters({ categoryKind: "", categorySlug: "", page: 1, programSlug: "", q: "", sort: "latest" }); }} type="button">Show all stories</button></div> : null}
+        {status === "ready" && !posts.length ? <div className="stories-state"><h3>No stories match this view.</h3><p>Try a broader search or clear the current filters.</p><button className="button button-secondary" onClick={() => { setSearchText(""); updateFilters({ categoryKind: "", categorySlug: "", eventYear: "", location: "", page: 1, programSlug: fixedProgram ?? "", q: "", sort: "latest" }); }} type="button">Show all stories</button></div> : null}
         {(status === "ready" || status === "refreshing") && posts.length ? <div className={`stories-grid${status === "refreshing" ? " is-refreshing" : ""}`}>{posts.map((post) => <StoryCard categories={categories} key={post.id} post={post} />)}</div> : null}
 
         {status === "ready" && pagination.totalPages > 1 ? (
@@ -463,8 +498,12 @@ export function StoriesHubPage() {
           </nav>
         ) : null}
       </section>
-    </main>
+    </section>
   );
+}
+
+export function StoriesHubPage() {
+  return <main className="page"><BlogArchive /></main>;
 }
 
 function ArticleBlock({ block }: { block: BlogContentBlock }) {
@@ -576,7 +615,13 @@ export function StoryArticlePage({ slug }: { slug: string }) {
             <p className="story-meta">{postMeta(post, categories)}</p>
             <h1>{post.title}</h1>
             <p className="story-article-excerpt">{post.excerpt}</p>
-            <div className="story-byline"><strong>{post.author || "Floydee Team"}</strong><span>{formatDate(post.publishedAt)}</span><span>{readingTime(post)} min read</span></div>
+            <div className="story-byline">
+              <strong>{post.author || "Floydee Team"}</strong>
+              {post.location ? <span>Location: {post.location}</span> : null}
+              {post.eventDate ? <span>Event: {formatDate(post.eventDate)}</span> : null}
+              <span>Published: {formatDate(post.publishedAt)}</span>
+              <span>{readingTime(post)} min read</span>
+            </div>
           </div>
           {post.heroImage?.url ? <figure><StoryImage eager media={post.heroImage} sizes="(max-width: 1080px) 100vw, 50vw" />{post.heroImage.caption ? <figcaption>{post.heroImage.caption}</figcaption> : null}</figure> : <div className="story-article-program">{programLabels[post.programAssociation]}</div>}
         </header>
