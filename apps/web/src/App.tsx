@@ -7,9 +7,14 @@ import healthCamp2 from "./assets/health-camp-2.webp";
 import healthCamp3 from "./assets/health-camp-3.webp";
 import studentSanika from "./assets/student-sanika.webp";
 import programMapping from "./assets/program-mapping.webp";
+import teamDisha from "./assets/team-disha.jpg";
+import teamHimanshu from "./assets/team-himanshu.png";
+import teamIpsito from "./assets/team-ipsito.jpg";
+import teamSreeparna from "./assets/team-sreeparna.jpg";
+import teamSubhodyuti from "./assets/team-subhodyuti.jpg";
 import { BlogAdminPage } from "./BlogAdminPage";
 import { LanguageSelector, useLocale } from "./LocaleProvider";
-import { StoryArticlePage, StoriesHubPage } from "./StoriesPage";
+import { BlogArchive, StoryArticlePage, StoriesHubPage } from "./StoriesPage";
 import type { BlogCategory, BlogProgramAssociation } from "@floydee/shared";
 
 type NavLink = [label: string, href: string, className?: string];
@@ -196,13 +201,70 @@ const newsCards = [
   }
 ];
 
-const teamMembers = [
-  ["Subho Chakraborty", "Product", "15+ years in software development and global teams, shaping product strategy and execution."],
-  ["Sreeparna Roy", "Marketing", "16+ years across marketing, brand vision, performance, reach, and scalability."],
-  ["Ipsito Ghosh", "Technology", "20+ years in software and engineering management, supporting technical excellence and team performance."],
-  ["Dr. Himanshu Borase", "Healthcare Consultant", "Women's health and fertility expertise, helping bridge clinical practice with digital femtech."],
-  ["Disha Mishra", "Partnerships", "Academic and institutional partnership experience across collaborations, licensing, and outreach."]
-] as const;
+type TeamMember = {
+  name: string;
+  role: string;
+  bio?: string;
+  image?: string;
+  imageAlt?: string;
+  initials: string;
+};
+
+const coreTeam: TeamMember[] = [
+  {
+    name: "Subhodyuti Chakraborty",
+    role: "Founder Director",
+    bio: "Brings over 15 years of experience in software development and global teams, shaping product strategy and execution.",
+    image: teamSubhodyuti,
+    imageAlt: "Subhodyuti Chakraborty, Founder Director",
+    initials: "SC"
+  },
+  {
+    name: "Ipsito Ghosh",
+    role: "Chief Technical Officer",
+    bio: "Brings more than 20 years of software development and engineering leadership experience, supporting technical excellence and team performance.",
+    image: teamIpsito,
+    imageAlt: "Ipsito Ghosh, Chief Technical Officer",
+    initials: "IG"
+  },
+  {
+    name: "Disha Mishra",
+    role: "Head, Program Delivery & Partnerships",
+    bio: "Leads program delivery and strategic partnerships across academia, industry, institutions, and community collaborators.",
+    image: teamDisha,
+    imageAlt: "Disha Mishra, Head of Program Delivery and Partnerships",
+    initials: "DM"
+  },
+  {
+    name: "Sreeparna Roy",
+    role: "Marketing Head",
+    bio: "Brings over 16 years of marketing experience, aligning campaigns with brand vision while strengthening performance, reach, and scalability.",
+    image: teamSreeparna,
+    imageAlt: "Sreeparna Roy, Marketing Head",
+    initials: "SR"
+  },
+  {
+    name: "Riya Banerjee",
+    role: "Social Media Executive",
+    initials: "RB"
+  }
+];
+
+const expertAdvisors: TeamMember[] = [
+  {
+    name: "Dr. Himanshu Borase",
+    role: "Expert Advisor, Women's Health & Fertility",
+    bio: "An expert in fertility and women's health, Dr. Borase helps bridge clinical practice with digital femtech and accessible care.",
+    image: teamHimanshu,
+    imageAlt: "Dr. Himanshu Borase, Expert Advisor",
+    initials: "HB"
+  },
+  {
+    name: "Dr. Suparna Biswas",
+    role: "Expert Advisor",
+    initials: "SB"
+  }
+];
 
 async function postInquiry(path: string, payload: Record<string, string | number>) {
   let response: Response;
@@ -1192,6 +1254,12 @@ function ProgramDetailPage({ slug }: { slug: keyof typeof programPages }) {
         </div>
         <a className="button button-primary" href="/contact">Start a conversation</a>
       </section>
+      <BlogArchive
+        basePath={`/programs/${slug}`}
+        eyebrow={`${program.title} stories`}
+        fixedProgram={slug}
+        title={`Latest from ${program.title}`}
+      />
     </main>
   );
 }
@@ -1301,6 +1369,13 @@ function LatestPage({ type }: { type: "latest" | "stories" | "news" | "resources
             <img src={image} alt={`Floydee gallery item ${index + 1}`} key={image} />
           ))}
         </section>
+      ) : type === "news" || type === "resources" ? (
+        <BlogArchive
+          basePath={`/${type}`}
+          channel={type === "news" ? "news" : "media"}
+          eyebrow={type === "news" ? "News archive" : "Media archive"}
+          title={type === "news" ? "Latest foundation news" : "Explore media and resources"}
+        />
       ) : (
         <section className="page-section">
           <div className="page-grid three">
@@ -1319,27 +1394,114 @@ function LatestPage({ type }: { type: "latest" | "stories" | "news" | "resources
   );
 }
 
-function AboutPage({ view }: { view: "about" | "mission" | "history" | "leadership" | "trust" | "contact" }) {
-  if (view === "contact") return <ContactPage />;
-
+function TeamDirectory({ members, startIndex = 1 }: { members: TeamMember[]; startIndex?: number }) {
   return (
-    <main className="page">
+    <div className="team-directory">
+      {members.map((member, index) => (
+        <article className="team-profile" key={member.name}>
+          <span aria-hidden="true" className="team-profile-index">{String(startIndex + index).padStart(2, "0")}</span>
+          <div className={`team-profile-portrait${member.image ? "" : " is-placeholder"}`}>
+            {member.image ? (
+              <img alt={member.imageAlt ?? ""} decoding="async" loading="lazy" src={member.image} />
+            ) : (
+              <span aria-hidden="true">{member.initials}</span>
+            )}
+          </div>
+          <div className="team-profile-identity">
+            <h3>{member.name}</h3>
+            <p className="role-label">{member.role}</p>
+          </div>
+          <div className="team-profile-bio">
+            {member.bio ? <p>{member.bio}</p> : <p className="team-profile-awaiting">Official profile details will be added soon.</p>}
+          </div>
+        </article>
+      ))}
+    </div>
+  );
+}
+
+function AboutExperience() {
+  return (
+    <>
       <PageHero
         eyebrow="Who We Are"
         title="Potential is everywhere. Access is the work."
         text="Floydee Future Foundation is a Section 8 foundation working at the intersection of education, health, well-being, and social impact."
         image={heroFoundation}
-        cta={["Contact us", "/contact"]}
+        cta={["Meet our team", "#core-team"]}
       />
-      {view === "leadership" ? (
-        <section className="page-section">
-          <div className="page-heading"><p className="section-label">Leadership</p><h2>Driven by a team committed to future-ready care and opportunity.</h2></div>
-          <div className="page-grid three">{teamMembers.map(([name, role, bio]) => <article key={name}><h3>{name}</h3><p className="role-label">{role}</p><p>{bio}</p></article>)}</div>
-        </section>
+
+      <section className="page-section about-story" aria-labelledby="about-story-title">
+        <div>
+          <p className="section-label">About the foundation</p>
+          <h2 id="about-story-title">Empowering women and educating youth are forces for a just, healthy, and prosperous society.</h2>
+        </div>
+        <div className="about-story-copy">
+          <p>Floydee Future Foundation was founded with a simple belief: every young person and every woman deserves the chance to grow with dignity, skills, and opportunity.</p>
+          <p>The foundation bridges the gap between potential and access through practical experiences rooted in real community needs.</p>
+          <a href="/mission">Explore our mission</a>
+        </div>
+      </section>
+
+      <section className="about-program-thread" aria-label="Floydee programs">
+        <article><span>01</span><div><h2>AAROHI</h2><p>Care that changes lives.</p></div></article>
+        <article><span>02</span><div><h2>SAKHI</h2><p>A safe space to share and be heard.</p></div></article>
+        <article><span>03</span><div><h2>VIDYA</h2><p>Pathways from education to employment.</p></div></article>
+      </section>
+
+      <section className="page-section team-section" id="core-team" aria-labelledby="core-team-title">
+        <div className="team-section-heading">
+          <div>
+            <p className="section-label">Our Team</p>
+            <h2 id="core-team-title">Core Team</h2>
+          </div>
+          <p>The internal team guiding the foundation's strategy, programs, partnerships, technology, communication, and day-to-day delivery.</p>
+        </div>
+        <TeamDirectory members={coreTeam} />
+      </section>
+
+      <section className="page-band advisor-section" aria-labelledby="advisor-title">
+        <div className="team-section-heading">
+          <div>
+            <p className="section-label">Specialist guidance</p>
+            <h2 id="advisor-title">Our Expert Advisors</h2>
+          </div>
+          <p>Doctors and professionals who regularly support our initiatives with specialist guidance while remaining distinct from the foundation's full-time core team.</p>
+        </div>
+        <TeamDirectory members={expertAdvisors} />
+      </section>
+
+      <section className="page-section about-cta" aria-labelledby="about-cta-title">
+        <p className="section-label">Build access with us</p>
+        <h2 id="about-cta-title">Bring your expertise, institution, or community into the work.</h2>
+        <p>Partner with Floydee Future Foundation to create practical pathways for health, dignity, education, and opportunity.</p>
+        <div className="about-cta-actions">
+          <a className="button button-primary" href="/partner-with-us">Partner with us</a>
+          <a className="button button-secondary" href="/contact">Contact us</a>
+        </div>
+      </section>
+    </>
+  );
+}
+
+function AboutPage({ view }: { view: "about" | "mission" | "history" | "leadership" | "trust" | "contact" }) {
+  if (view === "contact") return <ContactPage />;
+
+  return (
+    <main className={`page${view === "about" || view === "leadership" ? " about-page" : ""}`}>
+      {view === "about" || view === "leadership" ? (
+        <AboutExperience />
       ) : view === "trust" ? (
         <TrustCentrePage embedded />
       ) : (
         <>
+          <PageHero
+            eyebrow="Who We Are"
+            title="Potential is everywhere. Access is the work."
+            text="Floydee Future Foundation is a Section 8 foundation working at the intersection of education, health, well-being, and social impact."
+            image={heroFoundation}
+            cta={["Contact us", "/contact"]}
+          />
           <section className="page-section page-two-column">
             <div>
               <p className="section-label">{view === "mission" ? "Vision and mission" : view === "history" ? "Foundation history" : "About the foundation"}</p>
@@ -1493,7 +1655,7 @@ function usePageMotion(path: string) {
     if (reduceMotion) return;
 
     const targets = Array.from(root.querySelectorAll<HTMLElement>(
-      ".page-hero-copy, .page-hero-media, .page-section, .page-band, .page-grid article, .page-card-list article, .page-copy-panel, .page-cta-panel"
+      ".page-hero-copy, .page-hero-media, .page-section, .page-band, .page-grid article, .page-card-list article, .page-copy-panel, .page-cta-panel, .about-program-thread article, .team-profile"
     ));
 
     targets.forEach((target, index) => {

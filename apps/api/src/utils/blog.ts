@@ -2,6 +2,7 @@ import crypto from "node:crypto";
 import mongoose from "mongoose";
 import type {
   BlogCategoryKind,
+  BlogChannel,
   BlogContentBlock,
   BlogImageMedia,
   BlogProgramAssociation,
@@ -43,6 +44,10 @@ export function isProgramAssociation(value: unknown): value is BlogProgramAssoci
 
 export function isBlogCategoryKind(value: unknown): value is BlogCategoryKind {
   return value === "workshop" || value === "campaign" || value === "general";
+}
+
+export function isBlogChannel(value: unknown): value is BlogChannel {
+  return value === "news" || value === "media";
 }
 
 export function isBlogStatus(value: unknown): value is BlogStatus {

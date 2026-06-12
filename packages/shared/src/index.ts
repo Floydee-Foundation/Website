@@ -54,6 +54,8 @@ export type BlogProgramAssociation = ProgramSlug | "general";
 
 export type BlogCategoryKind = "workshop" | "campaign" | "general";
 
+export type BlogChannel = "news" | "media";
+
 export interface BlogSeo {
   title?: string;
   description?: string;
@@ -148,11 +150,14 @@ export interface BlogPost {
   categoryKind: BlogCategoryKind;
   categorySlug?: string;
   categorySlugs: string[];
+  channels: BlogChannel[];
   createdAt?: string;
+  eventDate?: string;
   excerpt: string;
   featured?: boolean;
   heroImage?: BlogImageMedia;
   id: string;
+  location?: string;
   programAssociation: BlogProgramAssociation;
   publishedAt?: string;
   seo: BlogSeo;

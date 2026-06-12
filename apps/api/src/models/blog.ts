@@ -1,5 +1,5 @@
 import mongoose, { type Model, Schema } from "mongoose";
-import type { BlogCategoryKind, BlogProgramAssociation, BlogStatus } from "@floydee/shared";
+import type { BlogCategoryKind, BlogChannel, BlogProgramAssociation, BlogStatus } from "@floydee/shared";
 
 export interface BlogCategoryDocument {
   createdAt: Date;
@@ -18,7 +18,9 @@ export interface BlogPostDocument {
   categoryKind: BlogCategoryKind;
   categorySlug?: string;
   categorySlugs: string[];
+  channels: BlogChannel[];
   createdAt: Date;
+  eventDate?: Date;
   excerpt: string;
   featured?: boolean;
   heroImage?: {
@@ -36,6 +38,7 @@ export interface BlogPostDocument {
     variants?: Array<{ byteSize: number; height: number; url: string; width: number }>;
     width?: number;
   };
+  location?: string;
   programAssociation: BlogProgramAssociation;
   publishedAt?: Date;
   seo: {
@@ -73,6 +76,8 @@ const blogPostSchema = new Schema<BlogPostDocument>(
     categoryKind: { default: "general", enum: ["workshop", "campaign", "general"], index: true, type: String },
     categorySlug: { index: true, trim: true, type: String },
     categorySlugs: { default: [], type: [String] },
+    channels: { default: [], enum: ["news", "media"], index: true, type: [String] },
+    eventDate: { index: true, type: Date },
     excerpt: { default: "", trim: true, type: String },
     featured: { default: false, index: true, type: Boolean },
     heroImage: {
@@ -99,6 +104,7 @@ const blogPostSchema = new Schema<BlogPostDocument>(
       },
       width: { type: Number }
     },
+    location: { index: true, trim: true, type: String },
     programAssociation: {
       default: "general",
       enum: ["aarohi", "sakhi", "vidya", "general"],

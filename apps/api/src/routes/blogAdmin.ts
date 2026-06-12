@@ -6,6 +6,7 @@ import { deleteStoredMedia, downloadDriveImage, optimizeAndStoreImage } from "..
 import {
   getString,
   getStringList,
+  isBlogChannel,
   isBlogCategoryKind,
   isGoogleDriveUrl,
   isBlogStatus,
@@ -84,11 +85,14 @@ function serializePost(post: any): BlogPost {
     categoryKind: post.categoryKind ?? "general",
     categorySlug: post.categoryKind && post.categoryKind !== "general" ? post.categorySlug || undefined : undefined,
     categorySlugs: post.categorySlugs ?? [],
+    channels: post.channels?.filter(isBlogChannel) ?? [],
     createdAt: post.createdAt?.toISOString?.(),
+    eventDate: post.eventDate?.toISOString?.().slice(0, 10),
     excerpt: post.excerpt ?? "",
     featured: post.featured === true || undefined,
     heroImage: post.heroImage?.url ? post.heroImage : undefined,
     id: String(post._id),
+    location: post.location || undefined,
     programAssociation: post.programAssociation ?? "general",
     publishedAt: post.publishedAt?.toISOString?.(),
     seo: {
@@ -196,6 +200,12 @@ async function buildPostPayload(body: Record<string, unknown>, existingStatus: B
     : body.publishedAt
       ? new Date(getString(body.publishedAt))
       : undefined;
+  const eventDateValue = getString(body.eventDate);
+  const eventDate = body.eventDate instanceof Date
+    ? body.eventDate
+    : eventDateValue
+      ? new Date(`${eventDateValue.slice(0, 10)}T00:00:00.000Z`)
+      : undefined;
   const errors: string[] = [];
 
   validateMedia(heroImage, errors, "Hero image URL", status === "published");
@@ -209,9 +219,12 @@ async function buildPostPayload(body: Record<string, unknown>, existingStatus: B
     categoryKind,
     categorySlug: categorySlug || undefined,
     categorySlugs: activeCategorySlugs,
+    channels: getStringList(body.channels).filter(isBlogChannel),
+    eventDate,
     excerpt: getString(body.excerpt),
     featured: body.featured === true,
     heroImage,
+    location: getString(body.location),
     programAssociation,
     publishedAt,
     seo: {
@@ -227,6 +240,7 @@ async function buildPostPayload(body: Record<string, unknown>, existingStatus: B
 
   if (!payload.slug) errors.push("Slug is required.");
   if (payload.publishedAt && Number.isNaN(payload.publishedAt.getTime())) errors.push("Publish date is invalid.");
+  if (payload.eventDate && Number.isNaN(payload.eventDate.getTime())) errors.push("Event date is invalid.");
 
   if (status === "published") {
     if (!payload.title) errors.push("Title is required before publishing.");
