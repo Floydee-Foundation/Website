@@ -194,11 +194,32 @@ function categoryName(post: BlogPost, categories: BlogCategory[]) {
 function postMeta(post: BlogPost, categories: BlogCategory[]) {
   return [
     categoryName(post, categories),
-    post.location ? `Location: ${post.location}` : "",
-    post.eventDate ? `Event: ${formatDate(post.eventDate)}` : "",
     `Published: ${formatDate(post.publishedAt)}`,
     `${readingTime(post)} min read`
   ].filter(Boolean).join(" · ");
+}
+
+function storyDetailItems(post: BlogPost) {
+  return [
+    post.location ? { label: "Location", value: post.location } : undefined,
+    post.eventDate ? { label: "Happened", value: formatDate(post.eventDate) } : undefined
+  ].filter(Boolean) as Array<{ label: string; value: string }>;
+}
+
+function StoryDateline({ post }: { post: BlogPost }) {
+  const details = storyDetailItems(post);
+  if (!details.length) return null;
+
+  return (
+    <div className="story-card-facts" aria-label="Story location and event date">
+      {details.map((detail) => (
+        <span className="story-card-fact" key={detail.label}>
+          <strong>{detail.label}</strong>
+          {detail.value}
+        </span>
+      ))}
+    </div>
+  );
 }
 
 function parseFilters(fixedProgram?: BlogProgramAssociation): Filters {
@@ -276,6 +297,7 @@ function StoryCard({ categories, post }: { categories: BlogCategory[]; post: Blo
       </a>
       <div className="story-card-copy">
         <p className="story-meta">{postMeta(post, categories)}</p>
+        <StoryDateline post={post} />
         <h2><a href={`/stories/${post.slug}`}>{post.title}</a></h2>
         <p>{post.excerpt}</p>
         <a className="story-read-link" href={`/stories/${post.slug}`}>Read story <span aria-hidden="true">→</span></a>
@@ -293,6 +315,7 @@ function FeaturedStory({ categories, post }: { categories: BlogCategory[]; post:
       <div className="stories-feature-copy">
         <p className="section-label">Featured story</p>
         <p className="story-meta">{postMeta(post, categories)}</p>
+        <StoryDateline post={post} />
         <h2 id="featured-story-title">{post.title}</h2>
         <p>{post.excerpt}</p>
         <a className="button button-primary" href={`/stories/${post.slug}`}>Read story</a>
