@@ -1,9 +1,9 @@
 import { FormEvent, KeyboardEvent as ReactKeyboardEvent, type CSSProperties, useEffect, useId, useRef, useState } from "react";
+import floydeeCircleLogo from "./assets/floydee-circle-logo.png";
 import floydeeLogo from "./assets/floydee-logo.png";
-import floydeeMark from "./assets/floydee-mark.svg";
+import nareeHealthLogo from "./assets/naree-health-logo.png";
 import heroFoundation from "./assets/hero-foundation.webp";
 import homeHeroHealthScreening from "./assets/home-hero-health-screening.webp";
-import heroAarohiWorkshop from "./assets/hero-aarohi-workshop.webp";
 import heroAboutCorridor from "./assets/hero-about-corridor.webp";
 import heroContactCare from "./assets/hero-contact-care.webp";
 import heroDonateScreening from "./assets/hero-donate-screening.webp";
@@ -15,7 +15,6 @@ import heroLegalFoundation from "./assets/hero-legal-foundation.webp";
 import heroMissionGroup from "./assets/hero-mission-group.webp";
 import heroNewsWorkshop from "./assets/hero-news-workshop.webp";
 import heroNotFoundStudent from "./assets/hero-not-found-student.webp";
-import heroProgramsGroup from "./assets/hero-programs-group.webp";
 import heroResourcesScreening from "./assets/hero-resources-screening.webp";
 import heroSitemapCommunity from "./assets/hero-sitemap-community.webp";
 import heroTrustAwareness from "./assets/hero-trust-awareness.webp";
@@ -24,6 +23,16 @@ import healthCamp2 from "./assets/health-camp-2.webp";
 import healthCamp3 from "./assets/health-camp-3.webp";
 import studentSanika from "./assets/student-sanika.webp";
 import programMapping from "./assets/program-mapping.webp";
+import websiteAboutHero from "./assets/website-changes/about-hero.jpg";
+import websiteProgramsHero from "./assets/website-changes/programs-hero.png";
+import websiteProgramAarohiCard from "./assets/website-changes/program-aarohi-card.jpg";
+import websiteProgramSakhiCard from "./assets/website-changes/program-sakhi-card.png";
+import websiteProgramVidyaCard from "./assets/website-changes/program-vidya-card.jpg";
+import websiteAarohiHero from "./assets/website-changes/aarohi-hero.jpg";
+import websiteSakhiHero from "./assets/website-changes/sakhi-hero.jpg";
+import websiteVidyaHero from "./assets/website-changes/vidya-hero.jpg";
+import websiteImpactHero from "./assets/website-changes/impact-hero.jpg";
+import websiteFeaturedInitiativeHealthCamp from "./assets/website-changes/featured-initiative-health-camp.jpg";
 import aarohiAfshanAnjum from "./assets/testimonials/aarohi-afshan-anjum.jpg";
 import aarohiAnushkaDas from "./assets/testimonials/aarohi-anushka-das.jpg";
 import aarohiAnushkaDutta from "./assets/testimonials/aarohi-anushka-dutta.jpg";
@@ -166,6 +175,7 @@ type ProgramPage = {
   tagline: string;
   eyebrow: string;
   image: string;
+  cardImage: string;
   statement: string;
   intro: string;
   problem: string;
@@ -241,15 +251,13 @@ const navGroups: NavGroup[] = [
   {
     label: "WHO WE ARE",
     links: [
-      ["ABOUT US", "/about"],
-      ["MISSION", "/mission"]
+      ["ABOUT US", "/about"]
     ]
   },
   {
     label: "CONTACT",
     links: [
-      ["CONTACT", "/contact"],
-      ["GENERAL ENQUIRY", "/contact"]
+      ["CONTACT", "/contact"]
     ]
   }
 ];
@@ -297,7 +305,8 @@ const programPages: Record<ProgramSlug, ProgramPage> = {
     title: "AAROHI",
     tagline: "Care That Changes Lives",
     eyebrow: "Health, dignity and access",
-    image: heroAarohiWorkshop,
+    image: websiteAarohiHero,
+    cardImage: websiteProgramAarohiCard,
     statement: "Together, we create healthier, safer, and more informed communities through education, screening, and access to care.",
     intro:
       "AAROHI is Floydee Future Foundation's flagship health program for adolescent girls and women, combining trusted information, supportive conversations, preventive screening, and pathways to care.",
@@ -378,7 +387,8 @@ const programPages: Record<ProgramSlug, ProgramPage> = {
     title: "SAKHI",
     tagline: "Your space to share, be heard, and feel supported",
     eyebrow: "Emotional Wellness and Resilience Program for Adolescents and Women",
-    image: aarohiSonikaDey,
+    image: websiteSakhiHero,
+    cardImage: websiteProgramSakhiCard,
     statement: "SAKHI empowers adolescents and women with the knowledge, skills, support systems, and safe spaces needed to build emotional resilience, strengthen mental well-being, and navigate life’s challenges with confidence.",
     intro:
       "SAKHI is Floydee Future Foundation's support pathway for emotional well-being, built around trust, listening, dignity, and confidence for girls, women, and youth.",
@@ -397,7 +407,8 @@ const programPages: Record<ProgramSlug, ProgramPage> = {
     title: "VIDYA",
     tagline: "Building Pathways from Education to Employment",
     eyebrow: "Education, skills and employability",
-    image: vidyaRabiya,
+    image: websiteVidyaHero,
+    cardImage: websiteProgramVidyaCard,
     statement: "VIDYA empowers youth with future-ready digital skills, career readiness, and employment pathways that bridge the gap between education and meaningful livelihoods.",
     intro:
       "VIDYA is a structured education-to-employment program that helps students and aspiring software professionals build practical technology skills, workplace confidence, career direction, and industry exposure.",
@@ -1202,7 +1213,7 @@ function Header() {
   return (
     <header className="site-header" id="top" onMouseLeave={() => setActiveMenu(null)}>
       <a className="brand" href="/" aria-label="Floydee Future Foundation home">
-        <img className="brand-logo header-logo" src={floydeeMark} alt="Floydee Foundation" />
+        <img className="brand-logo header-logo" src={floydeeCircleLogo} alt="Floydee Foundation" />
         <span className="brand-title"><span>Floydee</span> <span className="brand-title-gold">Foundation</span></span>
       </a>
 
@@ -1604,7 +1615,7 @@ function HomePage() {
             <div className="hero-actions">
               <a className="button button-primary" href="#donate">Donate now</a>
               <a className="button button-secondary" href="#book">Collaborate With Us</a>
-              <a className="button button-text" href="#stories">Explore stories</a>
+              <a className="button button-text" href="/stories">Explore stories</a>
             </div>
             <div className="hero-proof" aria-label="Foundation proof points">
               <span>Section 8 foundation</span>
@@ -1804,9 +1815,9 @@ function HomePage() {
             <h2 id="initiative-title">Menstrual health screening camp</h2>
             <p>Through partnership engagements, Floydee Future Foundation launched a menstrual health screening initiative at Government Girls High School, Rajarhat, supporting adolescent girls with health education, screening, and practical guidance.</p>
             <div className="mini-metrics"><span><strong>150</strong> girls reached</span><span><strong>1</strong> school camp</span><span><strong>3</strong> health focus areas</span></div>
-            <a className="button button-primary" href="/latest">See latest initiatives</a>
+            <a className="button button-primary" href="/stories">See latest initiatives</a>
           </div>
-          <img src={healthCamp3} alt="Floydee menstrual health screening camp participants" />
+          <img src={websiteFeaturedInitiativeHealthCamp} alt="Floydee menstrual health screening camp participants" />
         </section>
 
         <section className="join" id="join" aria-labelledby="join-title">
@@ -1880,6 +1891,7 @@ function HomePage() {
         </section>
       </main>
 
+      <StaticNareeAppBanner />
       <footer className="site-footer" id="trust">
         <div className="footer-brand">
           <a className="brand" href="#top"><img className="brand-logo footer-logo" src={floydeeLogo} alt="Floydee Foundation" /></a>
@@ -1897,17 +1909,20 @@ function HomePage() {
 
 function RouteFooter() {
   return (
-    <footer className="site-footer route-footer" id="trust">
-      <div className="footer-brand">
-        <a className="brand" href="/"><img className="brand-logo footer-logo" src={floydeeLogo} alt="Floydee Foundation" /></a>
-        <p>Section 8 foundation working with girls, women, and youth to build health, dignity, skills, and opportunity.</p>
-      </div>
-      <div><h2>Join Us</h2><a href="/donate">Donate</a><a href="/partner-with-us">Partner With Us</a><a href="/volunteer">Volunteer</a><a href="/book-a-program">Collaborate With Us</a></div>
-      <div><h2>Programs</h2><a href="/programs/aarohi">AAROHI</a><a href="/programs/sakhi">SAKHI</a><a href="/programs/vidya">VIDYA</a><a href="/programs">Pillars of Development</a></div>
-      <div><h2>Resources</h2><a href="/news">News</a><a href="/stories">Stories</a><a href="/resources">Media Centre</a><a href="/gallery">Gallery</a></div>
-      <div><h2>Contact</h2><p>New Town, Kolkata-700156</p><p>+91 91477 48064</p><p>contact@floydeefoundation.org</p></div>
-      <div className="footer-bottom"><span>© 2026 Floydee Future Foundation. All rights reserved.</span><FooterLegalLinks /></div>
-    </footer>
+    <>
+      <StaticNareeAppBanner />
+      <footer className="site-footer route-footer" id="trust">
+        <div className="footer-brand">
+          <a className="brand" href="/"><img className="brand-logo footer-logo" src={floydeeLogo} alt="Floydee Foundation" /></a>
+          <p>Section 8 foundation working with girls, women, and youth to build health, dignity, skills, and opportunity.</p>
+        </div>
+        <div><h2>Join Us</h2><a href="/donate">Donate</a><a href="/partner-with-us">Partner With Us</a><a href="/volunteer">Volunteer</a><a href="/book-a-program">Collaborate With Us</a></div>
+        <div><h2>Programs</h2><a href="/programs/aarohi">AAROHI</a><a href="/programs/sakhi">SAKHI</a><a href="/programs/vidya">VIDYA</a><a href="/programs">Pillars of Development</a></div>
+        <div><h2>Resources</h2><a href="/news">News</a><a href="/stories">Stories</a><a href="/resources">Media Centre</a><a href="/gallery">Gallery</a></div>
+        <div><h2>Contact</h2><p>New Town, Kolkata-700156</p><p>+91 91477 48064</p><p>contact@floydeefoundation.org</p></div>
+        <div className="footer-bottom"><span>© 2026 Floydee Future Foundation. All rights reserved.</span><FooterLegalLinks /></div>
+      </footer>
+    </>
   );
 }
 
@@ -2096,7 +2111,7 @@ function ProgramsOverviewPage() {
         eyebrow="What We Do"
         title="We work where health, confidence, skills, and access meet."
         text="Floydee Future Foundation designs practical, community-rooted programs that help girls, women, and youth move from potential to access."
-        image={heroProgramsGroup}
+        image={websiteProgramsHero}
         cta={["Partner with us", "/partner-with-us"]}
       />
       <section className="page-section">
@@ -2107,7 +2122,7 @@ function ProgramsOverviewPage() {
         <div className="page-grid three">
           {Object.values(programPages).map((program) => (
             <article className="page-card feature-card" key={program.title}>
-              <img src={program.image} alt="" />
+              <img src={program.cardImage} alt="" />
               <p>{program.eyebrow}</p>
               <h3>{program.title}</h3>
               <span>{program.tagline}</span>
@@ -2271,7 +2286,7 @@ function InitiativesPage() {
 function ImpactPage() {
   return (
     <main className="page">
-      <PageHero eyebrow="Impact" title="Measured in access opened, not promises made." text="Impact at Floydee is tracked through participation, partner engagement, program delivery, and the practical pathways opened for girls, women, and youth." image={heroGalleryStudents} />
+      <PageHero eyebrow="Impact" title="Measured in access opened, not promises made." text="Impact at Floydee is tracked through participation, partner engagement, program delivery, and the practical pathways opened for girls, women, and youth." image={websiteImpactHero} />
       <section className="page-section">
         <div className="page-grid four">
           <article className="metric-card"><strong>150+</strong><span>girls supported in screening initiatives</span></article>
@@ -2489,7 +2504,7 @@ function AboutExperience() {
         eyebrow="Who We Are"
         title="Potential is everywhere. Access is the work."
         text="Floydee Future Foundation is a Section 8 foundation working at the intersection of education, health, well-being, and social impact."
-        image={heroAboutCorridor}
+        image={websiteAboutHero}
         cta={["Meet our team", "#core-team"]}
       />
 
@@ -2771,6 +2786,143 @@ function usePageMotion(path: string) {
   }, [path]);
 }
 
+const nareeDismissalStorageKey = "floydee:naree-app-banner-dismissed";
+const nareeLinks = {
+  apple: "https://apps.apple.com/us/app/naree/id6743942142",
+  android: "https://play.google.com/store/apps/details?id=com.nareemobileapp.prod&pcampaignid=web_share",
+  website: "https://naree.health/"
+} as const;
+
+const clientPageShareImages: Record<string, string> = {
+  "/": homeHeroHealthScreening,
+  "/about": websiteAboutHero,
+  "/accessibility": heroLegalFoundation,
+  "/book-a-program": heroJoinCommunity,
+  "/campaign-with-us": heroJoinCommunity,
+  "/contact": heroContactCare,
+  "/donate": heroDonateScreening,
+  "/donate/campaigns": heroDonateScreening,
+  "/donate/monthly": heroDonateScreening,
+  "/donate/where-needed-most": heroDonateScreening,
+  "/gallery": galleryHealthCamp1,
+  "/history": heroMissionGroup,
+  "/impact": websiteImpactHero,
+  "/initiatives": heroInitiativesAchievement,
+  "/join-us": heroJoinCommunity,
+  "/leadership": websiteAboutHero,
+  "/latest": heroLatestField,
+  "/mission": heroMissionGroup,
+  "/news": heroNewsWorkshop,
+  "/partner-with-us": heroJoinCommunity,
+  "/privacy-policy": heroLegalFoundation,
+  "/programs": websiteProgramsHero,
+  "/programs/aarohi": websiteAarohiHero,
+  "/programs/education-skill-development": websiteVidyaHero,
+  "/programs/emotional-wellbeing": websiteSakhiHero,
+  "/programs/health-wellness": websiteAarohiHero,
+  "/programs/sakhi": websiteSakhiHero,
+  "/programs/vidya": websiteVidyaHero,
+  "/refund-policy": heroLegalFoundation,
+  "/resources": heroResourcesScreening,
+  "/sitemap": heroSitemapCommunity,
+  "/stories": heroAboutCorridor,
+  "/terms-and-conditions": heroLegalFoundation,
+  "/trust-centre": heroTrustAwareness,
+  "/volunteer": heroJoinCommunity,
+  "/where-we-work": heroLatestField
+};
+
+function NareeAppBannerContent({ onClose }: { onClose?: () => void }) {
+  return (
+    <div className="naree-app-bar-inner">
+      <a className="naree-app-brand" href={nareeLinks.website} target="_blank" rel="noreferrer" aria-label="Visit Naree Health">
+        <img src={nareeHealthLogo} alt="Naree Health App" />
+      </a>
+      <div className="naree-app-copy">
+        <p className="naree-app-kicker">Naree Health App</p>
+        <h2>Download Naree App</h2>
+        <p>Track wellness, access trusted guidance, and join our women-first health community.</p>
+      </div>
+      <div className="naree-app-actions" aria-label="Naree app download links">
+        <a className="naree-app-button naree-app-button-primary" href={nareeLinks.apple} target="_blank" rel="noreferrer">
+          <span>Download on</span>
+          <strong>App Store</strong>
+        </a>
+        <a className="naree-app-button" href={nareeLinks.android} target="_blank" rel="noreferrer">
+          <span>Get it on</span>
+          <strong>Google Play</strong>
+        </a>
+        <span className="naree-app-community">
+          Join our Community
+        </span>
+      </div>
+      {onClose ? (
+        <button className="naree-app-close" type="button" aria-label="Close Naree app download banner" onClick={onClose}>
+          X
+        </button>
+      ) : null}
+    </div>
+  );
+}
+
+function StaticNareeAppBanner() {
+  return (
+    <section className="naree-app-static" aria-label="Download Naree app">
+      <NareeAppBannerContent />
+    </section>
+  );
+}
+
+function setDocumentMeta(name: string, value: string, property = false) {
+  let element = document.querySelector<HTMLMetaElement>(`meta[${property ? "property" : "name"}="${name}"]`);
+  if (!element) {
+    element = document.createElement("meta");
+    element.setAttribute(property ? "property" : "name", name);
+    document.head.appendChild(element);
+  }
+  element.content = value;
+}
+
+function absoluteClientUrl(value: string) {
+  return new URL(value, window.location.origin).toString();
+}
+
+function StickyNareeAppBar({ path }: { path: string }) {
+  const isAdminRoute = path.startsWith("/admin/blogs");
+  const [dismissed, setDismissed] = useState(() => {
+    try {
+      return window.localStorage.getItem(nareeDismissalStorageKey) === "true";
+    } catch {
+      return false;
+    }
+  });
+  const [isClosing, setIsClosing] = useState(false);
+  const isVisible = !dismissed && !isAdminRoute;
+
+  useEffect(() => {
+    document.body.classList.toggle("has-naree-app-bar", isVisible);
+    return () => document.body.classList.remove("has-naree-app-bar");
+  }, [isVisible]);
+
+  if (!isVisible) return null;
+
+  const closeBar = () => {
+    setIsClosing(true);
+    try {
+      window.localStorage.setItem(nareeDismissalStorageKey, "true");
+    } catch {
+      // Keep dismissal working even when storage is unavailable.
+    }
+    window.setTimeout(() => setDismissed(true), 220);
+  };
+
+  return (
+    <aside className={`naree-app-bar${isClosing ? " is-closing" : ""}`} aria-label="Download Naree app">
+      <NareeAppBannerContent onClose={closeBar} />
+    </aside>
+  );
+}
+
 export function App() {
   const { locale, t } = useLocale();
   const [path, setPath] = useState(() => window.location.pathname);
@@ -2839,15 +2991,27 @@ export function App() {
     const programStory = programSlug ? programPages[programSlug].story : undefined;
     document.title = t(programStory?.metaTitle ?? "Floydee Future Foundation");
     const description = t(programStory?.metaDescription ?? "Floydee Future Foundation supports girls, women, and youth through health, emotional well-being, education, and employability programs.");
-    document.querySelector('meta[name="description"]')?.setAttribute("content", description);
-    document.querySelector('meta[property="og:title"]')?.setAttribute("content", document.title);
-    document.querySelector('meta[property="og:description"]')?.setAttribute("content", description);
+    const normalizedPath = path.length > 1 ? path.replace(/\/+$/, "") : path;
+    const shareImage = absoluteClientUrl(clientPageShareImages[normalizedPath] ?? floydeeLogo);
+    const shareUrl = absoluteClientUrl(normalizedPath);
+    setDocumentMeta("description", description);
+    setDocumentMeta("og:title", document.title, true);
+    setDocumentMeta("og:description", description, true);
+    setDocumentMeta("og:type", "website", true);
+    setDocumentMeta("og:url", shareUrl, true);
+    setDocumentMeta("og:image", shareImage, true);
+    setDocumentMeta("og:image:secure_url", shareImage, true);
+    setDocumentMeta("twitter:card", "summary_large_image");
+    setDocumentMeta("twitter:title", document.title);
+    setDocumentMeta("twitter:description", description);
+    setDocumentMeta("twitter:image", shareImage);
   }, [locale, path, t]);
 
   return (
     <>
       <Header />
       {renderRoute(path)}
+      <StickyNareeAppBar path={path} />
     </>
   );
 }

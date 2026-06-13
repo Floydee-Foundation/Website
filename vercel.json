@@ -9,11 +9,15 @@
     },
     {
       "source": "/((?!api/.*).*)",
-      "destination": "/index.html"
+      "destination": "/api/page"
     }
   ],
   "functions": {
     "api/[...path].ts": {
+      "maxDuration": 30
+    },
+    "api/page.ts": {
+      "includeFiles": "apps/web/dist/**",
       "maxDuration": 30
     }
   }
