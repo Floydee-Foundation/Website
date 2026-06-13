@@ -5005,6 +5005,19 @@
     "translatorNotes": ""
   },
   {
+    "key": "copy.cc14eb79c272",
+    "surface": "website",
+    "pageName": "Home; Impact",
+    "route": "/",
+    "section": "site copy",
+    "context": "apps/web/src/App.tsx",
+    "english": "girls supported in screening initiatives",
+    "hindi": "लड़कियों ने स्क्रीनिंग पहल में सहयोग किया",
+    "bengali": "মেয়েরা স্ক্রিনিং উদ্যোগে সমর্থিত",
+    "status": "AI draft - review",
+    "translatorNotes": ""
+  },
+  {
     "key": "copy.fde9000b32d8",
     "surface": "website",
     "pageName": "Home; Impact",
@@ -5033,7 +5046,7 @@
   {
     "key": "copy.dfdee1274bf6",
     "surface": "website",
-    "pageName": "Home",
+    "pageName": "Home; Impact",
     "route": "/",
     "section": "site copy",
     "context": "apps/web/src/App.tsx",
@@ -5625,6 +5638,19 @@
     "english": "m9 5 7 7-7 7",
     "hindi": "एम9 5 7 7-7 7",
     "bengali": "m9 5 7 7-7 7",
+    "status": "AI draft - review",
+    "translatorNotes": ""
+  },
+  {
+    "key": "copy.af2ea5e68d29",
+    "surface": "website",
+    "pageName": "Shared website content",
+    "route": "/",
+    "section": "site copy",
+    "context": "apps/web/src/App.tsx",
+    "english": "(prefers-reduced-motion: reduce)",
+    "hindi": "(पसंद-कम-गति: कम करें)",
+    "bengali": "(prefers-reduced-motion: হ্রাস)",
     "status": "AI draft - review",
     "translatorNotes": ""
   },
@@ -6327,19 +6353,6 @@
     "english": "Impact at Floydee is tracked through participation, partner engagement, program delivery, and the practical pathways opened for girls, women, and youth.",
     "hindi": "फ्लोयडी में प्रभाव को भागीदारी, साझेदार सहभागिता, कार्यक्रम वितरण और लड़कियों, महिलाओं और युवाओं के लिए खोले गए व्यावहारिक मार्गों के माध्यम से ट्रैक किया जाता है।",
     "bengali": "Floydee-এ প্রভাব অংশগ্রহণ, অংশীদারের ব্যস্ততা, প্রোগ্রাম ডেলিভারি, এবং মেয়ে, মহিলা এবং যুবকদের জন্য খোলা ব্যবহারিক পথের মাধ্যমে ট্র্যাক করা হয়।",
-    "status": "AI draft - review",
-    "translatorNotes": ""
-  },
-  {
-    "key": "copy.ab14d52d61d3",
-    "surface": "website",
-    "pageName": "Impact",
-    "route": "/",
-    "section": "site copy",
-    "context": "apps/web/src/App.tsx",
-    "english": "youth engagement ambition for VIDYA each year",
-    "hindi": "प्रत्येक वर्ष विद्या के लिए युवा सहभागिता की महत्वाकांक्षा",
-    "bengali": "প্রতি বছর বিদ্যার জন্য যুবকদের ব্যস্ততার উচ্চাকাঙ্ক্ষা",
     "status": "AI draft - review",
     "translatorNotes": ""
   },
@@ -7644,19 +7657,6 @@
     "translatorNotes": ""
   },
   {
-    "key": "copy.af2ea5e68d29",
-    "surface": "website",
-    "pageName": "Shared website content",
-    "route": "/",
-    "section": "site copy",
-    "context": "apps/web/src/App.tsx",
-    "english": "(prefers-reduced-motion: reduce)",
-    "hindi": "(पसंद-कम-गति: कम करें)",
-    "bengali": "(prefers-reduced-motion: হ্রাস)",
-    "status": "AI draft - review",
-    "translatorNotes": ""
-  },
-  {
     "key": "copy.da6bdb50f1fd",
     "surface": "website",
     "pageName": "Shared website content",
@@ -8177,15 +8177,15 @@
     "translatorNotes": ""
   },
   {
-    "key": "copy.0dbe260e65b0",
+    "key": "copy.a66afeb2eb40",
     "surface": "website",
     "pageName": "Blog archives and articles",
     "route": "/stories, /news, /resources, /programs/*",
     "section": "site copy",
     "context": "apps/web/src/StoriesPage.tsx",
-    "english": "Featured story",
-    "hindi": "विशेष कहानी",
-    "bengali": "আলোচিত গল্প",
+    "english": "Story spotlight",
+    "hindi": "कहानी पर प्रकाश डाला गया",
+    "bengali": "গল্প স্পটলাইট",
     "status": "AI draft - review",
     "translatorNotes": ""
   },
@@ -8277,6 +8277,19 @@
     "english": "Updating stories",
     "hindi": "कहानियाँ अद्यतन कर रहा हूँ",
     "bengali": "গল্প আপডেট করা হচ্ছে",
+    "status": "AI draft - review",
+    "translatorNotes": ""
+  },
+  {
+    "key": "copy.0dbe260e65b0",
+    "surface": "website",
+    "pageName": "Blog archives and articles",
+    "route": "/stories, /news, /resources, /programs/*",
+    "section": "site copy",
+    "context": "apps/web/src/StoriesPage.tsx",
+    "english": "Featured story",
+    "hindi": "विशेष कहानी",
+    "bengali": "আলোচিত গল্প",
     "status": "AI draft - review",
     "translatorNotes": ""
   },

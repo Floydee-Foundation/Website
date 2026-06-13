@@ -8,7 +8,6 @@ import heroAboutCorridor from "./assets/hero-about-corridor.webp";
 import heroContactCare from "./assets/hero-contact-care.webp";
 import heroDonateScreening from "./assets/hero-donate-screening.webp";
 import heroGalleryStudents from "./assets/hero-gallery-students.webp";
-import heroImpactGroup from "./assets/hero-impact-group.webp";
 import heroInitiativesAchievement from "./assets/hero-initiatives-achievement.webp";
 import heroJoinCommunity from "./assets/hero-join-community.webp";
 import heroLatestField from "./assets/hero-latest-field.webp";
@@ -18,16 +17,29 @@ import heroNewsWorkshop from "./assets/hero-news-workshop.webp";
 import heroNotFoundStudent from "./assets/hero-not-found-student.webp";
 import heroProgramsGroup from "./assets/hero-programs-group.webp";
 import heroResourcesScreening from "./assets/hero-resources-screening.webp";
-import heroSakhiStudent from "./assets/hero-sakhi-student.webp";
 import heroSitemapCommunity from "./assets/hero-sitemap-community.webp";
 import heroTrustAwareness from "./assets/hero-trust-awareness.webp";
-import heroVidyaStudent from "./assets/hero-vidya-student.webp";
-import heroWhereWorkshop from "./assets/hero-where-workshop.webp";
 import healthCamp1 from "./assets/health-camp-1.webp";
 import healthCamp2 from "./assets/health-camp-2.webp";
 import healthCamp3 from "./assets/health-camp-3.webp";
 import studentSanika from "./assets/student-sanika.webp";
 import programMapping from "./assets/program-mapping.webp";
+import aarohiAnushkaDas from "./assets/testimonials/aarohi-anushka-das.jpg";
+import aarohiBidisha from "./assets/testimonials/aarohi-bidisha.jpg";
+import aarohiBidishaKhatun from "./assets/testimonials/aarohi-bidisha-khatun.jpg";
+import aarohiEshaDas from "./assets/testimonials/aarohi-esha-das.jpg";
+import aarohiRaimaDas from "./assets/testimonials/aarohi-raima-das.jpg";
+import aarohiSanaParveen from "./assets/testimonials/aarohi-sana-parveen.jpg";
+import aarohiSaniaParveen from "./assets/testimonials/aarohi-sania-parveen.jpg";
+import aarohiSonikaDey from "./assets/testimonials/aarohi-sonika-dey.jpg";
+import vidyaDeepika from "./assets/testimonials/vidya-deepika.jpg";
+import vidyaIshminaSultana from "./assets/testimonials/vidya-ishmina-sultana.jpg";
+import vidyaKhanSafiya from "./assets/testimonials/vidya-khan-safiya.jpg";
+import vidyaLakshmishree from "./assets/testimonials/vidya-lakshmishree.jpg";
+import vidyaNishaRameshRathod from "./assets/testimonials/vidya-nisha-ramesh-rathod.jpg";
+import vidyaRabiya from "./assets/testimonials/vidya-rabiya.jpg";
+import vidyaSanikaTestimonial from "./assets/testimonials/vidya-sanika.jpg";
+import vidyaSujal from "./assets/testimonials/vidya-sujal.jpg";
 import aarohiOrchids from "./assets/partners/aarohi/aarohi-partner-01.jpeg";
 import aarohiHarimatiMadrasah from "./assets/partners/aarohi/aarohi-partner-02.jpg";
 import aarohiDeSovrani from "./assets/partners/aarohi/aarohi-partner-03.jpg";
@@ -127,6 +139,7 @@ type StudentTestimonial = {
   program: "AAROHI" | "VIDYA";
   name: string;
   detail: string;
+  image: string;
   quote: string;
 };
 
@@ -301,7 +314,7 @@ const programPages: Record<ProgramSlug, ProgramPage> = {
     title: "SAKHI",
     tagline: "Your space to share, be heard, and feel supported",
     eyebrow: "Emotional Wellness and Resilience Program for Adolescents and Women",
-    image: heroSakhiStudent,
+    image: aarohiSonikaDey,
     statement: "SAKHI empowers adolescents and women with the knowledge, skills, support systems, and safe spaces needed to build emotional resilience, strengthen mental well-being, and navigate life’s challenges with confidence.",
     intro:
       "SAKHI is Floydee Future Foundation's support pathway for emotional well-being, built around trust, listening, dignity, and confidence for girls, women, and youth.",
@@ -320,7 +333,7 @@ const programPages: Record<ProgramSlug, ProgramPage> = {
     title: "VIDYA",
     tagline: "Building Pathways from Education to Employment",
     eyebrow: "Education, skills and employability",
-    image: heroVidyaStudent,
+    image: vidyaRabiya,
     statement: "VIDYA empowers youth with future-ready digital skills, career readiness, and employment pathways that bridge the gap between education and meaningful livelihoods.",
     intro:
       "VIDYA is a structured education-to-employment program that helps students and aspiring software professionals build practical technology skills, workplace confidence, career direction, and industry exposure.",
@@ -457,48 +470,56 @@ const studentTestimonials: Record<"vidya" | "aarohi", StudentTestimonial[]> = {
       program: "VIDYA",
       name: "Rabiya",
       detail: "The Oxford College of Engineering | Electrical & Electronics Engineering",
+      image: vidyaRabiya,
       quote: "An amazing and truly informative bootcamp experience."
     },
     {
       program: "VIDYA",
       name: "Sanika",
       detail: "PES University | Computer Science Engineering",
+      image: vidyaSanikaTestimonial,
       quote: "A very valuable and practical learning experience."
     },
     {
       program: "VIDYA",
       name: "Sujal",
       detail: "Ramniranjan Jhunjhunwala College (Autonomous) | BSc Computer Science",
+      image: vidyaSujal,
       quote: "Practical learning that built confidence and real-world skills."
     },
     {
       program: "VIDYA",
       name: "Deepika",
       detail: "Rajiv Gandhi Institute of Technology | Electronics & Communication Engineering",
+      image: vidyaDeepika,
       quote: "A valuable learning opportunity that built both technical and soft skills."
     },
     {
       program: "VIDYA",
       name: "Lakshmishree",
       detail: "BNM Institute of Technology | Computer Science and Engineering",
+      image: vidyaLakshmishree,
       quote: "The bootcamp helped me understand key AI, ML, and cybersecurity concepts for my future engineering career."
     },
     {
       program: "VIDYA",
       name: "Ishmina Sultana",
       detail: "Girijananda Chowdhury University | Computer Science Engineering",
+      image: vidyaIshminaSultana,
       quote: "An interactive, confidence-boosting bootcamp that provided essential skills in GenAI, UI/UX, and cybersecurity."
     },
     {
       program: "VIDYA",
       name: "Nisha Ramesh Rathod",
       detail: "N. G. Acharya & D. K. Marathe College | BSc IT",
+      image: vidyaNishaRameshRathod,
       quote: "An engaging bootcamp that built fundamental AI and prompt engineering skills, boosting confidence for real-world application."
     },
     {
       program: "VIDYA",
       name: "Khan Safiya",
       detail: "N. G. Acharya & D. K. Marathe College | BSc IT",
+      image: vidyaKhanSafiya,
       quote: "A great bootcamp that built my leadership, cybersecurity, and IT skills, showing me how to use technology for real social impact."
     }
   ],
@@ -507,48 +528,56 @@ const studentTestimonials: Record<"vidya" | "aarohi", StudentTestimonial[]> = {
       program: "AAROHI",
       name: "Raima Das",
       detail: "AAROHI health awareness session",
+      image: aarohiRaimaDas,
       quote: "I used to avoid talking about menstrual health even with my friends, but now I feel like it is okay to have these conversations."
     },
     {
       program: "AAROHI",
       name: "Sonika Dey",
       detail: "AAROHI health awareness session",
+      image: aarohiSonikaDey,
       quote: "We talked about things in that one hour that I had never discussed in years, and it helped more than I expected."
     },
     {
       program: "AAROHI",
       name: "Esha Das",
       detail: "AAROHI health awareness session",
+      image: aarohiEshaDas,
       quote: "Learning that stress, diet, and sleep patterns can affect my cycle was genuinely reassuring."
     },
     {
       program: "AAROHI",
       name: "Anushka Das",
       detail: "AAROHI health awareness session",
+      image: aarohiAnushkaDas,
       quote: "Having menstrual health myths addressed one by one in the session was both surprising and freeing."
     },
     {
       program: "AAROHI",
       name: "Bidisha",
       detail: "AAROHI health awareness session",
+      image: aarohiBidisha,
       quote: "The session did not just give us information. It gave us language to describe what we feel and speak with doctors and families."
     },
     {
       program: "AAROHI",
       name: "Sania Parveen",
       detail: "Health screening camp",
+      image: aarohiSaniaParveen,
       quote: "The doctors were so friendly that I did not feel nervous at all. They told me things about my own health that I had never been told before."
     },
     {
       program: "AAROHI",
       name: "Sana Parveen",
       detail: "Health screening camp",
+      image: aarohiSanaParveen,
       quote: "The doctor listened carefully, ran a few checks, and explained what I needed to do to take better care of myself."
     },
     {
       program: "AAROHI",
       name: "Bidisha Khatun",
       detail: "Health screening camp",
+      image: aarohiBidishaKhatun,
       quote: "The doctor checked me thoroughly and explained everything she found. Nobody had ever given me that kind of personal health guidance before."
     }
   ]
@@ -1397,7 +1426,7 @@ function HomePage() {
             <h2 id="impact-title">Measured in access opened, not promises made.</h2>
           </div>
           <div className="metrics">
-            <article><strong>150+</strong><span>screenings completed</span></article>
+            <article><strong>150+</strong><span>girls supported in screening initiatives</span></article>
             <article><strong>30+</strong><span>partner relationships: 20+ VIDYA + 10+ Naree</span></article>
             <article><strong>3</strong><span>core programs across care and opportunity</span></article>
             <article><strong>3</strong><span>named pathways: AAROHI, SAKHI, and VIDYA</span></article>
@@ -1606,6 +1635,7 @@ function StudentTestimonialsCarousel({
   const headingId = useId();
   const trackRef = useRef<HTMLDivElement>(null);
   const [activeIndex, setActiveIndex] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
 
   const scrollToIndex = (index: number) => {
     const nextIndex = (index + testimonials.length) % testimonials.length;
@@ -1629,6 +1659,15 @@ function StudentTestimonialsCarousel({
     setActiveIndex(nextIndex);
   };
 
+  useEffect(() => {
+    if (isPaused || testimonials.length < 2) return undefined;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return undefined;
+    const interval = window.setInterval(() => {
+      scrollToIndex(activeIndex + 1);
+    }, 5200);
+    return () => window.clearInterval(interval);
+  }, [activeIndex, isPaused, testimonials.length]);
+
   return (
     <section className={`program-testimonials program-testimonials-${variant}`} aria-labelledby={headingId}>
       <div className="program-testimonials-heading">
@@ -1638,22 +1677,32 @@ function StudentTestimonialsCarousel({
         </div>
         <p>{text}</p>
       </div>
-      <div className="testimonial-carousel-shell">
+      <div
+        className="testimonial-carousel-shell"
+        onBlur={() => setIsPaused(false)}
+        onFocus={() => setIsPaused(true)}
+        onPointerEnter={() => setIsPaused(true)}
+        onPointerLeave={() => setIsPaused(false)}
+      >
         <button className="testimonial-carousel-control" type="button" aria-label={`Show previous ${eyebrow} testimonial`} onClick={() => scrollToIndex(activeIndex - 1)}>
           <ArrowIcon direction="previous" />
         </button>
         <div className="testimonial-carousel-track" ref={trackRef} onScroll={handleTrackScroll} tabIndex={0}>
           {testimonials.map((testimonial, index) => (
             <article className="testimonial-card" key={`${testimonial.program}-${testimonial.name}-${index}`}>
-              <div className="testimonial-card-top">
-                <span className="testimonial-avatar" aria-hidden="true">{testimonial.name.slice(0, 1)}</span>
-                <span>{testimonial.program}</span>
+              <div className="testimonial-photo">
+                <img src={testimonial.image} alt={`${testimonial.name}, ${testimonial.program} student voice`} loading="lazy" />
               </div>
-              <blockquote>{testimonial.quote}</blockquote>
-              <footer>
-                <strong>{testimonial.name}</strong>
-                <span>{testimonial.detail}</span>
-              </footer>
+              <div className="testimonial-card-copy">
+                <div className="testimonial-card-top">
+                  <span>{testimonial.program}</span>
+                </div>
+                <blockquote>{testimonial.quote}</blockquote>
+                <footer>
+                  <strong>{testimonial.name}</strong>
+                  <span>{testimonial.detail}</span>
+                </footer>
+              </div>
             </article>
           ))}
         </div>
@@ -1913,13 +1962,13 @@ function InitiativesPage() {
 function ImpactPage() {
   return (
     <main className="page">
-      <PageHero eyebrow="Impact" title="Measured in access opened, not promises made." text="Impact at Floydee is tracked through participation, partner engagement, program delivery, and the practical pathways opened for girls, women, and youth." image={heroImpactGroup} />
+      <PageHero eyebrow="Impact" title="Measured in access opened, not promises made." text="Impact at Floydee is tracked through participation, partner engagement, program delivery, and the practical pathways opened for girls, women, and youth." image={heroGalleryStudents} />
       <section className="page-section">
         <div className="page-grid four">
-          <article className="metric-card"><strong>150+</strong><span>screenings completed</span></article>
+          <article className="metric-card"><strong>150+</strong><span>girls supported in screening initiatives</span></article>
           <article className="metric-card"><strong>30+</strong><span>partner relationships: 20+ VIDYA + 10+ Naree</span></article>
           <article className="metric-card"><strong>3</strong><span>core programs across care and opportunity</span></article>
-          <article className="metric-card"><strong>5,000+</strong><span>youth engagement ambition for VIDYA each year</span></article>
+          <article className="metric-card"><strong>3</strong><span>named pathways: AAROHI, SAKHI, and VIDYA</span></article>
         </div>
       </section>
     </main>
@@ -1929,7 +1978,7 @@ function ImpactPage() {
 function WhereWeWorkPage() {
   return (
     <main className="page">
-      <PageHero eyebrow="Where We Work" title="Programs designed to move through institutions and communities." text="Floydee's presence grows through schools, colleges, communities, and partner networks across India." image={heroWhereWorkshop} cta={["Collaborate With Us", "/book-a-program"]} />
+      <PageHero eyebrow="Where We Work" title="Programs designed to move through institutions and communities." text="Floydee's presence grows through schools, colleges, communities, and partner networks across India." image={heroLatestField} cta={["Collaborate With Us", "/book-a-program"]} />
       <section className="page-section page-map-showcase">
         <img src={programMapping} alt="Floydee program presence map across India" />
         <div>
