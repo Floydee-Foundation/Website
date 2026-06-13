@@ -18,6 +18,7 @@ const donationTargetTypes = new Set(["program", "campaign", "workshop", "generic
 const contactIntents = new Set([
   "Partner with the foundation",
   "Volunteer",
+  "Collaborate With Us",
   "Book a program",
   "Request media information"
 ]);
