@@ -294,6 +294,13 @@ const contactIntentOptions = [
   "Collaborate With Us",
   "Request media information"
 ];
+const socialLinks = [
+  {
+    label: "LinkedIn",
+    href: "https://www.linkedin.com/company/108100391/",
+    iconLabel: "in"
+  }
+] as const;
 
 const routeAliases: Record<string, string> = {
   "/programs/health-wellness": "/programs/aarohi",
@@ -1905,6 +1912,7 @@ function HomePage() {
         <div className="footer-brand">
           <a className="brand" href="#top"><img className="brand-logo footer-logo" src={floydeeLogo} alt="Floydee Foundation" /></a>
           <p>Section 8 foundation working with girls, women, and youth to build health, dignity, skills, and opportunity.</p>
+          <SocialLinks />
         </div>
         <div><h2>Join Us</h2><a href="#donate">Donate</a><a href="#partners">Partner With Us</a><a href="#volunteer">Volunteer</a><a href="#book">Collaborate With Us</a></div>
         <div><h2>Programs</h2><a href="#aarohi">AAROHI</a><a href="#sakhi">SAKHI</a><a href="#vidya">VIDYA</a><a href="#programs">Pillars of Development</a></div>
@@ -1924,6 +1932,7 @@ function RouteFooter() {
         <div className="footer-brand">
           <a className="brand" href="/"><img className="brand-logo footer-logo" src={floydeeLogo} alt="Floydee Foundation" /></a>
           <p>Section 8 foundation working with girls, women, and youth to build health, dignity, skills, and opportunity.</p>
+          <SocialLinks />
         </div>
         <div><h2>Join Us</h2><a href="/donate">Donate</a><a href="/partner-with-us">Partner With Us</a><a href="/volunteer">Volunteer</a><a href="/book-a-program">Collaborate With Us</a></div>
         <div><h2>Programs</h2><a href="/programs/aarohi">AAROHI</a><a href="/programs/sakhi">SAKHI</a><a href="/programs/vidya">VIDYA</a><a href="/programs">Pillars of Development</a></div>
@@ -1944,6 +1953,22 @@ function FooterLegalLinks() {
       <span aria-hidden="true">·</span>
       <a href="/terms-and-conditions">Terms & Conditions</a>
     </span>
+  );
+}
+
+function SocialLinks() {
+  return (
+    <nav className="footer-social" aria-label="Floydee social media links">
+      <span className="footer-social-label">Follow</span>
+      <div className="footer-social-list">
+        {socialLinks.map((link) => (
+          <a className="footer-social-link" href={link.href} key={link.label} target="_blank" rel="noreferrer" aria-label={`Follow Floydee Foundation on ${link.label}`}>
+            <span className="footer-social-icon" aria-hidden="true">{link.iconLabel}</span>
+            <span>{link.label}</span>
+          </a>
+        ))}
+      </div>
+    </nav>
   );
 }
 

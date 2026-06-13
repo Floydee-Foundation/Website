@@ -3316,6 +3316,69 @@ section:not(.hero):not(.donation-band):not(.campaign-rail) {
   color: rgba(255, 255, 255, 0.7);
 }
 
+.footer-social {
+  display: grid;
+  gap: 10px;
+  margin-top: 22px;
+}
+
+.footer-social-label {
+  color: rgba(255, 255, 255, 0.58);
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.footer-social-list {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.site-footer .footer-social-link {
+  align-items: center;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 999px;
+  color: var(--white);
+  display: inline-flex;
+  gap: 9px;
+  margin: 0;
+  min-height: 42px;
+  padding: 7px 14px 7px 7px;
+  text-decoration: none;
+  transition: background 180ms ease, border-color 180ms ease, box-shadow 180ms ease, color 180ms ease, transform 180ms ease;
+}
+
+.site-footer .footer-social-link:hover,
+.site-footer .footer-social-link:focus-visible {
+  background: rgba(10, 102, 194, 0.96);
+  border-color: rgba(255, 255, 255, 0.4);
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.22);
+  color: var(--white);
+  outline: none;
+  transform: translateY(-2px);
+}
+
+.footer-social-icon {
+  align-items: center;
+  background: #0a66c2;
+  border-radius: 999px;
+  color: var(--white);
+  display: inline-flex;
+  flex: 0 0 auto;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 0.82rem;
+  font-weight: 900;
+  height: 28px;
+  justify-content: center;
+  letter-spacing: 0;
+  line-height: 1;
+  width: 28px;
+}
+
 .footer-bottom {
   border-top: 1px solid rgba(255, 255, 255, 0.18);
   color: rgba(255, 255, 255, 0.65);
@@ -4959,7 +5022,9 @@ section:not(.hero):not(.donation-band):not(.campaign-rail) {
   .naree-app-close:hover,
   .naree-app-close:focus-visible,
   .whatsapp-connect:hover,
-  .whatsapp-connect:focus-visible {
+  .whatsapp-connect:focus-visible,
+  .site-footer .footer-social-link:hover,
+  .site-footer .footer-social-link:focus-visible {
     transform: none;
   }
 }
