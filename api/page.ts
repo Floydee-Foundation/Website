@@ -1,9 +1,6 @@
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 import type { Request, Response } from "express";
-import { connectMongo } from "../apps/api/src/config/mongo.js";
-import { BlogPostModel } from "../apps/api/src/models/blog.js";
-import { toSlug } from "../apps/api/src/utils/blog.js";
 
 type ManifestEntry = {
   file?: string;
@@ -18,6 +15,18 @@ type ShareMeta = {
 
 type StaticPageMeta = Omit<ShareMeta, "image"> & {
   asset: string;
+};
+
+type PublicBlogPost = {
+  excerpt?: string;
+  heroImage?: {
+    url?: string;
+  };
+  seo?: {
+    description?: string;
+    title?: string;
+  };
+  title?: string;
 };
 
 const distDir = path.join(process.cwd(), "apps/web/dist");
@@ -245,8 +254,21 @@ function shareImageUrl(url: string) {
   return driveId ? `https://drive.google.com/thumbnail?id=${driveId}&sz=w2000` : url;
 }
 
+function toSlug(value: unknown) {
+  return typeof value === "string"
+    ? value
+      .trim()
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-+|-+$/g, "")
+      .slice(0, 90)
+    : "";
+}
+
 async function readIndexHtml() {
-  indexHtmlCache ??= readFile(path.join(distDir, "index.html"), "utf8");
+  indexHtmlCache ??= readFile(path.join(distDir, "index.html"), "utf8").catch(() => (
+    "<!doctype html><html lang=\"en\"><head><meta charset=\"UTF-8\" /><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" /></head><body><div id=\"root\"></div></body></html>"
+  ));
   return indexHtmlCache;
 }
 
@@ -271,9 +293,14 @@ function normalizedPath(request: Request) {
 
 async function storyMeta(request: Request, slug: string): Promise<ShareMeta | undefined> {
   try {
-    await connectMongo();
-    const post = await BlogPostModel.findOne({ slug: toSlug(slug), status: "published" }).lean();
-    if (!post) return undefined;
+    const response = await fetch(absoluteUrl(request, `/api/blog-posts/${toSlug(slug)}`), {
+      headers: { accept: "application/json" }
+    });
+    if (!response.ok) return undefined;
+    const payload = await response.json() as { post?: PublicBlogPost };
+    const post = payload.post;
+    if (!post?.title) return undefined;
+
     return {
       description: post.seo?.description || post.excerpt || defaultDescription,
       image: post.heroImage?.url ? shareImageUrl(post.heroImage.url) : absoluteUrl(request, fallbackLogoPath),
