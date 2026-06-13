@@ -60,6 +60,10 @@ function sendError(response: Response, error: unknown) {
   });
 }
 
+function logOptionalEmailFailure(label: string, error: unknown) {
+  console.warn(label, error instanceof Error ? error.message : error);
+}
+
 inquiriesRouter.post("/api/donation-inquiries", async (request, response) => {
   const locale = isLocale(request.body.locale) ? request.body.locale : "en";
   const name = getString(request.body.name);
@@ -126,24 +130,30 @@ inquiriesRouter.post("/api/donation-inquiries", async (request, response) => {
   ].join("\n");
 
   try {
-    await Promise.all([
-      sendMail({
-        to: email,
-        subject: translate(locale, "Thank you for supporting Floydee Future Foundation"),
-        text: donorText,
-        html: donorHtml
-      }),
-      sendMail({
-        to: env.foundationNotifyEmail,
-        subject: "New donation enquiry",
-        text: internalText,
-        html: `<p>New donation enquiry received.</p>${asHtmlList(internalFields)}`
-      })
-    ]);
+    await sendMail({
+      to: env.foundationNotifyEmail,
+      subject: "New donation enquiry",
+      text: internalText,
+      html: `<p>New donation enquiry received.</p>${asHtmlList(internalFields)}`
+    });
+
+    const confirmationSent = await sendMail({
+      to: email,
+      subject: translate(locale, "Thank you for supporting Floydee Future Foundation"),
+      text: donorText,
+      html: donorHtml
+    })
+      .then(() => true)
+      .catch((error) => {
+        logOptionalEmailFailure("Donation confirmation email failed", error);
+        return false;
+      });
 
     response.json({
       ok: true,
-      message: translate(locale, "Thank you. We emailed your confirmation and the Floydee team will connect with donation details.")
+      message: confirmationSent
+        ? translate(locale, "Thank you. We emailed your confirmation and the Floydee team will connect with donation details.")
+        : translate(locale, "Thank you. Your enquiry has been sent and the Floydee team will connect with donation details.")
     });
   } catch (error) {
     sendError(response, error);
@@ -196,24 +206,30 @@ inquiriesRouter.post("/api/contact-inquiries", async (request, response) => {
   ].join("\n");
 
   try {
-    await Promise.all([
-      sendMail({
-        to: email,
-        subject: translate(locale, "Thank you for contacting Floydee Future Foundation"),
-        text: visitorText,
-        html: visitorHtml
-      }),
-      sendMail({
-        to: env.foundationNotifyEmail,
-        subject: "New contact enquiry",
-        text: internalText,
-        html: `<p>New contact enquiry received.</p>${asHtmlList(internalFields)}`
-      })
-    ]);
+    await sendMail({
+      to: env.foundationNotifyEmail,
+      subject: "New contact enquiry",
+      text: internalText,
+      html: `<p>New contact enquiry received.</p>${asHtmlList(internalFields)}`
+    });
+
+    const confirmationSent = await sendMail({
+      to: email,
+      subject: translate(locale, "Thank you for contacting Floydee Future Foundation"),
+      text: visitorText,
+      html: visitorHtml
+    })
+      .then(() => true)
+      .catch((error) => {
+        logOptionalEmailFailure("Contact confirmation email failed", error);
+        return false;
+      });
 
     response.json({
       ok: true,
-      message: translate(locale, "Thank you. We emailed your confirmation and the Floydee team will get in touch soon.")
+      message: confirmationSent
+        ? translate(locale, "Thank you. We emailed your confirmation and the Floydee team will get in touch soon.")
+        : translate(locale, "Thank you. Your enquiry has been sent and the Floydee team will get in touch soon.")
     });
   } catch (error) {
     sendError(response, error);

@@ -1003,6 +1003,8 @@ const latestHeroImages = {
   stories: heroAboutCorridor
 } as const;
 
+const inquiryRequestTimeoutMs = 20_000;
+
 type TeamMember = {
   name: string;
   role: string;
@@ -1078,17 +1080,26 @@ const expertAdvisors: TeamMember[] = [
 
 async function postInquiry(path: string, payload: Record<string, string | number>) {
   let response: Response;
+  const controller = new AbortController();
+  const timeoutId = window.setTimeout(() => controller.abort(), inquiryRequestTimeoutMs);
 
   try {
     response = await fetch(`${apiBaseUrl}${path}`, {
       method: "POST",
+      signal: controller.signal,
       headers: {
         "Content-Type": "application/json"
       },
       body: JSON.stringify(payload)
     });
-  } catch {
+  } catch (error) {
+    if (error instanceof DOMException && error.name === "AbortError") {
+      throw new Error("The Floydee email service took too long to respond. Please try again or email contact@floydeefoundation.org.");
+    }
+
     throw new Error("We could not reach the Floydee email service. Please try again in a moment or email contact@floydeefoundation.org.");
+  } finally {
+    window.clearTimeout(timeoutId);
   }
 
   const result = (await response.json().catch(() => null)) as { message?: string } | null;
