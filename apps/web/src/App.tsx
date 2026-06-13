@@ -2743,7 +2743,7 @@ function usePageMotion(path: string) {
     if (reduceMotion) return;
 
     const targets = Array.from(root.querySelectorAll<HTMLElement>(
-      ".page-hero-copy, .page-hero-media, .page-section, .page-band, .page-grid article, .page-card-list article, .page-copy-panel, .page-cta-panel, .about-program-thread article, .team-profile, .testimonial-card, .gallery-section, .legal-copy-section"
+      ".page-hero-copy, .page-hero-media, .page-grid article, .page-card-list article, .page-copy-panel, .page-cta-panel, .about-program-thread article, .team-profile, .testimonial-card, .gallery-section, .legal-copy-section"
     ));
 
     targets.forEach((target, index) => {
