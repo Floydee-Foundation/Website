@@ -922,6 +922,10 @@ body {
   font-weight: 400;
 }
 
+body.has-naree-app-bar {
+  padding-bottom: 116px;
+}
+
 body.menu-open {
   overflow: hidden;
 }
@@ -936,6 +940,302 @@ body.dropdown-open::before {
   right: 0;
   top: 84px;
   z-index: 35;
+}
+
+.naree-app-bar {
+  animation: nareeBarIn 480ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  bottom: 0;
+  left: 0;
+  padding: 14px var(--page-gutter);
+  position: fixed;
+  right: 0;
+  z-index: 95;
+}
+
+.naree-app-bar.is-closing {
+  animation: nareeBarOut 220ms ease both;
+  pointer-events: none;
+}
+
+.naree-app-static {
+  background:
+    linear-gradient(180deg, #ffffff, rgba(255, 244, 248, 0.62)),
+    var(--paper);
+  padding: clamp(26px, 4vw, 46px) var(--page-gutter);
+}
+
+.naree-app-static .naree-app-bar-inner {
+  box-shadow: 0 14px 34px rgba(17, 17, 17, 0.1);
+  grid-template-columns: auto minmax(240px, 1fr) auto;
+}
+
+.naree-app-bar-inner {
+  align-items: center;
+  background:
+    linear-gradient(90deg, rgba(255, 244, 248, 0.98), rgba(255, 255, 255, 0.98) 42%, rgba(245, 248, 255, 0.98)),
+    var(--white);
+  border: 1px solid rgba(237, 121, 155, 0.32);
+  border-radius: 8px;
+  box-shadow: 0 16px 44px rgba(17, 17, 17, 0.18);
+  display: grid;
+  gap: 18px;
+  grid-template-columns: auto minmax(240px, 1fr) auto auto;
+  margin: 0 auto;
+  max-width: 1180px;
+  padding: 12px 14px 12px 16px;
+}
+
+.naree-app-brand {
+  align-items: center;
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid rgba(239, 127, 160, 0.26);
+  border-radius: 8px;
+  display: flex;
+  min-height: 64px;
+  padding: 8px 10px;
+  transition: border-color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
+}
+
+.naree-app-brand:hover,
+.naree-app-brand:focus-visible {
+  border-color: rgba(239, 127, 160, 0.62);
+  box-shadow: 0 10px 24px rgba(66, 69, 113, 0.13);
+  outline: none;
+  transform: translateY(-1px);
+}
+
+.naree-app-brand img {
+  display: block;
+  height: 48px;
+  object-fit: contain;
+  width: 168px;
+}
+
+.naree-app-copy {
+  min-width: 0;
+}
+
+.naree-app-kicker {
+  color: #ef789b;
+  font-size: 0.74rem;
+  font-weight: 900;
+  letter-spacing: 0;
+  margin: 0 0 2px;
+  text-transform: uppercase;
+}
+
+.naree-app-copy h2 {
+  color: #414571;
+  font-family: var(--font-display);
+  font-size: 1.45rem;
+  line-height: 1;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.naree-app-copy p:last-child {
+  color: #4f5162;
+  font-size: 0.92rem;
+  line-height: 1.35;
+  margin: 5px 0 0;
+  max-width: 520px;
+}
+
+.naree-app-actions {
+  align-items: center;
+  display: flex;
+  gap: 10px;
+}
+
+.naree-app-button {
+  align-items: center;
+  border-radius: 6px;
+  display: inline-flex;
+  font-weight: 900;
+  justify-content: center;
+  min-height: 46px;
+  text-decoration: none;
+  transition: background 180ms ease, border-color 180ms ease, box-shadow 180ms ease, color 180ms ease, transform 180ms ease;
+  white-space: nowrap;
+}
+
+.naree-app-button {
+  background: #414571;
+  color: var(--white);
+  flex-direction: column;
+  gap: 1px;
+  min-width: 118px;
+  padding: 8px 14px;
+}
+
+.naree-app-button-primary {
+  background: #ef789b;
+}
+
+.naree-app-button span {
+  font-size: 0.67rem;
+  line-height: 1;
+  opacity: 0.84;
+}
+
+.naree-app-button strong {
+  font-size: 0.9rem;
+  line-height: 1.05;
+}
+
+.naree-app-community {
+  align-items: center;
+  color: #414571;
+  display: inline-flex;
+  font-size: 0.78rem;
+  font-weight: 900;
+  letter-spacing: 0;
+  line-height: 1.15;
+  max-width: 124px;
+  text-align: left;
+  text-transform: uppercase;
+  white-space: normal;
+}
+
+.naree-app-button:hover,
+.naree-app-button:focus-visible {
+  box-shadow: 0 10px 22px rgba(65, 69, 113, 0.18);
+  outline: none;
+  transform: translateY(-2px);
+}
+
+.naree-app-close {
+  align-items: center;
+  background: rgba(65, 69, 113, 0.08);
+  border: 1px solid rgba(65, 69, 113, 0.12);
+  border-radius: 999px;
+  color: #414571;
+  cursor: pointer;
+  display: inline-flex;
+  font-size: 0.78rem;
+  font-weight: 900;
+  height: 34px;
+  justify-content: center;
+  padding: 0;
+  transition: background 180ms ease, border-color 180ms ease, color 180ms ease, transform 180ms ease;
+  width: 34px;
+}
+
+.naree-app-close:hover,
+.naree-app-close:focus-visible {
+  background: #414571;
+  border-color: #414571;
+  color: var(--white);
+  outline: none;
+  transform: rotate(90deg);
+}
+
+@keyframes nareeBarIn {
+  from {
+    opacity: 0;
+    transform: translateY(22px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes nareeBarOut {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+}
+
+@media (max-width: 920px) {
+  body.has-naree-app-bar {
+    padding-bottom: 208px;
+  }
+
+  .naree-app-bar {
+    padding: 10px 14px;
+  }
+
+  .naree-app-bar-inner {
+    gap: 12px;
+    grid-template-columns: auto 1fr auto;
+    padding: 12px;
+  }
+
+  .naree-app-static .naree-app-bar-inner {
+    grid-template-columns: auto 1fr;
+  }
+
+  .naree-app-brand img {
+    height: 42px;
+    width: 142px;
+  }
+
+  .naree-app-actions {
+    grid-column: 1 / -1;
+    justify-content: stretch;
+  }
+
+  .naree-app-button {
+    flex: 1 1 0;
+  }
+
+  .naree-app-community {
+    flex: 0 1 auto;
+    max-width: none;
+  }
+}
+
+@media (max-width: 620px) {
+  body.has-naree-app-bar {
+    padding-bottom: 254px;
+  }
+
+  .naree-app-bar-inner {
+    align-items: start;
+    grid-template-columns: 1fr auto;
+  }
+
+  .naree-app-static .naree-app-bar-inner {
+    grid-template-columns: 1fr;
+  }
+
+  .naree-app-brand {
+    justify-content: flex-start;
+    width: 100%;
+  }
+
+  .naree-app-copy {
+    grid-column: 1 / -1;
+  }
+
+  .naree-app-copy h2 {
+    font-size: 1.22rem;
+  }
+
+  .naree-app-actions {
+    flex-wrap: wrap;
+  }
+
+  .naree-app-button {
+    min-width: calc(50% - 5px);
+  }
+
+  .naree-app-community {
+    flex-basis: 100%;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .naree-app-close {
+    grid-column: 2;
+    grid-row: 1;
+  }
 }
 
 a {
@@ -4505,6 +4805,18 @@ section:not(.hero):not(.donation-band):not(.campaign-rail) {
   .page-hero-media.motion-item {
     opacity: 1 !important;
     transform: none !important;
+  }
+
+  .naree-app-bar,
+  .naree-app-bar.is-closing {
+    animation: none !important;
+  }
+
+  .naree-app-button:hover,
+  .naree-app-button:focus-visible,
+  .naree-app-close:hover,
+  .naree-app-close:focus-visible {
+    transform: none;
   }
 }
 

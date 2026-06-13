@@ -1,5 +1,6 @@
 import { FormEvent, useEffect, useState } from "react";
 import type { BlogCategory, BlogCategoryKind, BlogChannel, BlogContentBlock, BlogImageMedia, BlogPost, BlogProgramAssociation } from "@floydee/shared";
+import floydeeLogo from "./assets/floydee-logo.png";
 
 const apiBaseUrl = import.meta.env.VITE_API_BASE_URL ?? (import.meta.env.DEV ? "http://localhost:4000" : "");
 const pageSize = 9;
@@ -266,6 +267,7 @@ function useArticleMeta(post?: BlogPost) {
     const title = post.seo.title || `${post.title} | Floydee Future Foundation`;
     const description = post.seo.description || post.excerpt;
     const canonicalUrl = `${window.location.origin}/stories/${post.slug}`;
+    const shareImage = post.heroImage?.url ? imageUrl(post.heroImage.url) : new URL(floydeeLogo, window.location.origin).toString();
     let canonical = document.querySelector<HTMLLinkElement>('link[rel="canonical"]');
     if (!canonical) {
       canonical = document.createElement("link");
@@ -279,7 +281,12 @@ function useArticleMeta(post?: BlogPost) {
     setMeta("og:description", description, true);
     setMeta("og:type", "article", true);
     setMeta("og:url", canonicalUrl, true);
-    setMeta("og:image", post.heroImage?.url ? imageUrl(post.heroImage.url) : "", true);
+    setMeta("og:image", shareImage, true);
+    setMeta("og:image:secure_url", shareImage, true);
+    setMeta("twitter:card", "summary_large_image");
+    setMeta("twitter:title", title);
+    setMeta("twitter:description", description);
+    setMeta("twitter:image", shareImage);
 
     return () => {
       canonical?.remove();
