@@ -2800,6 +2800,7 @@ const nareeLinks = {
   android: "https://play.google.com/store/apps/details?id=com.nareemobileapp.prod&pcampaignid=web_share",
   website: "https://naree.health/"
 } as const;
+const whatsappConnectUrl = "https://wa.me/919147748064?text=Hello%20Floydee%20Future%20Foundation%2C%20I%20would%20like%20to%20connect.";
 
 const clientPageShareImages: Record<string, string> = {
   "/": homeHeroHealthScreening,
@@ -2931,6 +2932,26 @@ function StickyNareeAppBar({ path }: { path: string }) {
   );
 }
 
+function WhatsAppConnectButton({ path }: { path: string }) {
+  if (path.startsWith("/admin/blogs")) return null;
+
+  return (
+    <a
+      className="whatsapp-connect"
+      href={whatsappConnectUrl}
+      target="_blank"
+      rel="noreferrer"
+      aria-label="Connect with Floydee Foundation on WhatsApp"
+    >
+      <span className="whatsapp-connect-mark" aria-hidden="true">WA</span>
+      <span className="whatsapp-connect-copy">
+        <span>WhatsApp us</span>
+        <strong>One-click connect</strong>
+      </span>
+    </a>
+  );
+}
+
 export function App() {
   const { locale, t } = useLocale();
   const [path, setPath] = useState(() => window.location.pathname);
@@ -3019,6 +3040,7 @@ export function App() {
     <>
       <Header />
       {renderRoute(path)}
+      <WhatsAppConnectButton path={path} />
       <StickyNareeAppBar path={path} />
     </>
   );
