@@ -583,6 +583,11 @@ const studentTestimonials: Record<"vidya" | "aarohi", StudentTestimonial[]> = {
   ]
 };
 
+const studentVoiceTestimonials = Array.from(
+  { length: Math.max(studentTestimonials.vidya.length, studentTestimonials.aarohi.length) },
+  (_, index) => [studentTestimonials.vidya[index], studentTestimonials.aarohi[index]]
+).flat().filter((testimonial): testimonial is StudentTestimonial => Boolean(testimonial));
+
 const presenceLocations = [
   { name: "Jammu & Kashmir", x: "32.8%", y: "10.9%", tone: "north" },
   { name: "Delhi", x: "37.4%", y: "29.1%", tone: "north" },
@@ -1630,7 +1635,7 @@ function StudentTestimonialsCarousel({
   title: string;
   text: string;
   testimonials: StudentTestimonial[];
-  variant: "aarohi" | "vidya";
+  variant: "aarohi" | "combined" | "vidya";
 }) {
   const headingId = useId();
   const trackRef = useRef<HTMLDivElement>(null);
@@ -1689,7 +1694,7 @@ function StudentTestimonialsCarousel({
         </button>
         <div className="testimonial-carousel-track" ref={trackRef} onScroll={handleTrackScroll} tabIndex={0}>
           {testimonials.map((testimonial, index) => (
-            <article className="testimonial-card" key={`${testimonial.program}-${testimonial.name}-${index}`}>
+            <article className={`testimonial-card testimonial-card-${testimonial.program.toLowerCase()}`} key={`${testimonial.program}-${testimonial.name}-${index}`}>
               <div className="testimonial-photo">
                 <img src={testimonial.image} alt={`${testimonial.name}, ${testimonial.program} student voice`} loading="lazy" />
               </div>
@@ -1794,18 +1799,11 @@ function ProgramsOverviewPage() {
       </section>
       <section className="page-section student-voice-section" aria-label="Student voices from Floydee programs">
         <StudentTestimonialsCarousel
-          eyebrow="VIDYA student voices"
-          title="Bootcamp learning, in their words."
-          text="Students describe the confidence, practical exposure, and career readiness they built through VIDYA sessions."
-          testimonials={studentTestimonials.vidya}
-          variant="vidya"
-        />
-        <StudentTestimonialsCarousel
-          eyebrow="AAROHI student voices"
-          title="Care conversations that stayed with them."
-          text="Girls from AAROHI awareness sessions and screening camps reflect on safe dialogue, health knowledge, and personal guidance."
-          testimonials={studentTestimonials.aarohi}
-          variant="aarohi"
+          eyebrow="Student voices"
+          title="Learning, care, and confidence in their words."
+          text="VIDYA and AAROHI students reflect on practical exposure, safe health conversations, career readiness, and personal guidance."
+          testimonials={studentVoiceTestimonials}
+          variant="combined"
         />
       </section>
       <section className="page-band">

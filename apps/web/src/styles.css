@@ -3114,8 +3114,6 @@ section:not(.hero):not(.donation-band):not(.campaign-rail) {
     linear-gradient(180deg, #ffffff 0%, #ffffff 46%, var(--paper) 46%, var(--paper) 100%);
   display: grid;
   gap: clamp(34px, 6vw, 76px);
-  padding-left: max(24px, calc((100vw - 1440px) / 2)) !important;
-  padding-right: max(24px, calc((100vw - 1440px) / 2)) !important;
 }
 
 .program-testimonials {
@@ -3128,6 +3126,10 @@ section:not(.hero):not(.donation-band):not(.campaign-rail) {
 
 .program-testimonials-vidya {
   --testimonial-accent: var(--green);
+}
+
+.program-testimonials-combined {
+  --testimonial-accent: var(--gold);
 }
 
 .program-testimonials-heading {
@@ -3212,6 +3214,7 @@ section:not(.hero):not(.donation-band):not(.campaign-rail) {
 }
 
 .testimonial-card {
+  --card-accent: var(--testimonial-accent);
   background: var(--white);
   border: 1px solid var(--line);
   display: grid;
@@ -3224,7 +3227,7 @@ section:not(.hero):not(.donation-band):not(.campaign-rail) {
 }
 
 .testimonial-card::before {
-  background: var(--testimonial-accent);
+  background: var(--card-accent);
   content: "";
   height: 6px;
   left: -1px;
@@ -3241,10 +3244,18 @@ section:not(.hero):not(.donation-band):not(.campaign-rail) {
 }
 
 .testimonial-card-top > span {
-  color: var(--testimonial-accent);
+  color: var(--card-accent);
   font-size: 0.82rem;
   font-weight: 900;
   text-transform: uppercase;
+}
+
+.testimonial-card-aarohi {
+  --card-accent: var(--coral);
+}
+
+.testimonial-card-vidya {
+  --card-accent: var(--green);
 }
 
 .testimonial-photo {
