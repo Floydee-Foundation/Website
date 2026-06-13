@@ -24,8 +24,64 @@ import healthCamp2 from "./assets/health-camp-2.webp";
 import healthCamp3 from "./assets/health-camp-3.webp";
 import studentSanika from "./assets/student-sanika.webp";
 import programMapping from "./assets/program-mapping.webp";
+import aarohiAfshanAnjum from "./assets/testimonials/aarohi-afshan-anjum.jpg";
+import aarohiAnushkaDas from "./assets/testimonials/aarohi-anushka-das.jpg";
+import aarohiAnushkaDutta from "./assets/testimonials/aarohi-anushka-dutta.jpg";
+import aarohiBidisha from "./assets/testimonials/aarohi-bidisha.jpg";
+import aarohiEshaDas from "./assets/testimonials/aarohi-esha-das.jpg";
+import aarohiFirozaKhatun from "./assets/testimonials/aarohi-firoza-khatun.jpg";
+import aarohiIpshitaBhattacharjee from "./assets/testimonials/aarohi-ipshita-bhattacharjee.jpg";
+import aarohiRaimaDas from "./assets/testimonials/aarohi-raima-das.jpg";
 import aarohiSonikaDey from "./assets/testimonials/aarohi-sonika-dey.jpg";
+import aarohiStudent from "./assets/testimonials/aarohi-student.jpg";
+import screeningBidishaKhatun from "./assets/testimonials/screening-bidisha-khatun.jpg";
+import screeningSanaParveen from "./assets/testimonials/screening-sana-parveen.jpg";
+import screeningSaniaParveen from "./assets/testimonials/screening-sania-parveen.jpg";
+import screeningShaguftaParveen from "./assets/testimonials/screening-shagufta-parveen.jpg";
+import screeningStudentCheckup from "./assets/testimonials/screening-student-checkup.jpg";
+import screeningStudentGuidance from "./assets/testimonials/screening-student-guidance.jpg";
+import vidyaDeepakChauhan from "./assets/testimonials/vidya-deepak-chauhan.jpg";
+import vidyaDeepakGcu from "./assets/testimonials/vidya-deepak-gcu.jpg";
+import vidyaDeepika from "./assets/testimonials/vidya-deepika.jpg";
+import vidyaIshminaSultana from "./assets/testimonials/vidya-ishmina-sultana.jpg";
+import vidyaKhanSafiya from "./assets/testimonials/vidya-khan-safiya.jpg";
+import vidyaLakshmishree from "./assets/testimonials/vidya-lakshmishree.jpg";
+import vidyaNishaRathod from "./assets/testimonials/vidya-nisha-rathod.jpg";
 import vidyaRabiya from "./assets/testimonials/vidya-rabiya.jpg";
+import vidyaSanika from "./assets/testimonials/vidya-sanika.jpg";
+import vidyaSujal from "./assets/testimonials/vidya-sujal.jpg";
+import galleryBidhannagar1 from "./assets/gallery/bidhannagar-govt-high-school-01.jpg";
+import galleryBidhannagar2 from "./assets/gallery/bidhannagar-govt-high-school-02.jpg";
+import galleryBidhannagar3 from "./assets/gallery/bidhannagar-govt-high-school-03.jpg";
+import galleryCohort1Bidhannagar1 from "./assets/gallery/cohort-1-bidhannagar-01.jpg";
+import galleryCohort1Bidhannagar2 from "./assets/gallery/cohort-1-bidhannagar-02.jpg";
+import galleryCohort1Bidhannagar3 from "./assets/gallery/cohort-1-bidhannagar-03.jpg";
+import galleryCohort2Bidhannagar1 from "./assets/gallery/cohort-2-bidhannagar-01.jpg";
+import galleryCohort2Bidhannagar2 from "./assets/gallery/cohort-2-bidhannagar-02.jpg";
+import galleryHatiara1 from "./assets/gallery/hatiara-madrasa-01.jpg";
+import galleryHatiara2 from "./assets/gallery/hatiara-madrasa-02.jpg";
+import galleryHatiara3 from "./assets/gallery/hatiara-madrasa-03.jpg";
+import galleryHaydenHall1 from "./assets/gallery/hayden-hall-01.jpg";
+import galleryHaydenHall2 from "./assets/gallery/hayden-hall-02.jpg";
+import galleryHaydenHall3 from "./assets/gallery/hayden-hall-03.jpg";
+import galleryHealthCamp1 from "./assets/gallery/health-screening-camp-01.jpg";
+import galleryHealthCamp2 from "./assets/gallery/health-screening-camp-02.jpg";
+import galleryHealthCamp3 from "./assets/gallery/health-screening-camp-03.jpg";
+import galleryHealthCamp4 from "./assets/gallery/health-screening-camp-04.jpg";
+import galleryHealthCamp5 from "./assets/gallery/health-screening-camp-05.jpg";
+import galleryHealthCamp6 from "./assets/gallery/health-screening-camp-06.jpg";
+import galleryHelpFoundation1 from "./assets/gallery/help-foundation-01.jpg";
+import galleryHelpFoundation2 from "./assets/gallery/help-foundation-02.jpg";
+import galleryHelpFoundation3 from "./assets/gallery/help-foundation-03.jpg";
+import galleryJdmc1 from "./assets/gallery/jdmc-01.jpg";
+import galleryJdmc2 from "./assets/gallery/jdmc-02.jpg";
+import galleryJdmc3 from "./assets/gallery/jdmc-03.jpg";
+import gallerySpkJain1 from "./assets/gallery/spk-jain-academy-01.jpg";
+import gallerySpkJain2 from "./assets/gallery/spk-jain-academy-02.jpg";
+import gallerySpkJain3 from "./assets/gallery/spk-jain-academy-03.jpg";
+import galleryUdayanCare1 from "./assets/gallery/udayan-care-01.jpg";
+import galleryUdayanCare2 from "./assets/gallery/udayan-care-02.jpg";
+import galleryUdayanCare3 from "./assets/gallery/udayan-care-03.jpg";
 import aarohiOrchids from "./assets/partners/aarohi/aarohi-partner-01.jpeg";
 import aarohiHarimatiMadrasah from "./assets/partners/aarohi/aarohi-partner-02.jpg";
 import aarohiDeSovrani from "./assets/partners/aarohi/aarohi-partner-03.jpg";
@@ -120,6 +176,36 @@ type ProgramPage = {
 };
 
 type ProgramSlug = "aarohi" | "sakhi" | "vidya";
+type TestimonialCategory = "VIDYA" | "AAROHI" | "HEALTH SCREENING CAMP";
+type StudentTestimonial = {
+  category: TestimonialCategory;
+  detail: string;
+  image: string;
+  name: string;
+  program: string;
+  quote: string;
+};
+type GalleryCategory = "Naree Health Awareness" | "Cervical Cancer Awareness" | "Health Screening Camp";
+type GalleryImage = {
+  alt: string;
+  caption: string;
+  image: string;
+};
+type GallerySection = {
+  category: GalleryCategory;
+  images: GalleryImage[];
+  summary: string;
+  title: string;
+};
+type LegalPageContent = {
+  eyebrow: string;
+  intro: string;
+  sections: {
+    body: string[];
+    title: string;
+  }[];
+  title: string;
+};
 
 const navGroups: NavGroup[] = [
   {
@@ -441,6 +527,426 @@ const corporatePartners: PartnerLogo[] = [
   { name: "Naree Health", initials: "NH", note: "Health partner" },
   { name: "PKG Medical College and Hospitals", image: corporatePkg, note: "Hospital partner" }
 ];
+
+const studentTestimonials: StudentTestimonial[] = [
+  {
+    category: "AAROHI",
+    detail: "AAROHI participant",
+    image: aarohiBidisha,
+    name: "Bidisha",
+    program: "AAROHI",
+    quote: "The session did not just give us information. It gave us language: words to describe what we feel, words to use with a doctor, words to use with our own families."
+  },
+  {
+    category: "VIDYA",
+    detail: "Oxford College of Engineering, Electrical and Electronics Engineering",
+    image: vidyaRabiya,
+    name: "Rabiya",
+    program: "VIDYA",
+    quote: "An amazing and truly informative bootcamp experience."
+  },
+  {
+    category: "VIDYA",
+    detail: "PES University, Computer Science Engineering",
+    image: vidyaSanika,
+    name: "Sanika",
+    program: "VIDYA",
+    quote: "A very valuable and practical learning experience."
+  },
+  {
+    category: "VIDYA",
+    detail: "Girijananda Chowdhury University, Computer Science Engineering",
+    image: vidyaDeepakGcu,
+    name: "Deepak",
+    program: "VIDYA",
+    quote: "A valuable and practical learning experience for my career."
+  },
+  {
+    category: "VIDYA",
+    detail: "Ramniranjan Jhunjhunwala College, BSc Computer Science",
+    image: vidyaSujal,
+    name: "Sujal",
+    program: "VIDYA",
+    quote: "Practical learning that built confidence and real-world skills."
+  },
+  {
+    category: "VIDYA",
+    detail: "Rajiv Gandhi Institute of Technology, Electronics and Communication Engineering",
+    image: vidyaDeepika,
+    name: "Deepika",
+    program: "VIDYA",
+    quote: "A valuable learning opportunity that built both technical and soft skills."
+  },
+  {
+    category: "VIDYA",
+    detail: "BNM Institute of Technology, Computer Science and Engineering",
+    image: vidyaLakshmishree,
+    name: "Lakshmishree",
+    program: "VIDYA",
+    quote: "I gained essential AI, machine learning, and cybersecurity skills that can support my future engineering career."
+  },
+  {
+    category: "VIDYA",
+    detail: "Girijananda Chowdhury University, Computer Science Engineering",
+    image: vidyaIshminaSultana,
+    name: "Ishmina Sultana",
+    program: "VIDYA",
+    quote: "The bootcamp built confidence and gave me practical exposure to GenAI, UI/UX, and cybersecurity."
+  },
+  {
+    category: "VIDYA",
+    detail: "N. G. Acharya and D. K. Marathe College, BSc IT",
+    image: vidyaNishaRathod,
+    name: "Nisha Ramesh Rathod",
+    program: "VIDYA",
+    quote: "The bootcamp helped me build AI and prompt engineering basics with more confidence for real-world application."
+  },
+  {
+    category: "VIDYA",
+    detail: "Ramniranjan Jhunjhunwala College, BSc Computer Science",
+    image: vidyaDeepakChauhan,
+    name: "Deepak Chauhan",
+    program: "VIDYA",
+    quote: "A practical bootcamp experience sharpened my coding, cybersecurity, and resume skills for an IT career."
+  },
+  {
+    category: "VIDYA",
+    detail: "N. G. Acharya and D. K. Marathe College, BSc IT",
+    image: vidyaKhanSafiya,
+    name: "Khan Safiya",
+    program: "VIDYA",
+    quote: "The bootcamp built my leadership, cybersecurity, and IT skills, and showed me how technology can create social impact."
+  },
+  {
+    category: "AAROHI",
+    detail: "AAROHI participant",
+    image: aarohiRaimaDas,
+    name: "Raima Das",
+    program: "AAROHI",
+    quote: "I used to avoid talking about menstrual health even with my friends, but now I feel like it is okay to have these conversations."
+  },
+  {
+    category: "AAROHI",
+    detail: "AAROHI participant",
+    image: aarohiSonikaDey,
+    name: "Sonika Dey",
+    program: "AAROHI",
+    quote: "We talked about things in one hour that I had never discussed in years, and it helped more than I expected."
+  },
+  {
+    category: "AAROHI",
+    detail: "AAROHI participant",
+    image: aarohiEshaDas,
+    name: "Esha Das",
+    program: "AAROHI",
+    quote: "Learning that stress, diet, and sleep can affect my cycle was genuinely reassuring."
+  },
+  {
+    category: "AAROHI",
+    detail: "AAROHI participant",
+    image: aarohiAnushkaDas,
+    name: "Anushka Das",
+    program: "AAROHI",
+    quote: "Having menstrual health myths addressed one by one was both surprising and freeing."
+  },
+  {
+    category: "AAROHI",
+    detail: "AAROHI participant",
+    image: aarohiAnushkaDutta,
+    name: "Anushka Dutta",
+    program: "AAROHI",
+    quote: "Understanding my cycle, my diet, and my body's signals feels like something every girl deserves to know."
+  },
+  {
+    category: "AAROHI",
+    detail: "AAROHI participant",
+    image: aarohiAfshanAnjum,
+    name: "Afshan Anjum",
+    program: "AAROHI",
+    quote: "Most of what I knew about menstrual health came from whispers and guesses. A proper, informed conversation felt completely different."
+  },
+  {
+    category: "AAROHI",
+    detail: "AAROHI participant",
+    image: aarohiIpshitaBhattacharjee,
+    name: "Ipshita Bhattacharjee",
+    program: "AAROHI",
+    quote: "Health is not only about what happens when something goes wrong. It is also about understanding when everything is going right."
+  },
+  {
+    category: "AAROHI",
+    detail: "AAROHI participant",
+    image: aarohiFirozaKhatun,
+    name: "Firoza Khatun",
+    program: "AAROHI",
+    quote: "The session was very informative. I learnt things I genuinely did not know before, and a lot of my doubts were cleared."
+  },
+  {
+    category: "AAROHI",
+    detail: "AAROHI participant",
+    image: aarohiStudent,
+    name: "Student participant",
+    program: "AAROHI",
+    quote: "The topics were explained in a simple and clear way. It helped me learn how our bodies actually work."
+  },
+  {
+    category: "HEALTH SCREENING CAMP",
+    detail: "Health screening camp participant",
+    image: screeningSaniaParveen,
+    name: "Sania Parveen",
+    program: "Health Screening Camp",
+    quote: "The doctors were so friendly that I did not feel nervous at all. They told me things about my own health that I had never been told before."
+  },
+  {
+    category: "HEALTH SCREENING CAMP",
+    detail: "Health screening camp participant",
+    image: screeningShaguftaParveen,
+    name: "Shagufta Parveen",
+    program: "Health Screening Camp",
+    quote: "The doctor told me what my body needed, and I am going to make sure I follow her advice."
+  },
+  {
+    category: "HEALTH SCREENING CAMP",
+    detail: "Health screening camp participant",
+    image: screeningSanaParveen,
+    name: "Sana Parveen",
+    program: "Health Screening Camp",
+    quote: "The doctor listened carefully, ran a few checks, and explained what I needed to do to take better care of myself."
+  },
+  {
+    category: "HEALTH SCREENING CAMP",
+    detail: "Health screening camp participant",
+    image: screeningBidishaKhatun,
+    name: "Bidisha Khatun",
+    program: "Health Screening Camp",
+    quote: "Nobody had ever given me that kind of personal health guidance before."
+  },
+  {
+    category: "HEALTH SCREENING CAMP",
+    detail: "Health screening camp participant",
+    image: screeningStudentCheckup,
+    name: "Student participant",
+    program: "Health Screening Camp",
+    quote: "This was my first proper health checkup. The doctor explained my condition clearly and told me how to take care of myself."
+  },
+  {
+    category: "HEALTH SCREENING CAMP",
+    detail: "Health screening camp participant",
+    image: screeningStudentGuidance,
+    name: "Student participant",
+    program: "Health Screening Camp",
+    quote: "The doctor was approachable and explained everything in simple language. I am going to follow her advice."
+  }
+];
+
+const gallerySections: GallerySection[] = [
+  {
+    category: "Naree Health Awareness",
+    images: [
+      { alt: "Session with Help Foundation", caption: "Help Foundation awareness session", image: galleryHelpFoundation1 },
+      { alt: "Session with Help Foundation", caption: "Help Foundation awareness session", image: galleryHelpFoundation2 },
+      { alt: "Session with Help Foundation", caption: "Help Foundation awareness session", image: galleryHelpFoundation3 }
+    ],
+    summary: "Community health awareness moments with Help Foundation.",
+    title: "Session with Help Foundation"
+  },
+  {
+    category: "Naree Health Awareness",
+    images: [
+      { alt: "Session with SPK Jain Academy", caption: "SPK Jain Academy awareness session", image: gallerySpkJain1 },
+      { alt: "Session with SPK Jain Academy", caption: "SPK Jain Academy awareness session", image: gallerySpkJain2 },
+      { alt: "Session with SPK Jain Academy", caption: "SPK Jain Academy awareness session", image: gallerySpkJain3 }
+    ],
+    summary: "Student-facing health conversations with SPK Jain Academy.",
+    title: "Session with SPK Jain Academy"
+  },
+  {
+    category: "Naree Health Awareness",
+    images: [
+      { alt: "Session with JDMC under DU", caption: "JDMC under DU awareness session", image: galleryJdmc1 },
+      { alt: "Session with JDMC under DU", caption: "JDMC under DU awareness session", image: galleryJdmc2 },
+      { alt: "Session with JDMC under DU", caption: "JDMC under DU awareness session", image: galleryJdmc3 }
+    ],
+    summary: "College health awareness session with Janki Devi Memorial College under DU.",
+    title: "Session with JDMC under DU"
+  },
+  {
+    category: "Naree Health Awareness",
+    images: [
+      { alt: "Session with Hayden Hall", caption: "Hayden Hall awareness session", image: galleryHaydenHall1 },
+      { alt: "Session with Hayden Hall", caption: "Hayden Hall awareness session", image: galleryHaydenHall2 },
+      { alt: "Session with Hayden Hall", caption: "Hayden Hall awareness session", image: galleryHaydenHall3 }
+    ],
+    summary: "Community session moments with Hayden Hall.",
+    title: "Session with Hayden Hall"
+  },
+  {
+    category: "Naree Health Awareness",
+    images: [
+      { alt: "Session with Hatiara Girls' High Madrasa", caption: "Hatiara Girls' High Madrasa awareness session", image: galleryHatiara1 },
+      { alt: "Session with Hatiara Girls' High Madrasa", caption: "Hatiara Girls' High Madrasa awareness session", image: galleryHatiara2 },
+      { alt: "Session with Hatiara Girls' High Madrasa", caption: "Hatiara Girls' High Madrasa awareness session", image: galleryHatiara3 }
+    ],
+    summary: "School-based health awareness with Hatiara Girls' High Madrasa.",
+    title: "Session with Hatiara Girls' High Madrasa"
+  },
+  {
+    category: "Naree Health Awareness",
+    images: [
+      { alt: "Session with Bidhannagar Govt High School", caption: "Bidhannagar Govt High School awareness session", image: galleryBidhannagar1 },
+      { alt: "Session with Bidhannagar Govt High School", caption: "Bidhannagar Govt High School awareness session", image: galleryBidhannagar2 },
+      { alt: "Session with Bidhannagar Govt High School", caption: "Bidhannagar Govt High School awareness session", image: galleryBidhannagar3 }
+    ],
+    summary: "Awareness session moments with Bidhannagar Govt High School.",
+    title: "Session with Bidhannagar Govt High School"
+  },
+  {
+    category: "Naree Health Awareness",
+    images: [
+      { alt: "Session with Udayan Care, Kolkata", caption: "Udayan Care Kolkata awareness session", image: galleryUdayanCare1 },
+      { alt: "Session with Udayan Care, Kolkata", caption: "Udayan Care Kolkata awareness session", image: galleryUdayanCare2 },
+      { alt: "Session with Udayan Care, Kolkata", caption: "Udayan Care Kolkata awareness session", image: galleryUdayanCare3 }
+    ],
+    summary: "Awareness and dialogue moments with Udayan Care, Kolkata.",
+    title: "Session with Udayan Care, Kolkata"
+  },
+  {
+    category: "Cervical Cancer Awareness",
+    images: [
+      { alt: "Cohort 1 with Bidhannagar Govt High School", caption: "Cohort 1 awareness session", image: galleryCohort1Bidhannagar1 },
+      { alt: "Cohort 1 with Bidhannagar Govt High School", caption: "Cohort 1 awareness session", image: galleryCohort1Bidhannagar2 },
+      { alt: "Cohort 1 with Bidhannagar Govt High School", caption: "Cohort 1 awareness session", image: galleryCohort1Bidhannagar3 }
+    ],
+    summary: "Cervical cancer awareness session with Cohort 1 at Bidhannagar Govt High School.",
+    title: "Cohort 1 with Bidhannagar Govt High School"
+  },
+  {
+    category: "Cervical Cancer Awareness",
+    images: [
+      { alt: "Cohort 2 with Bidhannagar Govt High School", caption: "Cohort 2 awareness session", image: galleryCohort2Bidhannagar1 },
+      { alt: "Cohort 2 with Bidhannagar Govt High School", caption: "Cohort 2 awareness session", image: galleryCohort2Bidhannagar2 }
+    ],
+    summary: "Cervical cancer awareness session with Cohort 2 at Bidhannagar Govt High School.",
+    title: "Cohort 2 with Bidhannagar Govt High School"
+  },
+  {
+    category: "Health Screening Camp",
+    images: [
+      { alt: "Health screening camp participant registration", caption: "Health Screening Camp", image: galleryHealthCamp1 },
+      { alt: "Health screening camp clinical desk", caption: "Health Screening Camp", image: galleryHealthCamp2 },
+      { alt: "Health screening camp student checkup", caption: "Health Screening Camp", image: galleryHealthCamp3 },
+      { alt: "Health screening camp doctor consultation", caption: "Health Screening Camp", image: galleryHealthCamp4 },
+      { alt: "Health screening camp group interaction", caption: "Health Screening Camp", image: galleryHealthCamp5 },
+      { alt: "Health screening camp care team", caption: "Health Screening Camp", image: galleryHealthCamp6 }
+    ],
+    summary: "On-ground screening, consultation, and guidance moments from the Health Screening Camp.",
+    title: "Moments from Health Screening Camp"
+  }
+];
+
+const legalPages: Record<"privacy" | "terms", LegalPageContent> = {
+  privacy: {
+    eyebrow: "Privacy Policy",
+    intro:
+      "Floydee Future Foundation respects the privacy of people who visit our website, contact us, make donation enquiries, partner with us, or take part in our programs. This policy explains how we handle information shared through our public website and related foundation communications.",
+    sections: [
+      {
+        title: "Information we collect",
+        body: [
+          "We may collect information you choose to share, such as your name, email address, phone number, organisation, donation or program interest, message details, and communication preferences.",
+          "When you use the website, basic technical information such as device type, browser, approximate location, pages visited, referral source, and cookie or analytics identifiers may be collected to keep the website useful and secure."
+        ]
+      },
+      {
+        title: "How we use information",
+        body: [
+          "We use information to respond to enquiries, coordinate donations, issue donation or 80G follow-up details where applicable, manage program or partnership requests, improve our website, and communicate foundation updates.",
+          "Program-related information may be used to plan outreach, delivery, reporting, safeguarding, and impact documentation, always with care for dignity and confidentiality."
+        ]
+      },
+      {
+        title: "Communications and consent",
+        body: [
+          "If you submit a form or share your contact details, we may contact you by phone, email, SMS, or WhatsApp about your enquiry, donation, partnership, campaign, or program request.",
+          "You may ask us to stop non-essential communications at any time by contacting us at contact@floydeefoundation.org."
+        ]
+      },
+      {
+        title: "Cookies, analytics, and website improvement",
+        body: [
+          "The website may use cookies or similar technologies to understand traffic, improve performance, remember preferences, and protect forms from misuse.",
+          "You can control cookies through your browser settings, though some website features may not work as intended if cookies are disabled."
+        ]
+      },
+      {
+        title: "Sharing and safeguards",
+        body: [
+          "We do not sell personal information. We may share limited information with trusted service providers, payment or donation support teams, implementation partners, professional advisors, or authorities when required for lawful, operational, safety, or compliance reasons.",
+          "We use reasonable administrative and technical safeguards, but no internet-based system can be guaranteed to be completely secure."
+        ]
+      },
+      {
+        title: "Your choices and contact",
+        body: [
+          "You may request access, correction, or deletion of information you have shared with us, subject to legal, donation, reporting, safeguarding, and operational requirements.",
+          "For privacy questions, write to contact@floydeefoundation.org or contact Floydee Future Foundation at International Financial Hub, West Tower, 13th Floor, Mani Casadona, New Town, Kolkata-700156, West Bengal."
+        ]
+      }
+    ],
+    title: "Privacy Policy"
+  },
+  terms: {
+    eyebrow: "Terms & Conditions",
+    intro:
+      "These terms govern use of the Floydee Future Foundation website and public digital materials. By using the website, submitting forms, or engaging through linked pages, you agree to use the website responsibly and in line with these terms.",
+    sections: [
+      {
+        title: "Use of this website",
+        body: [
+          "You may use this website to learn about the foundation, read program information, submit enquiries, express donation interest, request collaboration, or access public resources.",
+          "You agree not to misuse the website, interfere with its operation, attempt unauthorised access, submit false or harmful information, or use the website for unlawful purposes."
+        ]
+      },
+      {
+        title: "Enquiries, donations, and program requests",
+        body: [
+          "Website forms are enquiry and coordination tools. A donation, campaign, workshop, or program request is confirmed only after the foundation team reviews details and completes any required follow-up.",
+          "Information about tax benefits, receipts, campaigns, or partnerships is provided for coordination and may require verification before final confirmation."
+        ]
+      },
+      {
+        title: "Content ownership and permitted use",
+        body: [
+          "Text, photographs, graphics, program names, reports, layouts, and other materials on this website are owned by or licensed to Floydee Future Foundation unless otherwise stated.",
+          "You may share public pages for informational purposes with appropriate credit. You may not copy, modify, sell, misrepresent, or commercially exploit website content without written permission."
+        ]
+      },
+      {
+        title: "External links and third-party services",
+        body: [
+          "The website may link to third-party websites, social platforms, payment channels, maps, documents, or partner resources. These services are governed by their own terms and privacy practices.",
+          "Floydee Future Foundation is not responsible for the content, security, availability, or practices of third-party websites."
+        ]
+      },
+      {
+        title: "Accuracy, availability, and updates",
+        body: [
+          "We aim to keep website information clear and current, but program details, campaign availability, dates, partner information, and resources may change.",
+          "The website may be updated, suspended, or changed at any time for maintenance, security, operational, or editorial reasons."
+        ]
+      },
+      {
+        title: "Liability and contact",
+        body: [
+          "The website is provided for general information and public engagement. It is not a substitute for medical, legal, financial, or professional advice.",
+          "To the fullest extent permitted by law, Floydee Future Foundation is not liable for losses arising from website use, unavailable pages, third-party links, or reliance on general website information.",
+          "For questions about these terms, write to contact@floydeefoundation.org."
+        ]
+      }
+    ],
+    title: "Terms & Conditions"
+  }
+};
 
 const presenceLocations = [
   { name: "Jammu & Kashmir", x: "32.8%", y: "10.9%", tone: "north" },
@@ -1383,7 +1889,7 @@ function HomePage() {
         <div><h2>Programs</h2><a href="#aarohi">AAROHI</a><a href="#sakhi">SAKHI</a><a href="#vidya">VIDYA</a><a href="#programs">Pillars of Development</a></div>
         <div><h2>Resources</h2><a href="/news">News</a><a href="/stories">Stories</a><a href="/resources">Media Centre</a><a href="#gallery">Gallery</a></div>
         <div><h2>Contact</h2><p>New Town, Kolkata-700156</p><p>+91 91477 48064</p><p>contact@floydeefoundation.org</p></div>
-        <div className="footer-bottom"><span>© 2026 Floydee Future Foundation. All rights reserved.</span><span>Legal · Privacy Policy · Terms & Conditions</span></div>
+        <div className="footer-bottom"><span>© 2026 Floydee Future Foundation. All rights reserved.</span><FooterLegalLinks /></div>
       </footer>
     </>
   );
@@ -1400,8 +1906,20 @@ function RouteFooter() {
       <div><h2>Programs</h2><a href="/programs/aarohi">AAROHI</a><a href="/programs/sakhi">SAKHI</a><a href="/programs/vidya">VIDYA</a><a href="/programs">Pillars of Development</a></div>
       <div><h2>Resources</h2><a href="/news">News</a><a href="/stories">Stories</a><a href="/resources">Media Centre</a><a href="/gallery">Gallery</a></div>
       <div><h2>Contact</h2><p>New Town, Kolkata-700156</p><p>+91 91477 48064</p><p>contact@floydeefoundation.org</p></div>
-      <div className="footer-bottom"><span>© 2026 Floydee Future Foundation. All rights reserved.</span><span>Legal · Privacy Policy · Terms & Conditions</span></div>
+      <div className="footer-bottom"><span>© 2026 Floydee Future Foundation. All rights reserved.</span><FooterLegalLinks /></div>
     </footer>
+  );
+}
+
+function FooterLegalLinks() {
+  return (
+    <span className="footer-legal-links">
+      <a href="/trust-centre">Legal</a>
+      <span aria-hidden="true">·</span>
+      <a href="/privacy-policy">Privacy Policy</a>
+      <span aria-hidden="true">·</span>
+      <a href="/terms-and-conditions">Terms & Conditions</a>
+    </span>
   );
 }
 
@@ -1465,6 +1983,67 @@ function PartnerShowcaseSection({
             </div>
           </article>
         ))}
+      </div>
+    </section>
+  );
+}
+
+function StudentTestimonialsSection() {
+  const headingId = useId();
+  const featured = studentTestimonials[0];
+  const categories: TestimonialCategory[] = ["VIDYA", "AAROHI", "HEALTH SCREENING CAMP"];
+
+  return (
+    <section className="page-section student-testimonials-section" aria-labelledby={headingId}>
+      <div className="student-testimonials-heading">
+        <div>
+          <p className="section-label">Student testimonials</p>
+          <h2 id={headingId}>Learning, care, and confidence in their words.</h2>
+        </div>
+        <p>
+          Direct voices from VIDYA learners, AAROHI participants, and students who attended the
+          Health Screening Camp. Each card keeps the student context, image, and quote together.
+        </p>
+      </div>
+      <article className="testimonial-feature">
+        <div className="testimonial-feature-media">
+          <img src={featured.image} alt={`${featured.name}, ${featured.program} participant`} loading="lazy" />
+        </div>
+        <div className="testimonial-feature-copy">
+          <p className="testimonial-tag">{featured.program}</p>
+          <blockquote>"{featured.quote}"</blockquote>
+          <div>
+            <strong>{featured.name}</strong>
+            <span>{featured.detail}</span>
+          </div>
+        </div>
+      </article>
+      <div className="testimonial-groups">
+        {categories.map((category) => {
+          const categoryTestimonials = studentTestimonials.filter((testimonial) => testimonial.category === category && testimonial !== featured);
+
+          return (
+            <section className="testimonial-group" key={category}>
+              <div className="testimonial-group-heading">
+                <p className="section-label">{category === "HEALTH SCREENING CAMP" ? "Screening voices" : `${category} voices`}</p>
+                <h3>{category === "HEALTH SCREENING CAMP" ? "Health Screening Camp" : category}</h3>
+              </div>
+              <div className="testimonial-card-grid">
+                {categoryTestimonials.map((testimonial) => (
+                  <article className="testimonial-card" key={`${testimonial.program}-${testimonial.name}-${testimonial.quote.slice(0, 24)}`}>
+                    <img src={testimonial.image} alt={`${testimonial.name}, ${testimonial.program} participant`} loading="lazy" />
+                    <div className="testimonial-card-copy">
+                      <p className="testimonial-tag">{testimonial.program}</p>
+                      <h4>{testimonial.name}</h4>
+                      <span>{testimonial.detail}</span>
+                      <blockquote>"{testimonial.quote}"</blockquote>
+                    </div>
+                  </article>
+                ))}
+              </div>
+            </section>
+          );
+        })}
       </div>
     </section>
   );
@@ -1537,6 +2116,7 @@ function ProgramsOverviewPage() {
           ))}
         </div>
       </section>
+      <StudentTestimonialsSection />
       <section className="page-band">
         <h2>Pillars of Development</h2>
         <div className="page-grid three">
@@ -1747,6 +2327,87 @@ function JoinPage({ kind }: { kind?: "volunteer" | "partner" | "book" | "campaig
           <p>Use the form and the team will get in touch with the right next step.</p>
         </div>
         <ContactForm defaultIntent={intent} />
+      </section>
+    </main>
+  );
+}
+
+function GalleryPage() {
+  const categories: GalleryCategory[] = ["Naree Health Awareness", "Cervical Cancer Awareness", "Health Screening Camp"];
+  const categoryIds: Record<GalleryCategory, string> = {
+    "Cervical Cancer Awareness": "cervical-cancer-awareness",
+    "Health Screening Camp": "health-screening-camp",
+    "Naree Health Awareness": "naree-health-awareness"
+  };
+  const imageCount = gallerySections.reduce((total, section) => total + section.images.length, 0);
+
+  return (
+    <main className="page gallery-page">
+      <PageHero
+        eyebrow="Gallery"
+        title="Field moments, gathered with care."
+        text="Real images from Floydee awareness sessions, school cohorts, community partners, and health screening work."
+        image={galleryHealthCamp1}
+      />
+      <section className="page-section gallery-overview" aria-labelledby="gallery-overview-title">
+        <div>
+          <p className="section-label">Visual archive</p>
+          <h2 id="gallery-overview-title">From awareness rooms to screening desks.</h2>
+        </div>
+        <div className="gallery-overview-copy">
+          <p>
+            The legacy Floydee gallery has been rebuilt here with locally stored images, cleaned section labels,
+            and a clearer editorial layout for browsing.
+          </p>
+          <div className="gallery-stats" aria-label="Gallery content summary">
+            <span><strong>{gallerySections.length}</strong> sections</span>
+            <span><strong>{imageCount}</strong> field images</span>
+            <span><strong>3</strong> program themes</span>
+          </div>
+        </div>
+      </section>
+      <nav className="gallery-filter-row" aria-label="Gallery sections">
+        {categories.map((category) => (
+          <a href={`#${categoryIds[category]}`} key={category}>{category}</a>
+        ))}
+      </nav>
+      <section className="page-section gallery-archive" aria-label="Floydee gallery archive">
+        {categories.map((category) => (
+          <div className="gallery-category-block" id={categoryIds[category]} key={category}>
+            <div className="gallery-category-heading">
+              <p className="section-label">
+                {category === "Naree Health Awareness"
+                  ? "Moments from Naree Health Awareness Session"
+                  : category === "Cervical Cancer Awareness"
+                    ? "Moments from Cervical Cancer Awareness Session"
+                    : "Moments from Health Screening Camp"}
+              </p>
+              <h2>{category}</h2>
+            </div>
+            {gallerySections.filter((section) => section.category === category).map((section) => (
+              <section className="gallery-section" key={section.title} aria-labelledby={`${categoryIds[category]}-${section.title.replace(/[^a-z0-9]+/gi, "-").toLowerCase()}`}>
+                <div className="gallery-section-heading">
+                  <div>
+                    <p>{section.images.length} images</p>
+                    <h3 id={`${categoryIds[category]}-${section.title.replace(/[^a-z0-9]+/gi, "-").toLowerCase()}`}>{section.title}</h3>
+                  </div>
+                  <span>{section.summary}</span>
+                </div>
+                <div className="gallery-masonry-grid">
+                  {section.images.map((item, index) => (
+                    <figure className={`gallery-tile gallery-tile-${(index % 6) + 1}`} key={`${section.title}-${item.image}`}>
+                      <img src={item.image} alt={item.alt} loading="lazy" />
+                      <figcaption>
+                        <span>{section.category}</span>
+                        <strong>{item.caption}</strong>
+                      </figcaption>
+                    </figure>
+                  ))}
+                </div>
+              </section>
+            ))}
+          </div>
+        ))}
       </section>
     </main>
   );
@@ -1976,14 +2637,32 @@ function ContactPage() {
   );
 }
 
-function LegalPage({ title }: { title: string }) {
+function LegalPage({ page, title }: { page?: LegalPageContent; title?: string }) {
+  const resolvedPage = page ?? {
+    eyebrow: "Legal and utility",
+    intro: "This page supports donor confidence, accessibility, compliance, and public website navigation.",
+    sections: [
+      {
+        title: title ?? "Legal and utility",
+        body: [
+          "This starter page is ready for foundation-approved legal, accessibility, or policy text.",
+          "For official use, the foundation should review and finalize this content before launch."
+        ]
+      }
+    ],
+    title: title ?? "Legal and utility"
+  };
+
   return (
-    <main className="page">
-      <PageHero eyebrow="Legal and utility" title={title} text="This page supports donor confidence, accessibility, compliance, and public website navigation." image={heroLegalFoundation} />
-      <section className="page-section page-copy-panel">
-        <h2>{title}</h2>
-        <p>This starter page is ready for foundation-approved legal, accessibility, or policy text. It is included in Phase 1 so the public website has a complete navigation structure.</p>
-        <p>For official use, the foundation should review and finalize this content before launch.</p>
+    <main className="page legal-page">
+      <PageHero eyebrow={resolvedPage.eyebrow} title={resolvedPage.title} text={resolvedPage.intro} image={heroLegalFoundation} />
+      <section className="page-section legal-copy">
+        {resolvedPage.sections.map((section) => (
+          <article className="legal-copy-section" key={section.title}>
+            <h2>{section.title}</h2>
+            {section.body.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
+          </article>
+        ))}
       </section>
     </main>
   );
@@ -2040,15 +2719,15 @@ function renderRoute(path: string) {
   if (canonicalPath.startsWith("/stories/")) return <><StoryArticlePage slug={canonicalPath.replace("/stories/", "")} /><RouteFooter /></>;
   if (canonicalPath === "/news") return <><LatestPage type="news" /><RouteFooter /></>;
   if (canonicalPath === "/resources") return <><LatestPage type="resources" /><RouteFooter /></>;
-  if (canonicalPath === "/gallery") return <><LatestPage type="gallery" /><RouteFooter /></>;
+  if (canonicalPath === "/gallery") return <><GalleryPage /><RouteFooter /></>;
   if (canonicalPath === "/about") return <><AboutPage view="about" /><RouteFooter /></>;
   if (canonicalPath === "/mission") return <><AboutPage view="mission" /><RouteFooter /></>;
   if (canonicalPath === "/history") return <><AboutPage view="history" /><RouteFooter /></>;
   if (canonicalPath === "/leadership") return <><AboutPage view="leadership" /><RouteFooter /></>;
   if (canonicalPath === "/trust-centre") return <><TrustCentrePage /><RouteFooter /></>;
   if (canonicalPath === "/contact") return <><ContactPage /><RouteFooter /></>;
-  if (canonicalPath === "/privacy-policy") return <><LegalPage title="Privacy Policy" /><RouteFooter /></>;
-  if (canonicalPath === "/terms-and-conditions") return <><LegalPage title="Terms And Conditions" /><RouteFooter /></>;
+  if (canonicalPath === "/privacy-policy") return <><LegalPage page={legalPages.privacy} /><RouteFooter /></>;
+  if (canonicalPath === "/terms-and-conditions") return <><LegalPage page={legalPages.terms} /><RouteFooter /></>;
   if (canonicalPath === "/refund-policy") return <><LegalPage title="Refund Policy" /><RouteFooter /></>;
   if (canonicalPath === "/accessibility") return <><LegalPage title="Accessibility" /><RouteFooter /></>;
   if (canonicalPath === "/sitemap") return <><SitemapPage /><RouteFooter /></>;
@@ -2064,7 +2743,7 @@ function usePageMotion(path: string) {
     if (reduceMotion) return;
 
     const targets = Array.from(root.querySelectorAll<HTMLElement>(
-      ".page-hero-copy, .page-hero-media, .page-section, .page-band, .page-grid article, .page-card-list article, .page-copy-panel, .page-cta-panel, .about-program-thread article, .team-profile"
+      ".page-hero-copy, .page-hero-media, .page-grid article, .page-card-list article, .page-copy-panel, .page-cta-panel, .about-program-thread article, .team-profile, .testimonial-card, .gallery-section, .legal-copy-section"
     ));
 
     targets.forEach((target, index) => {
