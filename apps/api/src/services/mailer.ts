@@ -19,6 +19,9 @@ function getTransporter() {
     host: env.smtp.host,
     port: env.smtp.port,
     secure: env.smtp.secure,
+    connectionTimeout: 10_000,
+    greetingTimeout: 10_000,
+    socketTimeout: 15_000,
     auth: {
       user: env.smtp.user,
       pass: env.smtp.pass
@@ -37,4 +40,3 @@ export async function sendMail(message: MailMessage) {
     html: message.html
   });
 }
-
