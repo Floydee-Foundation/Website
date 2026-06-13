@@ -2826,6 +2826,7 @@ const nareeLinks = {
   website: "https://naree.health/"
 } as const;
 const whatsappConnectUrl = "https://wa.me/919147748064?text=Hello%20Floydee%20Future%20Foundation%2C%20I%20would%20like%20to%20connect.";
+const whatsappDismissalStorageKey = "floydee:whatsapp-connect-dismissed";
 
 const clientPageShareImages: Record<string, string> = {
   "/": homeHeroHealthScreening,
@@ -2958,22 +2959,45 @@ function StickyNareeAppBar({ path }: { path: string }) {
 }
 
 function WhatsAppConnectButton({ path }: { path: string }) {
-  if (path.startsWith("/admin/blogs")) return null;
+  const isAdminRoute = path.startsWith("/admin/blogs");
+  const [dismissed, setDismissed] = useState(() => {
+    try {
+      return window.localStorage.getItem(whatsappDismissalStorageKey) === "true";
+    } catch {
+      return false;
+    }
+  });
+
+  if (isAdminRoute || dismissed) return null;
+
+  const closeButton = () => {
+    try {
+      window.localStorage.setItem(whatsappDismissalStorageKey, "true");
+    } catch {
+      // Keep the close interaction working even when storage is unavailable.
+    }
+    setDismissed(true);
+  };
 
   return (
-    <a
-      className="whatsapp-connect"
-      href={whatsappConnectUrl}
-      target="_blank"
-      rel="noreferrer"
-      aria-label="Connect with Floydee Foundation on WhatsApp"
-    >
-      <span className="whatsapp-connect-mark" aria-hidden="true">WA</span>
-      <span className="whatsapp-connect-copy">
-        <span>WhatsApp us</span>
-        <strong>One-click connect</strong>
-      </span>
-    </a>
+    <aside className="whatsapp-connect-shell" aria-label="WhatsApp contact shortcut">
+      <a
+        className="whatsapp-connect"
+        href={whatsappConnectUrl}
+        target="_blank"
+        rel="noreferrer"
+        aria-label="Connect with Floydee Foundation on WhatsApp"
+      >
+        <span className="whatsapp-connect-mark" aria-hidden="true">WA</span>
+        <span className="whatsapp-connect-copy">
+          <span>WhatsApp us</span>
+          <strong>One-click connect</strong>
+        </span>
+      </a>
+      <button className="whatsapp-connect-close" type="button" aria-label="Close WhatsApp connect button" onClick={closeButton}>
+        X
+      </button>
+    </aside>
   );
 }
 
