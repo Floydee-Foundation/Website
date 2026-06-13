@@ -2885,6 +2885,25 @@ section:not(.hero):not(.donation-band):not(.campaign-rail) {
   padding-top: 22px;
 }
 
+.footer-legal-links {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.site-footer .footer-legal-links a {
+  color: rgba(255, 255, 255, 0.76);
+  display: inline-flex;
+  margin: 0;
+  text-decoration: none;
+}
+
+.site-footer .footer-legal-links a:hover,
+.site-footer .footer-legal-links a:focus {
+  color: var(--white);
+}
+
 .page {
   background: var(--white);
   animation: pageEnter 380ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
@@ -3583,6 +3602,374 @@ section:not(.hero):not(.donation-band):not(.campaign-rail) {
   width: 100%;
 }
 
+.student-testimonials-section {
+  background:
+    linear-gradient(90deg, #ffffff 0%, #ffffff 26%, var(--paper) 26%, var(--paper) 100%);
+  border-top: 1px solid var(--line);
+  overflow: hidden;
+}
+
+.student-testimonials-heading,
+.gallery-overview,
+.gallery-section-heading {
+  align-items: end;
+  display: grid;
+  gap: clamp(28px, 6vw, 84px);
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 0.5fr);
+}
+
+.student-testimonials-heading {
+  margin-bottom: clamp(32px, 5vw, 64px);
+}
+
+.student-testimonials-heading h2 {
+  font-size: clamp(2.6rem, 5.7vw, 7rem);
+  line-height: 0.9;
+  max-width: 960px;
+}
+
+.student-testimonials-heading > p,
+.gallery-overview-copy > p,
+.gallery-section-heading > span,
+.legal-copy-section p {
+  color: var(--muted);
+  line-height: 1.62;
+  margin: 0;
+}
+
+.student-testimonials-heading > p,
+.gallery-section-heading > span {
+  border-top: 1px solid var(--ink);
+  padding-top: 18px;
+}
+
+.testimonial-feature {
+  background: var(--white);
+  border: 1px solid var(--ink);
+  display: grid;
+  grid-template-columns: minmax(300px, 0.52fr) minmax(0, 1fr);
+  margin-bottom: clamp(38px, 6vw, 72px);
+  min-height: 460px;
+}
+
+.testimonial-feature-media {
+  min-height: 460px;
+  overflow: hidden;
+}
+
+.testimonial-feature-media img,
+.testimonial-card img,
+.gallery-tile img {
+  height: 100%;
+  object-fit: cover;
+  width: 100%;
+}
+
+.testimonial-feature-copy {
+  align-content: center;
+  display: grid;
+  gap: 22px;
+  padding: clamp(28px, 5vw, 72px);
+}
+
+.testimonial-tag {
+  color: var(--coral);
+  font-size: 0.78rem;
+  font-weight: 900;
+  letter-spacing: 0;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.testimonial-feature blockquote,
+.testimonial-card blockquote {
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: 0;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.testimonial-feature blockquote {
+  font-size: clamp(2.1rem, 4vw, 5rem);
+  line-height: 0.96;
+  max-width: 980px;
+  text-transform: none;
+}
+
+.testimonial-feature-copy strong,
+.testimonial-feature-copy span,
+.testimonial-card-copy h4,
+.testimonial-card-copy span {
+  display: block;
+}
+
+.testimonial-feature-copy strong {
+  font-family: var(--font-display);
+  font-size: clamp(1.35rem, 2vw, 2rem);
+  text-transform: uppercase;
+}
+
+.testimonial-feature-copy span,
+.testimonial-card-copy span {
+  color: var(--muted);
+  line-height: 1.45;
+}
+
+.testimonial-groups {
+  display: grid;
+  gap: clamp(34px, 5vw, 64px);
+}
+
+.testimonial-group {
+  border-top: 1px solid var(--ink);
+  display: grid;
+  gap: 24px;
+  padding-top: 22px;
+}
+
+.testimonial-group-heading {
+  align-items: baseline;
+  display: flex;
+  gap: 18px;
+  justify-content: space-between;
+}
+
+.testimonial-group-heading h3 {
+  font-family: var(--font-display);
+  font-size: clamp(1.8rem, 3vw, 3.5rem);
+  line-height: 0.95;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.testimonial-card-grid {
+  display: grid;
+  gap: 18px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.testimonial-card {
+  background: var(--white);
+  border: 1px solid var(--line);
+  display: grid;
+  grid-template-rows: clamp(210px, 18vw, 280px) 1fr;
+  min-height: 520px;
+  overflow: hidden;
+}
+
+.testimonial-card-copy {
+  display: grid;
+  gap: 10px;
+  padding: clamp(18px, 2.2vw, 26px);
+}
+
+.testimonial-card-copy h4 {
+  font-family: var(--font-display);
+  font-size: clamp(1.3rem, 1.8vw, 1.95rem);
+  line-height: 1;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.testimonial-card blockquote {
+  font-size: clamp(1.3rem, 1.8vw, 2rem);
+  line-height: 1.04;
+  text-transform: none;
+}
+
+.gallery-page .page-hero {
+  background:
+    linear-gradient(90deg, #ffffff 0%, #ffffff 52%, #f4f6f0 52%, #f4f6f0 100%);
+}
+
+.gallery-overview {
+  background: var(--white);
+}
+
+.gallery-overview h2 {
+  font-size: clamp(2.4rem, 5vw, 6.2rem);
+  line-height: 0.92;
+}
+
+.gallery-overview-copy {
+  display: grid;
+  gap: 22px;
+}
+
+.gallery-stats {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.gallery-stats span {
+  border-top: 4px solid var(--coral);
+  color: var(--muted);
+  display: grid;
+  font-weight: 900;
+  gap: 6px;
+  padding-top: 12px;
+  text-transform: uppercase;
+}
+
+.gallery-stats strong {
+  color: var(--ink);
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 3.4vw, 4.2rem);
+  line-height: 0.85;
+}
+
+.gallery-filter-row {
+  align-items: center;
+  background: var(--ink);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 16px max(24px, calc((100vw - 1272px) / 2));
+  position: sticky;
+  top: 84px;
+  z-index: 8;
+}
+
+.gallery-filter-row a {
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  color: var(--white);
+  font-size: 0.82rem;
+  font-weight: 900;
+  padding: 10px 14px;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.gallery-filter-row a:hover,
+.gallery-filter-row a:focus {
+  background: var(--white);
+  color: var(--ink);
+}
+
+.gallery-archive {
+  display: grid;
+  gap: clamp(62px, 8vw, 112px);
+}
+
+.gallery-category-block {
+  display: grid;
+  gap: clamp(28px, 4vw, 46px);
+  scroll-margin-top: 160px;
+}
+
+.gallery-category-heading {
+  border-bottom: 1px solid var(--ink);
+  padding-bottom: clamp(20px, 3vw, 34px);
+}
+
+.gallery-category-heading h2 {
+  font-size: clamp(2.8rem, 6vw, 7rem);
+  line-height: 0.88;
+  max-width: 1000px;
+}
+
+.gallery-section {
+  display: grid;
+  gap: 22px;
+}
+
+.gallery-section-heading p {
+  color: var(--coral);
+  font-size: 0.78rem;
+  font-weight: 900;
+  margin: 0 0 8px;
+  text-transform: uppercase;
+}
+
+.gallery-section-heading h3 {
+  font-family: var(--font-display);
+  font-size: clamp(1.8rem, 3.2vw, 3.8rem);
+  line-height: 0.96;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.gallery-masonry-grid {
+  display: grid;
+  gap: 16px;
+  grid-auto-flow: dense;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+}
+
+.gallery-tile {
+  background: var(--paper);
+  grid-column: span 4;
+  margin: 0;
+  min-height: 300px;
+  overflow: hidden;
+  position: relative;
+}
+
+.gallery-tile-1 {
+  grid-column: span 7;
+  min-height: 430px;
+}
+
+.gallery-tile-2,
+.gallery-tile-3 {
+  grid-column: span 5;
+}
+
+.gallery-tile-4,
+.gallery-tile-5,
+.gallery-tile-6 {
+  min-height: 340px;
+}
+
+.gallery-tile figcaption {
+  background: linear-gradient(180deg, rgba(17, 17, 17, 0), rgba(17, 17, 17, 0.88));
+  bottom: 0;
+  color: var(--white);
+  display: grid;
+  gap: 4px;
+  left: 0;
+  padding: 54px 18px 18px;
+  position: absolute;
+  right: 0;
+}
+
+.gallery-tile figcaption span {
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 0.72rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.gallery-tile figcaption strong {
+  font-family: var(--font-display);
+  font-size: clamp(1.1rem, 1.6vw, 1.75rem);
+  line-height: 1.02;
+  text-transform: uppercase;
+}
+
+.legal-copy {
+  display: grid;
+  gap: clamp(24px, 4vw, 44px);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.legal-copy-section {
+  border-top: 1px solid var(--ink);
+  display: grid;
+  gap: 14px;
+  padding-top: 22px;
+}
+
+.legal-copy-section h2 {
+  font-size: clamp(1.55rem, 2.2vw, 2.6rem);
+  line-height: 1;
+  max-width: 620px;
+}
+
 .partner-showcase {
   background:
     linear-gradient(180deg, #ffffff 0%, #faf8f3 100%);
@@ -4224,7 +4611,12 @@ section:not(.hero):not(.donation-band):not(.campaign-rail) {
   .program-overview,
   .program-section-heading,
   .program-journey,
-  .program-impact-band {
+  .program-impact-band,
+  .student-testimonials-heading,
+  .testimonial-feature,
+  .gallery-overview,
+  .gallery-section-heading,
+  .legal-copy {
     grid-template-columns: 1fr;
   }
 
@@ -4337,6 +4729,21 @@ section:not(.hero):not(.donation-band):not(.campaign-rail) {
 
   .program-impact-copy h2 {
     max-width: 820px;
+  }
+
+  .testimonial-card-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .gallery-tile,
+  .gallery-tile-1,
+  .gallery-tile-2,
+  .gallery-tile-3,
+  .gallery-tile-4,
+  .gallery-tile-5,
+  .gallery-tile-6 {
+    grid-column: span 6;
+    min-height: 320px;
   }
 }
 
@@ -4488,6 +4895,73 @@ section:not(.hero):not(.donation-band):not(.campaign-rail) {
   .page-section,
   .page-band {
     padding: 44px 20px !important;
+  }
+
+  .student-testimonials-section {
+    background: var(--paper);
+  }
+
+  .student-testimonials-heading h2,
+  .gallery-category-heading h2 {
+    font-size: clamp(2.25rem, 10vw, 3.5rem);
+    line-height: 0.98;
+  }
+
+  .testimonial-feature {
+    min-height: auto;
+  }
+
+  .testimonial-feature-media {
+    min-height: 340px;
+  }
+
+  .testimonial-feature-copy {
+    padding: 24px;
+  }
+
+  .testimonial-feature blockquote {
+    font-size: clamp(1.72rem, 8vw, 2.6rem);
+    line-height: 1.05;
+  }
+
+  .testimonial-group-heading {
+    align-items: start;
+    display: grid;
+    gap: 6px;
+  }
+
+  .testimonial-card-grid,
+  .gallery-stats {
+    grid-template-columns: 1fr;
+  }
+
+  .testimonial-card {
+    grid-template-rows: 240px auto;
+    min-height: auto;
+  }
+
+  .gallery-filter-row {
+    padding: 14px 20px;
+    position: static;
+  }
+
+  .gallery-masonry-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .gallery-tile,
+  .gallery-tile-1,
+  .gallery-tile-2,
+  .gallery-tile-3,
+  .gallery-tile-4,
+  .gallery-tile-5,
+  .gallery-tile-6 {
+    grid-column: auto;
+    min-height: 310px;
+  }
+
+  .legal-copy {
+    grid-template-columns: 1fr;
   }
 
   .page > .page-section:last-child,
