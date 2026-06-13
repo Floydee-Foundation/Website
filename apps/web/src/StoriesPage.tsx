@@ -313,7 +313,7 @@ function FeaturedStory({ categories, post }: { categories: BlogCategory[]; post:
         {post.heroImage?.url ? <StoryImage eager media={post.heroImage} sizes="(max-width: 1080px) 100vw, 65vw" /> : <span>{programLabels[post.programAssociation]}</span>}
       </div>
       <div className="stories-feature-copy">
-        <p className="section-label">Featured story</p>
+        <p className="section-label">Story spotlight</p>
         <p className="story-meta">{postMeta(post, categories)}</p>
         <StoryDateline post={post} />
         <h2 id="featured-story-title">{post.title}</h2>
@@ -480,7 +480,15 @@ export function BlogArchive({
 
   return (
     <section className="stories-page blog-archive">
-      {showFeatured ? <FeaturedStory categories={categories} post={featured} /> : null}
+      {showFeatured ? (
+        <section className="stories-feature-block" aria-labelledby="featured-story-block-title">
+          <div className="stories-feature-title">
+            <p className="section-label">Featured story</p>
+            <h2 id="featured-story-block-title">Featured story</h2>
+          </div>
+          <FeaturedStory categories={categories} post={featured} />
+        </section>
+      ) : null}
 
       <section className="stories-library" aria-labelledby="stories-library-title">
         <div className="stories-library-heading">

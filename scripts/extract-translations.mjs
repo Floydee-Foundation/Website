@@ -127,8 +127,28 @@ const protectedCopy = [
   "AAROHI", "SAKHI", "VIDYA", "Floydee", "Floydee Foundation", "Floydee Future Foundation",
   "PAN", "80G", "AAGCF6699F", "AAGCF6699FF20261", "contact@floydeefoundation.org",
   "+91 91477 48064", "Kolkata", "Delhi", "Patna", "Lucknow", "Mumbai", "Bangalore",
+  "Pune", "Chennai", "Darjeeling", "Guwahati", "Jammu & Kashmir",
   "Subhodyuti Chakraborty", "Ipsito Ghosh", "Disha Mishra", "Sreeparna Roy", "Riya Banerjee",
-  "Dr. Himanshu Borase", "Dr. Suparna Biswas", "SC", "IG", "DM", "SR", "RB", "HB", "SB"
+  "Dr. Himanshu Borase", "Dr. Suparna Biswas", "SC", "IG", "DM", "SR", "RB", "HB", "SB",
+  "Orchids The International School", "Harimati Girls' High Madrasah", "De Sovrani",
+  "Udayan Care", "Janki Devi Memorial College", "Help Foundation", "Hayden Hall",
+  "SPK Jain Futuristic Academy", "Shah and Anchor Kutchhi Engineering College",
+  "Ramniranjan Jhunjhunwala College", "SIES College of Arts, Science and Commerce",
+  "NG Acharya and DK Marathe College", "Government Engineering College, Siwan",
+  "Sitamarhi Institute of Engineering", "SNDT Women's University", "Vemana Institute of Technology",
+  "Jyoti Institute of Technology", "Datta Meghe Institute of Technology", "APS College of Engineering",
+  "Rajiv Gandhi Institute of Technology", "BMN Institute of Technology", "PES University",
+  "University of Engineering and Management, Jaipur", "Ram-Eesh Institute of Technology",
+  "Bharati Vidyapeeth University", "The Oxford College of Engineering", "Apex Laboratories Pvt. Ltd",
+  "Emcure Pharmaceuticals", "Naree Health", "PKG Medical College and Hospitals", "NH",
+  "PCOD", "PCOS", "Agile", "Git", "GitHub", "AI", "ML", "LinkedIn", "MVP", "GenAI", "UI/UX",
+  "Rabiya", "Sanika", "Sujal", "Deepika", "Lakshmishree", "Ishmina Sultana",
+  "Nisha Ramesh Rathod", "Khan Safiya", "Raima Das", "Sonika Dey", "Esha Das",
+  "Anushka Das", "Bidisha", "Sania Parveen", "Sana Parveen", "Bidisha Khatun",
+  "Girijananda Chowdhury University", "BNM Institute of Technology",
+  "N. G. Acharya & D. K. Marathe College", "BSc IT", "BSc Computer Science",
+  "Electrical & Electronics Engineering", "Computer Science Engineering",
+  "Electronics & Communication Engineering", "Computer Science and Engineering"
 ];
 for (const value of protectedCopy) {
   const entry = entries.get(value);

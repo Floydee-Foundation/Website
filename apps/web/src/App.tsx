@@ -1,12 +1,61 @@
-import { FormEvent, KeyboardEvent as ReactKeyboardEvent, useEffect, useId, useRef, useState } from "react";
+import { FormEvent, KeyboardEvent as ReactKeyboardEvent, type CSSProperties, useEffect, useId, useRef, useState } from "react";
 import floydeeLogo from "./assets/floydee-logo.png";
 import floydeeMark from "./assets/floydee-mark.svg";
 import heroFoundation from "./assets/hero-foundation.webp";
+import homeHeroHealthScreening from "./assets/home-hero-health-screening.webp";
+import heroAarohiWorkshop from "./assets/hero-aarohi-workshop.webp";
+import heroAboutCorridor from "./assets/hero-about-corridor.webp";
+import heroContactCare from "./assets/hero-contact-care.webp";
+import heroDonateScreening from "./assets/hero-donate-screening.webp";
+import heroGalleryStudents from "./assets/hero-gallery-students.webp";
+import heroInitiativesAchievement from "./assets/hero-initiatives-achievement.webp";
+import heroJoinCommunity from "./assets/hero-join-community.webp";
+import heroLatestField from "./assets/hero-latest-field.webp";
+import heroLegalFoundation from "./assets/hero-legal-foundation.webp";
+import heroMissionGroup from "./assets/hero-mission-group.webp";
+import heroNewsWorkshop from "./assets/hero-news-workshop.webp";
+import heroNotFoundStudent from "./assets/hero-not-found-student.webp";
+import heroProgramsGroup from "./assets/hero-programs-group.webp";
+import heroResourcesScreening from "./assets/hero-resources-screening.webp";
+import heroSitemapCommunity from "./assets/hero-sitemap-community.webp";
+import heroTrustAwareness from "./assets/hero-trust-awareness.webp";
 import healthCamp1 from "./assets/health-camp-1.webp";
 import healthCamp2 from "./assets/health-camp-2.webp";
 import healthCamp3 from "./assets/health-camp-3.webp";
 import studentSanika from "./assets/student-sanika.webp";
 import programMapping from "./assets/program-mapping.webp";
+import aarohiSonikaDey from "./assets/testimonials/aarohi-sonika-dey.jpg";
+import vidyaRabiya from "./assets/testimonials/vidya-rabiya.jpg";
+import aarohiOrchids from "./assets/partners/aarohi/aarohi-partner-01.jpeg";
+import aarohiHarimatiMadrasah from "./assets/partners/aarohi/aarohi-partner-02.jpg";
+import aarohiDeSovrani from "./assets/partners/aarohi/aarohi-partner-03.jpg";
+import aarohiSchoolSeal from "./assets/partners/aarohi/aarohi-partner-04.jpg";
+import aarohiSpkJain from "./assets/partners/aarohi/aarohi-partner-09.webp";
+import aarohiHaydenHall from "./assets/partners/aarohi/hayden-hall.png";
+import aarohiHelpFoundation from "./assets/partners/aarohi/help-foundation.png";
+import aarohiJankiDevi from "./assets/partners/aarohi/janki-devi-memorial-college.jpeg";
+import aarohiUdayanCare from "./assets/partners/aarohi/udayan-care.jpg";
+import corporateApex from "./assets/partners/corporate/apex-laboratories.png";
+import corporateEmcure from "./assets/partners/corporate/emcure-pharmaceuticals.png";
+import corporatePkg from "./assets/partners/corporate/pkg-medical-college-hospital.png";
+import vidyaAps from "./assets/partners/vidya/aps-college-of-engineering.png";
+import vidyaBharatiVidyapeeth from "./assets/partners/vidya/bharati-vidyapeeth-university.png";
+import vidyaBmnit from "./assets/partners/vidya/bmnit.png";
+import vidyaDattaMeghe from "./assets/partners/vidya/datta-meghe-institute-of-technology.png";
+import vidyaGovernmentEngineeringSiwan from "./assets/partners/vidya/government-engineering-college-siwan.png";
+import vidyaJyoti from "./assets/partners/vidya/jyoti-institute-of-technology.png";
+import vidyaNgadkm from "./assets/partners/vidya/ngadkm-college.png";
+import vidyaOxford from "./assets/partners/vidya/oxford-college-of-engineering.png";
+import vidyaPes from "./assets/partners/vidya/pes-university.png";
+import vidyaRajivGandhi from "./assets/partners/vidya/rajiv-gandhi-institute-of-technology.png";
+import vidyaRamEesh from "./assets/partners/vidya/ram-eesh-institute-of-technology.png";
+import vidyaRamniranjan from "./assets/partners/vidya/ramniranjan-jhunjhunwala-college.png";
+import vidyaShahAnchor from "./assets/partners/vidya/vidya-partner-01.jpg";
+import vidyaSies from "./assets/partners/vidya/sies-college.png";
+import vidyaSitamarhi from "./assets/partners/vidya/sitamarhi-institute-of-engineering.png";
+import vidyaSndt from "./assets/partners/vidya/sndt-womens-university.png";
+import vidyaUemJaipur from "./assets/partners/vidya/uem-jaipur.png";
+import vidyaVemana from "./assets/partners/vidya/vemana-institute-of-technology.png";
 import teamDisha from "./assets/team-disha.jpg";
 import teamHimanshu from "./assets/team-himanshu.png";
 import teamIpsito from "./assets/team-ipsito.jpg";
@@ -23,6 +72,54 @@ type NavGroup = {
   href?: string;
   links: NavLink[];
 };
+
+type PartnerLogo = {
+  name: string;
+  image?: string;
+  initials?: string;
+  note: string;
+};
+
+type ProgramStory = {
+  focusLabel: string;
+  focusTitle: string;
+  focusText: string;
+  focusAreas: {
+    title: string;
+    text: string;
+  }[];
+  journeyLabel: string;
+  journeyTitle: string;
+  journeyText: string;
+  journeySteps: {
+    title: string;
+    text: string;
+  }[];
+  secondaryImage: string;
+  secondaryImageAlt: string;
+  impactMetric: string;
+  impactLabel: string;
+  impactText: string;
+  callToAction: [string, string];
+  metaTitle: string;
+  metaDescription: string;
+};
+
+type ProgramPage = {
+  title: string;
+  tagline: string;
+  eyebrow: string;
+  image: string;
+  statement: string;
+  intro: string;
+  problem: string;
+  audience: string;
+  activities: readonly string[];
+  impact: string;
+  story?: ProgramStory;
+};
+
+type ProgramSlug = "aarohi" | "sakhi" | "vidya";
 
 const navGroups: NavGroup[] = [
   {
@@ -99,7 +196,7 @@ const donationConsentText =
 const contactIntentOptions = [
   "Partner with the foundation",
   "Volunteer",
-  "Book a program",
+  "Collaborate With Us",
   "Request media information"
 ];
 
@@ -109,65 +206,189 @@ const routeAliases: Record<string, string> = {
   "/programs/education-skill-development": "/programs/vidya"
 };
 
-const programPages = {
+const programPages: Record<ProgramSlug, ProgramPage> = {
   aarohi: {
     title: "AAROHI",
     tagline: "Care That Changes Lives",
     eyebrow: "Health, dignity and access",
-    image: healthCamp1,
-    statement: "Practical care for girls and young women starts with trusted information and reachable screening access.",
+    image: heroAarohiWorkshop,
+    statement: "Together, we create healthier, safer, and more informed communities through education, screening, and access to care.",
     intro:
-      "AAROHI brings menstrual health education, PCOD awareness, cervical cancer education, and screening guidance into schools and communities, helping adolescent girls move from hesitation to informed care.",
+      "AAROHI is Floydee Future Foundation's flagship health program for adolescent girls and women, combining trusted information, supportive conversations, preventive screening, and pathways to care.",
     problem:
-      "Health information should not be a privilege. Many girls grow up without safe spaces to ask questions about menstrual health, symptoms, screening, or follow-up support.",
-    audience: "Adolescent girls, young women, schools, communities, and partner institutions.",
+      "Accurate health information remains difficult to access for many adolescent girls and women. Stigma, misinformation, silence, and limited preventive care can delay support, screening, and treatment. AAROHI responds by bringing education and access into trusted schools and community spaces.",
+    audience: "Adolescent girls, young women, schools, colleges, community groups, public institutions, and partner organizations.",
     activities: [
-      "Menstrual health education sessions",
-      "PCOD awareness and early guidance",
-      "Cervical cancer education and screening access pathways",
-      "Dignity-led conversations with follow-up and referral guidance"
+      "Menstrual Health & Hygiene : Education, myth-busting, hygiene management.",
+      "Reproductive & Preventive Health: PCOS/PCOD awareness, cervical health, anemia prevention.",
+      "Nutrition & Healthy Living: Adolescent nutrition and lifestyle awareness",
+      "Access to Care: Screening, counseling, referrals, follow-up support."
     ],
-    impact: "150+ girls were reached through the Rajarhat school-based screening initiative."
+    impact: "150+ girls were impacted through the Aarohi health screening camp conducted at a Government school in Kolkata",
+    story: {
+      focusLabel: "What AAROHI covers",
+      focusTitle: "Health knowledge that grows into confident action.",
+      focusText:
+        "Sessions are shaped for adolescents, young adults, and women so every conversation feels relevant, respectful, and useful.",
+      focusAreas: [
+        {
+          title: "Puberty and body awareness",
+          text: "Age-appropriate guidance helps girls understand physical changes, body literacy, and personal well-being."
+        },
+        {
+          title: "Menstrual hygiene and reproductive health",
+          text: "Open conversations replace myths and silence with practical knowledge, dignity, and healthier habits."
+        },
+        {
+          title: "PCOD and PCOS awareness",
+          text: "Early understanding helps participants recognise common signs and know when to seek professional care."
+        },
+        {
+          title: "Nutrition and healthy lifestyles",
+          text: "Everyday guidance connects food, movement, rest, and preventive habits to long-term well-being."
+        },
+        {
+          title: "Cervical cancer awareness and screening",
+          text: "Clear information builds awareness of prevention, early screening, and available care pathways."
+        },
+        {
+          title: "Mental and emotional well-being",
+          text: "Safe, supportive spaces make room for questions, reflection, dialogue, and emotional health."
+        }
+      ],
+      journeyLabel: "From awareness to care",
+      journeyTitle: "A care pathway built around trust and continuity.",
+      journeyText:
+        "AAROHI combines education with practical access so a single session can become the beginning of informed, ongoing care.",
+      journeySteps: [
+        {
+          title: "Interactive awareness sessions",
+          text: "Classroom and community conversations make essential health information approachable."
+        },
+        {
+          title: "Expert-led guidance",
+          text: "Doctors and mental health professionals bring trusted answers into familiar spaces."
+        },
+        {
+          title: "Safe dialogue and digital support",
+          text: "Participants can ask freely, reflect, and continue building healthy habits beyond the session."
+        },
+        {
+          title: "Screening and referral access",
+          text: "Health camps, follow-up sessions, and medical referrals connect awareness to the next step."
+        }
+      ],
+      secondaryImage: healthCamp2,
+      secondaryImageAlt: "A health professional supporting students during a Floydee AAROHI session",
+      impactMetric: "150+",
+      impactLabel: "girls reached through screening",
+      impactText: "A school-based AAROHI health screening camp in Kolkata connected adolescent girls with awareness, preventive care, and informed next steps.",
+      callToAction: ["Bring AAROHI to your community", "/book-a-program"],
+      metaTitle: "AAROHI | Menstrual Health and Women's Wellness | Floydee Future Foundation",
+      metaDescription: "AAROHI advances menstrual health, PCOD and PCOS awareness, cervical cancer screening, nutrition, and mental well-being for adolescent girls and women."
+    }
   },
   sakhi: {
     title: "SAKHI",
     tagline: "Your space to share, be heard, and feel supported",
-    eyebrow: "Emotional well-being",
-    image: heroFoundation,
-    statement: "Safe, inclusive spaces help people speak, listen, learn, and grow with self-worth.",
+    eyebrow: "Emotional Wellness and Resilience Program for Adolescents and Women",
+    image: aarohiSonikaDey,
+    statement: "SAKHI empowers adolescents and women with the knowledge, skills, support systems, and safe spaces needed to build emotional resilience, strengthen mental well-being, and navigate life’s challenges with confidence.",
     intro:
       "SAKHI is Floydee Future Foundation's support pathway for emotional well-being, built around trust, listening, dignity, and confidence for girls, women, and youth.",
     problem:
-      "Support often begins with being heard. Many young people need a respectful space to ask questions, name concerns, and find the confidence to take the next step.",
-    audience: "Girls, women, youth groups, schools, colleges, and community partners.",
+      "Adolescents and women today face increasing emotional pressures arising from academic stress, social expectations, family challenges, workplace demands, digital exposure, and changing life circumstances. Despite these challenges, emotional well-being remains one of the most neglected areas of health. SAKHI creates safe and supportive spaces where individuals can learn, express themselves, seek guidance, and build resilience for healthier and happier lives.",
+    audience: "Adolescent Girls, Women, Young adults, Teachers, Parents, and Community groups ",
     activities: [
-      "Safe-space circles and guided sharing formats",
-      "Well-being awareness sessions",
-      "Confidence, self-worth, and informed decision-making conversations",
-      "Partner-led routes into appropriate support where needed"
+      "Emotional Well-being: Understanding emotions, self-awareness, emotional regulation.",
+      "Resilience Building-Developing coping skills and adaptability.",
+      "Life Skills & Self-Esteem: Confidence building, decision-making, communication.",
+      "Mental Health Literacy: Reducing stigma and promoting help-seeking behaviour."
     ],
-    impact: "SAKHI strengthens the foundation's care model by connecting awareness, support, and dignity."
+    impact: "Building emotionally safe, resilient, and empowered adolescents and women through well-being education, life skills, support systems, and resilience-building interventions"
   },
   vidya: {
     title: "VIDYA",
     tagline: "Building Pathways from Education to Employment",
     eyebrow: "Education, skills and employability",
-    image: studentSanika,
-    statement: "Young people need more than education; they need exposure, confidence, and industry-ready pathways.",
+    image: vidyaRabiya,
+    statement: "VIDYA empowers youth with future-ready digital skills, career readiness, and employment pathways that bridge the gap between education and meaningful livelihoods.",
     intro:
-      "VIDYA supports aspiring software professionals and students with engineering mindset, practical tools, soft skills, career readiness, mentorship, and industry exposure rooted in real workplace expectations.",
+      "VIDYA is a structured education-to-employment program that helps students and aspiring software professionals build practical technology skills, workplace confidence, career direction, and industry exposure.",
     problem:
-      "Talent from Tier-2 and Tier-3 ecosystems is often held back by limited opportunity, exposure, and career guidance.",
-    audience: "Students, graduates, aspiring software professionals, colleges, and skill-building partners.",
+      "Many young people graduate with academic qualifications but limited practical experience, career guidance, industry exposure, or access to professional networks. VIDYA closes that gap through hands-on learning, mentorship, employability training, and pathways to opportunity.",
+    audience: "Students from underserved communities, graduates, aspiring software professionals, colleges, public institutions, and skill-building partners.",
     activities: [
-      "Engineering mindset, SDLC, Agile, MVP, cybersecurity, and design thinking",
-      "Git, GitHub, frontend and backend overview, AI/ML introduction, and collaborative ideation",
-      "Communication, teamwork, leadership, problem solving, time management, and presentation skills",
-      "Resume, LinkedIn, personal branding, mock interviews, etiquette, networking, and goal setting"
+      "Digital & Technology Skills: Software development, AI, cybersecurity, digital tools.",
+      "Soft skills & Career Readiness: Communication, workplace readiness, interviews, personal branding",
+      "Mentorship & Guided Growth: Connecting learners with mentors, industry professionals who provide guidance, encouragement, insights, and support to help them make informed academic and career decisions",
+      "Experiential Learning & Practical Application:Providing opportunities for hands-on learning, project-based experiences, real-world problem-solving, and collaborative activities that transform knowledge into practical capability."
     ],
-    impact: "VIDYA is designed to engage 5,000+ youth each year through digital confidence and employability pathways."
+    impact: "VIDYA aims to empower 5,000+ youth annually with future-ready skills, career readiness, mentorship, and hands-on learning experiences, preparing them to succeed in an increasingly dynamic and technology-driven world.",
+    story: {
+      focusLabel: "What learners build",
+      focusTitle: "Practical capability for the world of work.",
+      focusText:
+        "VIDYA brings technology foundations, professional skills, mentorship, and real-world exposure into one structured learning experience.",
+      focusAreas: [
+        {
+          title: "Engineering mindset and technology foundations",
+          text: "Learners explore Agile practices, the software development lifecycle, MVP thinking, cybersecurity, and design thinking."
+        },
+        {
+          title: "From idea to execution",
+          text: "Git, GitHub, frontend and backend concepts, AI and ML, and collaborative ideation turn theory into practical work."
+        },
+        {
+          title: "Soft skills development",
+          text: "Communication, teamwork, leadership, problem solving, time management, and storytelling strengthen workplace confidence."
+        },
+        {
+          title: "Career readiness and professional growth",
+          text: "Resume building, LinkedIn, personal branding, mock interviews, workplace etiquette, networking, and goal setting prepare learners for opportunity."
+        }
+      ],
+      journeyLabel: "How VIDYA works",
+      journeyTitle: "A clear pathway from education to employment.",
+      journeyText:
+        "Each stage helps learners move forward with stronger skills, sharper career direction, and greater access to industry.",
+      journeySteps: [
+        {
+          title: "Mobilization",
+          text: "Reach motivated students and introduce the opportunity."
+        },
+        {
+          title: "Enrolment",
+          text: "Bring learners into a structured, supportive program."
+        },
+        {
+          title: "Training sessions",
+          text: "Build practical technology and professional skills."
+        },
+        {
+          title: "Industry exposure",
+          text: "Connect learning with real workplace expectations."
+        },
+        {
+          title: "Career counseling",
+          text: "Help learners make informed academic and career decisions."
+        },
+        {
+          title: "Placement assistance",
+          text: "Support the transition from preparation to opportunity."
+        }
+      ],
+      secondaryImage: studentSanika,
+      secondaryImageAlt: "A student building career-ready technology skills through VIDYA",
+      impactMetric: "5,000+",
+      impactLabel: "youth annual impact goal",
+      impactText: "VIDYA aims to expand access to digital literacy, emerging technologies, mentorship, and employability pathways for young people each year.",
+      callToAction: ["Bring VIDYA to your institution", "/book-a-program"],
+      metaTitle: "VIDYA | Tech Skills and Career Readiness | Floydee Future Foundation",
+      metaDescription: "VIDYA equips students and youth with software skills, career guidance, mock interviews, mentorship, and industry exposure across India."
+    }
   }
-} as const;
+};
 
 const partnerNames = [
   "Udayan Care",
@@ -180,17 +401,72 @@ const partnerNames = [
   "Vemana Institute"
 ];
 
+const programAcademicPartners: Partial<Record<keyof typeof programPages, PartnerLogo[]>> = {
+  aarohi: [
+    { name: "Orchids The International School", image: aarohiOrchids, note: "Academic partner" },
+    { name: "Harimati Girls' High Madrasah", image: aarohiHarimatiMadrasah, note: "Academic partner" },
+    { name: "De Sovrani", image: aarohiDeSovrani, note: "Academic partner" },
+    { name: "AAROHI academic partner school", image: aarohiSchoolSeal, note: "School partner" },
+    { name: "Udayan Care", image: aarohiUdayanCare, note: "Community partner" },
+    { name: "Janki Devi Memorial College", image: aarohiJankiDevi, note: "Academic partner" },
+    { name: "Help Foundation", image: aarohiHelpFoundation, note: "Community partner" },
+    { name: "Hayden Hall", image: aarohiHaydenHall, note: "Community partner" },
+    { name: "SPK Jain Futuristic Academy", image: aarohiSpkJain, note: "Academic partner" }
+  ],
+  vidya: [
+    { name: "Shah and Anchor Kutchhi Engineering College", image: vidyaShahAnchor, note: "Academic partner" },
+    { name: "Ramniranjan Jhunjhunwala College", image: vidyaRamniranjan, note: "Academic partner" },
+    { name: "SIES College of Arts, Science and Commerce", image: vidyaSies, note: "Academic partner" },
+    { name: "NG Acharya and DK Marathe College", image: vidyaNgadkm, note: "Academic partner" },
+    { name: "Government Engineering College, Siwan", image: vidyaGovernmentEngineeringSiwan, note: "Academic partner" },
+    { name: "Sitamarhi Institute of Engineering", image: vidyaSitamarhi, note: "Academic partner" },
+    { name: "SNDT Women's University", image: vidyaSndt, note: "Academic partner" },
+    { name: "Vemana Institute of Technology", image: vidyaVemana, note: "Academic partner" },
+    { name: "Jyoti Institute of Technology", image: vidyaJyoti, note: "Academic partner" },
+    { name: "Datta Meghe Institute of Technology", image: vidyaDattaMeghe, note: "Academic partner" },
+    { name: "APS College of Engineering", image: vidyaAps, note: "Academic partner" },
+    { name: "Rajiv Gandhi Institute of Technology", image: vidyaRajivGandhi, note: "Academic partner" },
+    { name: "BMN Institute of Technology", image: vidyaBmnit, note: "Academic partner" },
+    { name: "PES University", image: vidyaPes, note: "Academic partner" },
+    { name: "University of Engineering and Management, Jaipur", image: vidyaUemJaipur, note: "Academic partner" },
+    { name: "Ram-Eesh Institute of Technology", image: vidyaRamEesh, note: "Academic partner" },
+    { name: "Bharati Vidyapeeth University", image: vidyaBharatiVidyapeeth, note: "Academic partner" },
+    { name: "The Oxford College of Engineering", image: vidyaOxford, note: "Academic partner" }
+  ]
+};
+
+const corporatePartners: PartnerLogo[] = [
+  { name: "Apex Laboratories Pvt. Ltd", image: corporateApex, note: "Corporate sponsor" },
+  { name: "Emcure Pharmaceuticals", image: corporateEmcure, note: "Corporate partner" },
+  { name: "Naree Health", initials: "NH", note: "Health partner" },
+  { name: "PKG Medical College and Hospitals", image: corporatePkg, note: "Hospital partner" }
+];
+
+const presenceLocations = [
+  { name: "Jammu & Kashmir", x: "32.8%", y: "10.9%", tone: "north" },
+  { name: "Delhi", x: "37.4%", y: "29.1%", tone: "north" },
+  { name: "Lucknow", x: "43.2%", y: "35.6%", tone: "central" },
+  { name: "Patna", x: "55.8%", y: "38.3%", tone: "central" },
+  { name: "Darjeeling", x: "65.3%", y: "35.6%", tone: "east" },
+  { name: "Guwahati", x: "72.1%", y: "36.9%", tone: "east" },
+  { name: "Kolkata", x: "64.6%", y: "49.1%", tone: "east" },
+  { name: "Mumbai", x: "22.0%", y: "60.0%", tone: "west" },
+  { name: "Pune", x: "22.7%", y: "62.7%", tone: "west" },
+  { name: "Bangalore", x: "34.1%", y: "80.3%", tone: "south" },
+  { name: "Chennai", x: "39.9%", y: "83.0%", tone: "south" }
+] as const;
+
 const newsCards = [
   {
     category: "News",
     title: "Why VIDYA exists",
-    text: "Closing the Tier-2 and Tier-3 gap in product and technology careers through exposure, skills, and industry guidance.",
+    text: "Bridging the gap between learning and opportunity through future-ready skills, mentorship, career readiness, and hands-on learning experiences.",
     image: studentSanika
   },
   {
     category: "Initiative",
     title: "Menstrual health screening camp",
-    text: "A school-based awareness and screening initiative at Government Girls High School, Rajarhat reached 150 adolescent girls.",
+    text: "150+ adolescent girls from a government school in Kolkata were empowered through a health awareness and screening initiative that promoted preventive healthcare, informed decision-making, and overall well-being.",
     image: healthCamp1
   },
   {
@@ -200,6 +476,14 @@ const newsCards = [
     image: programMapping
   }
 ];
+
+const latestHeroImages = {
+  gallery: heroGalleryStudents,
+  latest: heroLatestField,
+  news: heroNewsWorkshop,
+  resources: heroResourcesScreening,
+  stories: heroAboutCorridor
+} as const;
 
 type TeamMember = {
   name: string;
@@ -813,7 +1097,7 @@ function HomePage() {
             </p>
             <div className="hero-actions">
               <a className="button button-primary" href="#donate">Donate now</a>
-              <a className="button button-secondary" href="#book">Book a program</a>
+              <a className="button button-secondary" href="#book">Collaborate With Us</a>
               <a className="button button-text" href="#stories">Explore stories</a>
             </div>
             <div className="hero-proof" aria-label="Foundation proof points">
@@ -823,7 +1107,7 @@ function HomePage() {
             </div>
           </div>
           <div className="hero-media" aria-hidden="true">
-            <img src={heroFoundation} alt="" />
+            <img src={homeHeroHealthScreening} alt="" />
             <div className="hero-card hero-card-primary">
               <strong>150+</strong>
               <span>girls reached through screening initiatives</span>
@@ -1002,7 +1286,7 @@ function HomePage() {
           </div>
           <div className="metrics">
             <article><strong>150+</strong><span>girls supported in screening initiatives</span></article>
-            <article><strong>12+</strong><span>academic and NGO partner relationships</span></article>
+            <article><strong>30+</strong><span>partner relationships: 20+ VIDYA + 10+ Naree</span></article>
             <article><strong>3</strong><span>core programs across care and opportunity</span></article>
             <article><strong>3</strong><span>named pathways: AAROHI, SAKHI, and VIDYA</span></article>
           </div>
@@ -1027,7 +1311,7 @@ function HomePage() {
           <div className="join-grid">
             <article id="volunteer"><span>Volunteer</span><h3>Give time and skills</h3><p>Support outreach, content, events, training, and program delivery.</p><a href="#contact">Sign up</a></article>
             <article id="partners"><span>Partner</span><h3>Collaborate with us</h3><p>Schools, colleges, hospitals, NGOs, and CSR teams can co-create programs.</p><a href="#contact">Partner with us</a></article>
-            <article id="book"><span>Book</span><h3>Bring a program in</h3><p>Request a health, well-being, or skill session for your community.</p><a href="#contact">Book a program</a></article>
+            <article id="book"><span>Book</span><h3>Bring a program in</h3><p>Request a health, well-being, or skill session for your community.</p><a href="#contact">Collaborate With Us</a></article>
             <article><span>Fund</span><h3>Support a campaign</h3><p>Help underwrite kits, screenings, learning materials, and workshops.</p><a href="#donate">Donate today</a></article>
           </div>
         </section>
@@ -1052,26 +1336,27 @@ function HomePage() {
                   </article>
                 ))}
               </div>
-              <a className="button button-secondary presence-cta" href="#book">Book a Program</a>
+              <a className="button button-secondary presence-cta" href="#book">Collaborate With Us</a>
             </div>
             <div className="presence-map-card">
               <div className="presence-map-visual">
                 <img src={programMapping} alt="Floydee program presence map across India" />
-                <div className="presence-pulse-layer" aria-hidden="true">
-                  <span className="pulse-point pulse-kolkata"></span>
-                  <span className="pulse-point pulse-delhi"></span>
-                  <span className="pulse-point pulse-mumbai"></span>
-                  <span className="pulse-point pulse-bangalore"></span>
-                  <span className="pulse-point pulse-lucknow"></span>
+                <div className="presence-pulse-layer" aria-label="Highlighted presence locations">
+                  {presenceLocations.map((location) => (
+                    <span
+                      aria-label={location.name}
+                      className={`pulse-point pulse-${location.tone}`}
+                      key={location.name}
+                      role="img"
+                      style={{
+                        "--marker-x": location.x,
+                        "--marker-y": location.y
+                      } as CSSProperties}
+                    >
+                      <span>{location.name}</span>
+                    </span>
+                  ))}
                 </div>
-              </div>
-              <div className="presence-locations" aria-label="Highlighted presence locations">
-                <span>Kolkata</span>
-                <span>Delhi</span>
-                <span>Patna</span>
-                <span>Lucknow</span>
-                <span>Mumbai</span>
-                <span>Bangalore</span>
               </div>
             </div>
           </div>
@@ -1094,7 +1379,7 @@ function HomePage() {
           <a className="brand" href="#top"><img className="brand-logo footer-logo" src={floydeeLogo} alt="Floydee Foundation" /></a>
           <p>Section 8 foundation working with girls, women, and youth to build health, dignity, skills, and opportunity.</p>
         </div>
-        <div><h2>Join Us</h2><a href="#donate">Donate</a><a href="#partners">Partner With Us</a><a href="#volunteer">Volunteer</a><a href="#book">Book a Program</a></div>
+        <div><h2>Join Us</h2><a href="#donate">Donate</a><a href="#partners">Partner With Us</a><a href="#volunteer">Volunteer</a><a href="#book">Collaborate With Us</a></div>
         <div><h2>Programs</h2><a href="#aarohi">AAROHI</a><a href="#sakhi">SAKHI</a><a href="#vidya">VIDYA</a><a href="#programs">Pillars of Development</a></div>
         <div><h2>Resources</h2><a href="/news">News</a><a href="/stories">Stories</a><a href="/resources">Media Centre</a><a href="#gallery">Gallery</a></div>
         <div><h2>Contact</h2><p>New Town, Kolkata-700156</p><p>+91 91477 48064</p><p>contact@floydeefoundation.org</p></div>
@@ -1111,7 +1396,7 @@ function RouteFooter() {
         <a className="brand" href="/"><img className="brand-logo footer-logo" src={floydeeLogo} alt="Floydee Foundation" /></a>
         <p>Section 8 foundation working with girls, women, and youth to build health, dignity, skills, and opportunity.</p>
       </div>
-      <div><h2>Join Us</h2><a href="/donate">Donate</a><a href="/partner-with-us">Partner With Us</a><a href="/volunteer">Volunteer</a><a href="/book-a-program">Book a Program</a></div>
+      <div><h2>Join Us</h2><a href="/donate">Donate</a><a href="/partner-with-us">Partner With Us</a><a href="/volunteer">Volunteer</a><a href="/book-a-program">Collaborate With Us</a></div>
       <div><h2>Programs</h2><a href="/programs/aarohi">AAROHI</a><a href="/programs/sakhi">SAKHI</a><a href="/programs/vidya">VIDYA</a><a href="/programs">Pillars of Development</a></div>
       <div><h2>Resources</h2><a href="/news">News</a><a href="/stories">Stories</a><a href="/resources">Media Centre</a><a href="/gallery">Gallery</a></div>
       <div><h2>Contact</h2><p>New Town, Kolkata-700156</p><p>+91 91477 48064</p><p>contact@floydeefoundation.org</p></div>
@@ -1142,6 +1427,49 @@ function PageHero({ eyebrow, title, text, image, cta }: { eyebrow: string; title
   );
 }
 
+function PartnerShowcaseSection({
+  eyebrow,
+  title,
+  text,
+  partners,
+  variant = "academic"
+}: {
+  eyebrow: string;
+  title: string;
+  text: string;
+  partners: PartnerLogo[];
+  variant?: "academic" | "corporate";
+}) {
+  const headingId = useId();
+
+  return (
+    <section className={`page-section partner-showcase partner-showcase-${variant}`} aria-labelledby={headingId}>
+      <div className="partner-showcase-heading">
+        <div>
+          <p className="section-label">{eyebrow}</p>
+          <h2 id={headingId}>{title}</h2>
+        </div>
+        <p>{text}</p>
+      </div>
+      <div className="partner-logo-grid">
+        {partners.map((partner) => (
+          <article className={`partner-logo-card${partner.image ? "" : " is-text-mark"}`} key={partner.name}>
+            <div className="partner-logo-mark">
+              {partner.image
+                ? <img src={partner.image} alt={partner.name} loading="lazy" />
+                : <span aria-hidden="true">{partner.initials}</span>}
+            </div>
+            <div className="partner-logo-copy">
+              <h3>{partner.name}</h3>
+              <p>{partner.note}</p>
+            </div>
+          </article>
+        ))}
+      </div>
+    </section>
+  );
+}
+
 function DonationPage({ path }: { path: string }) {
   const isMonthly = path === "/donate/monthly";
   const isCampaign = path === "/donate/campaigns";
@@ -1153,7 +1481,7 @@ function DonationPage({ path }: { path: string }) {
         eyebrow="Donate"
         title={isMonthly ? "Stand with access every month." : "Turn concern into access."}
         text="Support a program, named campaign, workshop, or general foundation need through a donation enquiry. The Floydee team will connect with payment and 80G receipt details."
-        image={healthCamp2}
+        image={heroDonateScreening}
       />
       <section className="page-section page-donation-layout" aria-labelledby="donation-page-title">
         <div>
@@ -1189,7 +1517,7 @@ function ProgramsOverviewPage() {
         eyebrow="What We Do"
         title="We work where health, confidence, skills, and access meet."
         text="Floydee Future Foundation designs practical, community-rooted programs that help girls, women, and youth move from potential to access."
-        image={heroFoundation}
+        image={heroProgramsGroup}
         cta={["Partner with us", "/partner-with-us"]}
       />
       <section className="page-section">
@@ -1221,39 +1549,112 @@ function ProgramsOverviewPage() {
   );
 }
 
-function ProgramDetailPage({ slug }: { slug: keyof typeof programPages }) {
+function ProgramDetailPage({ slug }: { slug: ProgramSlug }) {
   const program = programPages[slug];
+  const academicPartners = programAcademicPartners[slug];
+  const story = program.story;
 
   return (
-    <main className="page">
-      <PageHero eyebrow={program.eyebrow} title={`${program.title}: ${program.tagline}`} text={program.statement} image={program.image} cta={["Book a program", "/book-a-program"]} />
-      <section className="page-section page-two-column">
-        <div>
+    <main className={`page program-detail program-detail-${slug}`}>
+      <PageHero eyebrow={program.eyebrow} title={`${program.title}: ${program.tagline}`} text={program.statement} image={program.image} cta={["Collaborate With Us", "/book-a-program"]} />
+      <section className="page-section program-overview">
+        <div className="program-overview-lead">
           <p className="section-label">Program overview</p>
           <h2>{program.intro}</h2>
         </div>
-        <div className="page-copy-panel">
-          <h3>Problem being addressed</h3>
-          <p>{program.problem}</p>
-          <h3>Target audience</h3>
-          <p>{program.audience}</p>
+        <div className="program-overview-context">
+          <div>
+            <h3>Why this matters</h3>
+            <p>{program.problem}</p>
+          </div>
+          <div>
+            <h3>Who the program serves</h3>
+            <p>{program.audience}</p>
+          </div>
         </div>
       </section>
-      <section className="page-band">
-        <h2>Activities and interventions</h2>
-        <div className="page-grid two">
-          {program.activities.map((activity) => (
-            <article key={activity}><h3>{activity}</h3><p>Designed for practical delivery with partners, facilitators, and community-rooted follow-up.</p></article>
-          ))}
-        </div>
-      </section>
-      <section className="page-section page-cta-panel">
-        <div>
-          <p className="section-label">Impact pathway</p>
-          <h2>{program.impact}</h2>
-        </div>
-        <a className="button button-primary" href="/contact">Start a conversation</a>
-      </section>
+      {story ? (
+        <>
+          <section className="page-band program-focus" aria-labelledby={`${slug}-focus-title`}>
+            <div className="program-section-heading">
+              <div>
+                <p className="section-label">{story.focusLabel}</p>
+                <h2 id={`${slug}-focus-title`}>{story.focusTitle}</h2>
+              </div>
+              <p>{story.focusText}</p>
+            </div>
+            <div className="program-focus-list">
+              {story.focusAreas.map((area, index) => (
+                <article key={area.title}>
+                  <span aria-hidden="true">{String(index + 1).padStart(2, "0")}</span>
+                  <div>
+                    <h3>{area.title}</h3>
+                    <p>{area.text}</p>
+                  </div>
+                </article>
+              ))}
+            </div>
+          </section>
+          <section className="page-section program-journey" aria-labelledby={`${slug}-journey-title`}>
+            <div className="program-journey-media">
+              <img src={story.secondaryImage} alt={story.secondaryImageAlt} loading="lazy" />
+              <p>{story.journeyLabel}</p>
+            </div>
+            <div className="program-journey-copy">
+              <p className="section-label">{story.journeyLabel}</p>
+              <h2 id={`${slug}-journey-title`}>{story.journeyTitle}</h2>
+              <p className="program-journey-intro">{story.journeyText}</p>
+              <ol className="program-journey-steps">
+                {story.journeySteps.map((step) => (
+                  <li key={step.title}>
+                    <div>
+                      <h3>{step.title}</h3>
+                      <p>{step.text}</p>
+                    </div>
+                  </li>
+                ))}
+              </ol>
+            </div>
+          </section>
+          <section className="page-section program-impact-band">
+            <div className="program-impact-metric">
+              <strong>{story.impactMetric}</strong>
+              <span>{story.impactLabel}</span>
+            </div>
+            <div className="program-impact-copy">
+              <p className="section-label">Impact pathway</p>
+              <h2>{story.impactText}</h2>
+              <a className="button button-primary" href={story.callToAction[1]}>{story.callToAction[0]}</a>
+            </div>
+          </section>
+        </>
+      ) : (
+        <>
+          <section className="page-band">
+            <h2>Activities and interventions</h2>
+            <div className="page-grid two">
+              {program.activities.map((activity) => (
+                <article key={activity}><h3>{activity}</h3><p>Designed for practical delivery with partners, facilitators, and community-rooted follow-up.</p></article>
+              ))}
+            </div>
+          </section>
+          <section className="page-section page-cta-panel">
+            <div>
+              <p className="section-label">Impact pathway</p>
+              <h2>{program.impact}</h2>
+            </div>
+            <a className="button button-primary" href="/contact">Start a conversation</a>
+          </section>
+        </>
+      )}
+      {academicPartners ? (
+        <PartnerShowcaseSection
+          eyebrow="Academic partners"
+          title={slug === "aarohi" ? "Institutions helping AAROHI reach further." : "Institutions helping VIDYA reach further."}
+          text="Our partners open trusted spaces for practical learning, care, mentorship, and opportunity."
+          partners={academicPartners}
+        />
+      ) : null}
       <BlogArchive
         basePath={`/programs/${slug}`}
         eyebrow={`${program.title} stories`}
@@ -1271,7 +1672,7 @@ function InitiativesPage() {
         eyebrow="Initiatives"
         title="School-based awareness can become practical screening access."
         text="Floydee Future Foundation turns field partnerships into health education, screening guidance, PCOD awareness, cervical cancer education, and follow-up pathways."
-        image={healthCamp3}
+        image={heroInitiativesAchievement}
         cta={["Fund the next camp", "/donate/campaigns"]}
       />
       <section className="page-section page-story-feature">
@@ -1290,13 +1691,13 @@ function InitiativesPage() {
 function ImpactPage() {
   return (
     <main className="page">
-      <PageHero eyebrow="Impact" title="Measured in access opened, not promises made." text="Impact at Floydee is tracked through participation, partner engagement, program delivery, and the practical pathways opened for girls, women, and youth." image={programMapping} />
+      <PageHero eyebrow="Impact" title="Measured in access opened, not promises made." text="Impact at Floydee is tracked through participation, partner engagement, program delivery, and the practical pathways opened for girls, women, and youth." image={heroGalleryStudents} />
       <section className="page-section">
         <div className="page-grid four">
           <article className="metric-card"><strong>150+</strong><span>girls supported in screening initiatives</span></article>
-          <article className="metric-card"><strong>12+</strong><span>academic and NGO partner relationships</span></article>
+          <article className="metric-card"><strong>30+</strong><span>partner relationships: 20+ VIDYA + 10+ Naree</span></article>
           <article className="metric-card"><strong>3</strong><span>core programs across care and opportunity</span></article>
-          <article className="metric-card"><strong>5,000+</strong><span>youth engagement ambition for VIDYA each year</span></article>
+          <article className="metric-card"><strong>3</strong><span>named pathways: AAROHI, SAKHI, and VIDYA</span></article>
         </div>
       </section>
     </main>
@@ -1306,7 +1707,7 @@ function ImpactPage() {
 function WhereWeWorkPage() {
   return (
     <main className="page">
-      <PageHero eyebrow="Where We Work" title="Programs designed to move through institutions and communities." text="Floydee's presence grows through schools, colleges, communities, and partner networks across India." image={programMapping} cta={["Book a program", "/book-a-program"]} />
+      <PageHero eyebrow="Where We Work" title="Programs designed to move through institutions and communities." text="Floydee's presence grows through schools, colleges, communities, and partner networks across India." image={heroLatestField} cta={["Collaborate With Us", "/book-a-program"]} />
       <section className="page-section page-map-showcase">
         <img src={programMapping} alt="Floydee program presence map across India" />
         <div>
@@ -1323,19 +1724,19 @@ function JoinPage({ kind }: { kind?: "volunteer" | "partner" | "book" | "campaig
   const defaults = {
     volunteer: ["Volunteer", "Give time, skills, and care to outreach, events, training, content, and program delivery."],
     partner: ["Partner with the foundation", "Collaborate through schools, colleges, hospitals, NGOs, CSR teams, and community institutions."],
-    book: ["Book a program", "Bring AAROHI, SAKHI, or VIDYA into a school, college, community, or partner setting."],
+    book: ["Collaborate With Us", "Bring AAROHI, SAKHI, or VIDYA into a school, college, community, or partner setting."],
     campaign: ["Partner with the foundation", "Co-create a focused campaign around health access, dignity kits, learning material, or employability."]
   } as const;
   const [intent, text] = kind ? defaults[kind] : ["Partner with the foundation", "Choose the engagement pathway that matches your institution, energy, and community need."];
 
   return (
     <main className="page">
-      <PageHero eyebrow="Join Us" title="Choose the door that matches your energy." text={text} image={heroFoundation} cta={["Send enquiry", "#join-form"]} />
+      <PageHero eyebrow="Join Us" title="Choose the door that matches your energy." text={text} image={heroJoinCommunity} cta={["Send enquiry", "#join-form"]} />
       <section className="page-section">
         <div className="page-grid four">
           <article><h3>Volunteer</h3><p>Support outreach, program delivery, events, content, and community engagement.</p><a href="/volunteer">Sign up</a></article>
           <article><h3>Partner</h3><p>Work with Floydee through school, college, hospital, NGO, CSR, or institutional pathways.</p><a href="/partner-with-us">Partner with us</a></article>
-          <article><h3>Book a Program</h3><p>Request AAROHI, SAKHI, or VIDYA for your students, community, or institution.</p><a href="/book-a-program">Book now</a></article>
+          <article><h3>Collaborate With Us</h3><p>Request AAROHI, SAKHI, or VIDYA for your students, community, or institution.</p><a href="/book-a-program">Book now</a></article>
           <article><h3>Campaign</h3><p>Collaborate on targeted drives for care, awareness, dignity, and employability.</p><a href="/campaign-with-us">Campaign with us</a></article>
         </div>
       </section>
@@ -1362,7 +1763,7 @@ function LatestPage({ type }: { type: "latest" | "stories" | "news" | "resources
 
   return (
     <main className="page">
-      <PageHero eyebrow="Stories & Latest" title={titles[type]} text="Shareable proof from programs, partnerships, reports, media updates, and community moments." image={type === "gallery" ? healthCamp2 : studentSanika} />
+      <PageHero eyebrow="Stories & Latest" title={titles[type]} text="Shareable proof from programs, partnerships, reports, media updates, and community moments." image={latestHeroImages[type]} />
       {type === "gallery" ? (
         <section className="page-section page-gallery-grid">
           {[healthCamp1, healthCamp2, healthCamp3, heroFoundation, programMapping, studentSanika].map((image, index) => (
@@ -1427,7 +1828,7 @@ function AboutExperience() {
         eyebrow="Who We Are"
         title="Potential is everywhere. Access is the work."
         text="Floydee Future Foundation is a Section 8 foundation working at the intersection of education, health, well-being, and social impact."
-        image={heroFoundation}
+        image={heroAboutCorridor}
         cta={["Meet our team", "#core-team"]}
       />
 
@@ -1471,6 +1872,14 @@ function AboutExperience() {
         <TeamDirectory members={expertAdvisors} />
       </section>
 
+      <PartnerShowcaseSection
+        eyebrow="Our sponsors and corporate partners"
+        title="Organizations investing in access."
+        text="Corporate, healthcare, and institutional partners help strengthen the reach, quality, and continuity of Floydee's work."
+        partners={corporatePartners}
+        variant="corporate"
+      />
+
       <section className="page-section about-cta" aria-labelledby="about-cta-title">
         <p className="section-label">Build access with us</p>
         <h2 id="about-cta-title">Bring your expertise, institution, or community into the work.</h2>
@@ -1499,7 +1908,7 @@ function AboutPage({ view }: { view: "about" | "mission" | "history" | "leadersh
             eyebrow="Who We Are"
             title="Potential is everywhere. Access is the work."
             text="Floydee Future Foundation is a Section 8 foundation working at the intersection of education, health, well-being, and social impact."
-            image={heroFoundation}
+            image={heroMissionGroup}
             cta={["Contact us", "/contact"]}
           />
           <section className="page-section page-two-column">
@@ -1546,13 +1955,13 @@ function TrustCentrePage({ embedded = false }: { embedded?: boolean }) {
   );
 
   if (embedded) return <>{content}</>;
-  return <main className="page"><PageHero eyebrow="Trust Centre" title="Transparency builds the path for sustainable impact." text="Registration, tax, reports, policies, partners, and source notes belong in one clear place." image={programMapping} />{content}</main>;
+  return <main className="page"><PageHero eyebrow="Trust Centre" title="Transparency builds the path for sustainable impact." text="Registration, tax, reports, policies, partners, and source notes belong in one clear place." image={heroTrustAwareness} />{content}</main>;
 }
 
 function ContactPage() {
   return (
     <main className="page">
-      <PageHero eyebrow="Contact" title="Collaborate with us." text="Reach out for donations, partnerships, program bookings, volunteering, media, or general enquiries." image={healthCamp2} cta={["Send enquiry", "#contact-form"]} />
+      <PageHero eyebrow="Contact" title="Collaborate with us." text="Reach out for donations, partnerships, program bookings, volunteering, media, or general enquiries." image={heroContactCare} cta={["Send enquiry", "#contact-form"]} />
       <section className="contact-section page-contact-embed" aria-labelledby="contact-page-title">
         <div>
           <p className="section-label">Get in touch</p>
@@ -1570,7 +1979,7 @@ function ContactPage() {
 function LegalPage({ title }: { title: string }) {
   return (
     <main className="page">
-      <PageHero eyebrow="Legal and utility" title={title} text="This page supports donor confidence, accessibility, compliance, and public website navigation." image={programMapping} />
+      <PageHero eyebrow="Legal and utility" title={title} text="This page supports donor confidence, accessibility, compliance, and public website navigation." image={heroLegalFoundation} />
       <section className="page-section page-copy-panel">
         <h2>{title}</h2>
         <p>This starter page is ready for foundation-approved legal, accessibility, or policy text. It is included in Phase 1 so the public website has a complete navigation structure.</p>
@@ -1592,7 +2001,7 @@ function SitemapPage() {
 
   return (
     <main className="page">
-      <PageHero eyebrow="Sitemap" title="Floydee Future Foundation website structure." text="A public map of the Phase 1 website pages and future growth pathways." image={heroFoundation} />
+      <PageHero eyebrow="Sitemap" title="Floydee Future Foundation website structure." text="A public map of the Phase 1 website pages and future growth pathways." image={heroSitemapCommunity} />
       <section className="page-section">
         <div className="page-grid three">{groups.map(([label, links]) => <article key={label as string}><h3>{label as string}</h3>{(links as string[]).map((link) => <a href={link} key={link}>{link}</a>)}</article>)}</div>
       </section>
@@ -1603,7 +2012,7 @@ function SitemapPage() {
 function NotFoundPage() {
   return (
     <main className="page">
-      <PageHero eyebrow="Page not found" title="This page is not part of the current sitemap." text="Use the sitemap to find the current Phase 1 website pages." image={heroFoundation} cta={["View sitemap", "/sitemap"]} />
+      <PageHero eyebrow="Page not found" title="This page is not part of the current sitemap." text="Use the sitemap to find the current Phase 1 website pages." image={heroNotFoundStudent} cta={["View sitemap", "/sitemap"]} />
     </main>
   );
 }
@@ -1747,9 +2156,12 @@ export function App() {
 
   useEffect(() => {
     if (path.startsWith("/stories/")) return;
-    document.title = t("Floydee Future Foundation");
-    const description = t("Floydee Future Foundation supports girls, women, and youth through health, emotional well-being, education, and employability programs.");
+    const programSlug = path.match(/^\/programs\/(aarohi|sakhi|vidya)$/)?.[1] as ProgramSlug | undefined;
+    const programStory = programSlug ? programPages[programSlug].story : undefined;
+    document.title = t(programStory?.metaTitle ?? "Floydee Future Foundation");
+    const description = t(programStory?.metaDescription ?? "Floydee Future Foundation supports girls, women, and youth through health, emotional well-being, education, and employability programs.");
     document.querySelector('meta[name="description"]')?.setAttribute("content", description);
+    document.querySelector('meta[property="og:title"]')?.setAttribute("content", document.title);
     document.querySelector('meta[property="og:description"]')?.setAttribute("content", description);
   }, [locale, path, t]);
 
