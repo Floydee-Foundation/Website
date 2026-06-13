@@ -23,7 +23,7 @@ import healthCamp2 from "./assets/health-camp-2.webp";
 import healthCamp3 from "./assets/health-camp-3.webp";
 import studentSanika from "./assets/student-sanika.webp";
 import programMapping from "./assets/program-mapping.webp";
-import websiteAboutHero from "./assets/website-changes/about-hero.jpg";
+import websiteAboutHero from "./assets/website-changes/about-hero-left.jpg";
 import websiteProgramsHero from "./assets/website-changes/programs-hero.png";
 import websiteProgramAarohiCard from "./assets/website-changes/program-aarohi-card.jpg";
 import websiteProgramSakhiCard from "./assets/website-changes/program-sakhi-card.png";
@@ -124,6 +124,7 @@ import vidyaVemana from "./assets/partners/vidya/vemana-institute-of-technology.
 import teamDisha from "./assets/team-disha.jpg";
 import teamHimanshu from "./assets/team-himanshu.png";
 import teamIpsito from "./assets/team-ipsito.jpg";
+import teamKrishnaShah from "./assets/team-krishna-shah.jpg";
 import teamSreeparna from "./assets/team-sreeparna.jpg";
 import teamSubhodyuti from "./assets/team-subhodyuti.jpg";
 import { BlogAdminPage } from "./BlogAdminPage";
@@ -1014,18 +1015,18 @@ type TeamMember = {
 const coreTeam: TeamMember[] = [
   {
     name: "Subhodyuti Chakraborty",
-    role: "Founder Director",
+    role: "Founder and Director",
     bio: "Brings over 15 years of experience in software development and global teams, shaping product strategy and execution.",
     image: teamSubhodyuti,
-    imageAlt: "Subhodyuti Chakraborty, Founder Director",
+    imageAlt: "Subhodyuti Chakraborty, Founder and Director",
     initials: "SC"
   },
   {
     name: "Ipsito Ghosh",
-    role: "Chief Technical Officer",
+    role: "Head of Technology",
     bio: "Brings more than 20 years of software development and engineering leadership experience, supporting technical excellence and team performance.",
     image: teamIpsito,
-    imageAlt: "Ipsito Ghosh, Chief Technical Officer",
+    imageAlt: "Ipsito Ghosh, Head of Technology",
     initials: "IG"
   },
   {
@@ -1038,11 +1039,19 @@ const coreTeam: TeamMember[] = [
   },
   {
     name: "Sreeparna Roy",
-    role: "Marketing Head",
+    role: "Head of Marketing",
     bio: "Brings over 16 years of marketing experience, aligning campaigns with brand vision while strengthening performance, reach, and scalability.",
     image: teamSreeparna,
-    imageAlt: "Sreeparna Roy, Marketing Head",
+    imageAlt: "Sreeparna Roy, Head of Marketing",
     initials: "SR"
+  },
+  {
+    name: "Krishna Shah",
+    role: "Head of Finance",
+    bio: "Brings 6+ years of experience across finance operations, reporting, budgeting, and financial controls, helping strengthen governance and sustainable planning.",
+    image: teamKrishnaShah,
+    imageAlt: "Krishna Shah, Head of Finance",
+    initials: "KS"
   },
   {
     name: "Riya Banerjee",
@@ -2516,7 +2525,6 @@ function AboutExperience() {
         <div className="about-story-copy">
           <p>Floydee Future Foundation was founded with a simple belief: every young person and every woman deserves the chance to grow with dignity, skills, and opportunity.</p>
           <p>The foundation bridges the gap between potential and access through practical experiences rooted in real community needs.</p>
-          <a href="/mission">Explore our mission</a>
         </div>
       </section>
 
