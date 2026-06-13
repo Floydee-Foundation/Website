@@ -15,6 +15,8 @@
   --white: #ffffff;
   --line: #dfdfdf;
   --shadow: 0 18px 48px rgba(17, 17, 17, 0.14);
+  --page-content-max: 1272px;
+  --page-gutter: max(24px, calc((100vw - var(--page-content-max)) / 2));
   --font-display: "Oswald", "Noto Sans Devanagari", "Noto Sans Bengali", "Arial Narrow", Arial, sans-serif;
   --font-body: "Lato", "Noto Sans Devanagari", "Noto Sans Bengali", Arial, Helvetica, sans-serif;
   font-family: var(--font-body);
@@ -1388,7 +1390,7 @@ body[data-locale="bn"] .brand-title {
   height: calc(100svh - 84px);
   min-height: 0;
   overflow: hidden;
-  padding: clamp(24px, 4svh, 52px) max(24px, calc((100vw - 1272px) / 2)) clamp(64px, 9svh, 92px);
+  padding: clamp(24px, 4svh, 52px) var(--page-gutter) clamp(64px, 9svh, 92px);
   position: relative;
 }
 
@@ -1397,7 +1399,7 @@ body[data-locale="bn"] .brand-title {
   bottom: clamp(36px, 5vw, 72px);
   content: "";
   height: 10px;
-  left: max(24px, calc((100vw - 1272px) / 2));
+  left: var(--page-gutter);
   position: absolute;
   width: min(38vw, 520px);
 }
@@ -1540,11 +1542,11 @@ body[data-locale="bn"] .brand-title {
   gap: clamp(18px, 3vw, 42px);
   grid-template-columns: minmax(180px, 0.4fr) 1fr auto;
   margin: 0 auto;
-  max-width: 1272px;
+  max-width: var(--page-content-max);
   min-height: 160px;
   padding: clamp(24px, 3.4vw, 42px) !important;
   position: relative;
-  width: min(calc(100% - 48px), 1272px);
+  width: min(calc(100% - 48px), var(--page-content-max));
   z-index: 8;
 }
 
@@ -1596,9 +1598,9 @@ body[data-locale="bn"] .brand-title {
   display: grid;
   grid-template-columns: minmax(260px, 394px) 1fr;
   margin: clamp(28px, 4vw, 56px) auto 0;
-  max-width: 1272px;
+  max-width: var(--page-content-max);
   position: relative;
-  width: min(calc(100% - 48px), 1272px);
+  width: min(calc(100% - 48px), var(--page-content-max));
   z-index: 5;
 }
 
@@ -2065,7 +2067,7 @@ textarea {
 }
 
 section:not(.hero):not(.donation-band):not(.campaign-rail) {
-  padding: clamp(48px, 6vw, 88px) max(24px, calc((100vw - 1272px) / 2));
+  padding: clamp(48px, 6vw, 88px) var(--page-gutter);
 }
 
 .impact-strip {
@@ -2421,7 +2423,7 @@ section:not(.hero):not(.donation-band):not(.campaign-rail) {
   display: grid;
   gap: 0;
   grid-template-columns: 1fr 1fr;
-  margin: 0 max(24px, calc((100vw - 1272px) / 2));
+  margin: 0 var(--page-gutter);
   padding: 0 !important;
 }
 
@@ -2844,7 +2846,7 @@ section:not(.hero):not(.donation-band):not(.campaign-rail) {
   display: grid;
   gap: 24px;
   grid-template-columns: 1.5fr repeat(4, 1fr);
-  padding: clamp(40px, 6vw, 72px) max(24px, calc((100vw - 1272px) / 2)) 24px;
+  padding: clamp(40px, 6vw, 72px) var(--page-gutter) 24px;
 }
 
 .footer-logo {
@@ -2920,7 +2922,7 @@ section:not(.hero):not(.donation-band):not(.campaign-rail) {
   height: calc(100svh - 84px);
   min-height: 0;
   overflow: hidden;
-  padding: clamp(24px, 4svh, 52px) max(24px, calc((100vw - 1272px) / 2)) !important;
+  padding: clamp(24px, 4svh, 52px) var(--page-gutter) !important;
   position: relative;
 }
 
@@ -2929,7 +2931,7 @@ section:not(.hero):not(.donation-band):not(.campaign-rail) {
   bottom: clamp(32px, 4vw, 58px);
   content: "";
   height: 8px;
-  left: max(24px, calc((100vw - 1272px) / 2));
+  left: var(--page-gutter);
   position: absolute;
   width: min(34vw, 460px);
 }
@@ -3009,7 +3011,7 @@ section:not(.hero):not(.donation-band):not(.campaign-rail) {
 
 .page-section,
 .page-band {
-  padding: clamp(50px, 6vw, 90px) max(24px, calc((100vw - 1272px) / 2)) !important;
+  padding: clamp(50px, 6vw, 90px) var(--page-gutter) !important;
 }
 
 .page > .page-section:last-child,
@@ -3483,7 +3485,7 @@ section:not(.hero):not(.donation-band):not(.campaign-rail) {
 .page-story-feature {
   background: var(--ink);
   color: var(--white);
-  margin: clamp(28px, 4vw, 56px) max(24px, calc((100vw - 1272px) / 2));
+  margin: clamp(28px, 4vw, 56px) var(--page-gutter);
   padding: 0 !important;
 }
 
@@ -3513,7 +3515,7 @@ section:not(.hero):not(.donation-band):not(.campaign-rail) {
   background: var(--coral);
   content: "";
   height: 6px;
-  left: max(24px, calc((100vw - 1272px) / 2));
+  left: var(--page-gutter);
   position: absolute;
   top: 0;
   width: min(260px, 32vw);
@@ -3619,6 +3621,7 @@ section:not(.hero):not(.donation-band):not(.campaign-rail) {
 }
 
 .student-testimonials-heading {
+  inline-size: 100%;
   margin-bottom: clamp(32px, 5vw, 64px);
 }
 
@@ -3648,6 +3651,7 @@ section:not(.hero):not(.donation-band):not(.campaign-rail) {
   border: 1px solid var(--ink);
   display: grid;
   grid-template-columns: minmax(300px, 0.52fr) minmax(0, 1fr);
+  inline-size: 100%;
   margin-bottom: clamp(38px, 6vw, 72px);
   min-height: 460px;
 }
@@ -3719,13 +3723,16 @@ section:not(.hero):not(.donation-band):not(.campaign-rail) {
 .testimonial-groups {
   display: grid;
   gap: clamp(34px, 5vw, 64px);
+  grid-template-columns: minmax(0, 1fr);
+  inline-size: 100%;
 }
 
 .testimonial-group {
   border-top: 1px solid var(--ink);
   display: grid;
   gap: 24px;
-  padding-top: 22px;
+  grid-template-columns: minmax(0, 1fr);
+  padding: 22px 0 0 !important;
 }
 
 .testimonial-group-heading {
@@ -3747,6 +3754,7 @@ section:not(.hero):not(.donation-band):not(.campaign-rail) {
   display: grid;
   gap: 18px;
   grid-template-columns: repeat(3, minmax(0, 1fr));
+  inline-size: 100%;
 }
 
 .testimonial-card {
@@ -3828,7 +3836,7 @@ section:not(.hero):not(.donation-band):not(.campaign-rail) {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
-  padding: 16px max(24px, calc((100vw - 1272px) / 2));
+  padding: 16px var(--page-gutter);
   position: sticky;
   top: 84px;
   z-index: 8;
@@ -3853,11 +3861,15 @@ section:not(.hero):not(.donation-band):not(.campaign-rail) {
 .gallery-archive {
   display: grid;
   gap: clamp(62px, 8vw, 112px);
+  grid-template-columns: minmax(0, 1fr);
+  inline-size: 100%;
 }
 
 .gallery-category-block {
   display: grid;
   gap: clamp(28px, 4vw, 46px);
+  grid-template-columns: minmax(0, 1fr);
+  inline-size: 100%;
   scroll-margin-top: 160px;
 }
 
@@ -3875,6 +3887,9 @@ section:not(.hero):not(.donation-band):not(.campaign-rail) {
 .gallery-section {
   display: grid;
   gap: 22px;
+  grid-template-columns: minmax(0, 1fr);
+  inline-size: 100%;
+  padding: 0 !important;
 }
 
 .gallery-section-heading p {
@@ -3898,6 +3913,7 @@ section:not(.hero):not(.donation-band):not(.campaign-rail) {
   gap: 16px;
   grid-auto-flow: dense;
   grid-template-columns: repeat(12, minmax(0, 1fr));
+  inline-size: 100%;
 }
 
 .gallery-tile {
@@ -3982,7 +3998,7 @@ section:not(.hero):not(.donation-band):not(.campaign-rail) {
   background: var(--coral);
   content: "";
   height: 7px;
-  left: max(24px, calc((100vw - 1272px) / 2));
+  left: var(--page-gutter);
   position: absolute;
   top: 0;
   width: min(240px, 30vw);
@@ -4135,7 +4151,7 @@ section:not(.hero):not(.donation-band):not(.campaign-rail) {
 }
 
 .about-page {
-  --about-gutter: max(24px, calc((100vw - 1272px) / 2));
+  --about-gutter: var(--page-gutter);
 }
 
 .about-story {
@@ -5256,7 +5272,7 @@ section:not(.hero):not(.donation-band):not(.campaign-rail) {
 /* Stories editorial hub and reader */
 .stories-page,
 .story-article-page {
-  --story-gutter: max(24px, calc((100vw - 1272px) / 2));
+  --story-gutter: var(--page-gutter);
 }
 
 .blog-archive {
