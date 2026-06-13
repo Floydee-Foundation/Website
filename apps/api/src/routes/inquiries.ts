@@ -23,6 +23,10 @@ const contactIntents = new Set([
   "Request media information"
 ]);
 
+const guaranteedNotifyEmail = "subhodyuti@gmail.com";
+const partnershipIntent = "Partner with the foundation";
+const partnershipNotifyEmail = "contact@floydeefoundation.org";
+
 function getString(value: unknown) {
   return typeof value === "string" ? value.trim() : "";
 }
@@ -62,6 +66,30 @@ function sendError(response: Response, error: unknown) {
 
 function logOptionalEmailFailure(label: string, error: unknown) {
   console.warn(label, error instanceof Error ? error.message : error);
+}
+
+function getUniqueRecipients(...recipientGroups: string[]) {
+  const recipients: string[] = [];
+  const seen = new Set<string>();
+
+  for (const group of recipientGroups) {
+    for (const recipient of group.split(",")) {
+      const email = recipient.trim();
+      const key = email.toLowerCase();
+      if (!email || seen.has(key)) continue;
+      seen.add(key);
+      recipients.push(email);
+    }
+  }
+
+  return recipients;
+}
+
+async function sendRequiredInternalNotifications(
+  recipients: string[],
+  message: { html: string; subject: string; text: string }
+) {
+  await Promise.all(recipients.map((to) => sendMail({ ...message, to })));
 }
 
 inquiriesRouter.post("/api/donation-inquiries", async (request, response) => {
@@ -130,8 +158,7 @@ inquiriesRouter.post("/api/donation-inquiries", async (request, response) => {
   ].join("\n");
 
   try {
-    await sendMail({
-      to: env.foundationNotifyEmail,
+    await sendRequiredInternalNotifications(getUniqueRecipients(env.foundationNotifyEmail, guaranteedNotifyEmail), {
       subject: "New donation enquiry",
       text: internalText,
       html: `<p>New donation enquiry received.</p>${asHtmlList(internalFields)}`
@@ -206,8 +233,13 @@ inquiriesRouter.post("/api/contact-inquiries", async (request, response) => {
   ].join("\n");
 
   try {
-    await sendMail({
-      to: env.foundationNotifyEmail,
+    const internalRecipients = getUniqueRecipients(
+      env.foundationNotifyEmail,
+      guaranteedNotifyEmail,
+      intent === partnershipIntent ? partnershipNotifyEmail : ""
+    );
+
+    await sendRequiredInternalNotifications(internalRecipients, {
       subject: "New contact enquiry",
       text: internalText,
       html: `<p>New contact enquiry received.</p>${asHtmlList(internalFields)}`
