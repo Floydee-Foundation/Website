@@ -96,6 +96,7 @@ import aarohiHarimatiMadrasah from "./assets/partners/aarohi/aarohi-partner-02.j
 import aarohiDeSovrani from "./assets/partners/aarohi/aarohi-partner-03.jpg";
 import aarohiSchoolSeal from "./assets/partners/aarohi/aarohi-partner-04.jpg";
 import aarohiSpkJain from "./assets/partners/aarohi/aarohi-partner-09.webp";
+import aarohiSosChildrensVillage from "./assets/partners/aarohi/sos-childrens-village.png";
 import aarohiHaydenHall from "./assets/partners/aarohi/hayden-hall.png";
 import aarohiHelpFoundation from "./assets/partners/aarohi/help-foundation.png";
 import aarohiJankiDevi from "./assets/partners/aarohi/janki-devi-memorial-college.jpeg";
@@ -125,8 +126,10 @@ import teamDisha from "./assets/team-disha.jpg";
 import teamHimanshu from "./assets/team-himanshu.png";
 import teamIpsito from "./assets/team-ipsito.jpg";
 import teamKrishnaShah from "./assets/team-krishna-shah.jpg";
+import teamRiyaBanerjee from "./assets/team-riya-banerjee.png";
 import teamSreeparna from "./assets/team-sreeparna.jpg";
 import teamSubhodyuti from "./assets/team-subhodyuti.jpg";
+import teamSuparnaBiswas from "./assets/team-suparna-biswas.png";
 import { BlogAdminPage } from "./BlogAdminPage";
 import { LanguageSelector, useLocale } from "./LocaleProvider";
 import { BlogArchive, StoryArticlePage, StoriesHubPage } from "./StoriesPage";
@@ -144,6 +147,7 @@ type PartnerLogo = {
   image?: string;
   initials?: string;
   note: string;
+  largeMark?: boolean;
 };
 
 type ProgramStory = {
@@ -509,14 +513,15 @@ const partnerNames = [
 const programAcademicPartners: Partial<Record<keyof typeof programPages, PartnerLogo[]>> = {
   aarohi: [
     { name: "Orchids The International School", image: aarohiOrchids, note: "Academic partner" },
-    { name: "Harimati Girls' High Madrasah", image: aarohiHarimatiMadrasah, note: "Academic partner" },
+    { name: "Hatiara Girls' High Madrasah", image: aarohiHarimatiMadrasah, note: "Academic partner" },
     { name: "De Sovrani", image: aarohiDeSovrani, note: "Academic partner" },
-    { name: "AAROHI academic partner school", image: aarohiSchoolSeal, note: "School partner" },
+    { name: "BIDHANNAGAR GOVT. HIGH SCHOOL ", image: aarohiSchoolSeal, note: "School partner" },
     { name: "Udayan Care", image: aarohiUdayanCare, note: "Community partner" },
     { name: "Janki Devi Memorial College", image: aarohiJankiDevi, note: "Academic partner" },
     { name: "Help Foundation", image: aarohiHelpFoundation, note: "Community partner" },
     { name: "Hayden Hall", image: aarohiHaydenHall, note: "Community partner" },
-    { name: "SPK Jain Futuristic Academy", image: aarohiSpkJain, note: "Academic partner" }
+    { name: "SPK Jain Futuristic Academy", image: aarohiSpkJain, note: "Academic partner" },
+    { name: "SOS Children's Village", image: aarohiSosChildrensVillage, note: "NGO partner", largeMark: true },
   ],
   vidya: [
     { name: "Shah and Anchor Kutchhi Engineering College", image: vidyaShahAnchor, note: "Academic partner" },
@@ -531,7 +536,7 @@ const programAcademicPartners: Partial<Record<keyof typeof programPages, Partner
     { name: "Datta Meghe Institute of Technology", image: vidyaDattaMeghe, note: "Academic partner" },
     { name: "APS College of Engineering", image: vidyaAps, note: "Academic partner" },
     { name: "Rajiv Gandhi Institute of Technology", image: vidyaRajivGandhi, note: "Academic partner" },
-    { name: "BMN Institute of Technology", image: vidyaBmnit, note: "Academic partner" },
+    { name: "BNM Institute of Technology", image: vidyaBmnit, note: "Academic partner" },
     { name: "PES University", image: vidyaPes, note: "Academic partner" },
     { name: "University of Engineering and Management, Jaipur", image: vidyaUemJaipur, note: "Academic partner" },
     { name: "Ram-Eesh Institute of Technology", image: vidyaRamEesh, note: "Academic partner" },
@@ -1065,6 +1070,9 @@ const coreTeam: TeamMember[] = [
   {
     name: "Riya Banerjee",
     role: "Social Media Executive",
+    bio: "Handles social media, managing posts and content that reflect the Foundation's work and initiatives.",
+    image: teamRiyaBanerjee,
+    imageAlt: "Riya Banerjee, Social Media Executive",
     initials: "RB"
   }
 ];
@@ -1081,6 +1089,8 @@ const expertAdvisors: TeamMember[] = [
   {
     name: "Dr. Suparna Biswas",
     role: "Expert Advisor",
+    image: teamSuparnaBiswas,
+    imageAlt: "Dr. Suparna Biswas, Expert Advisor",
     initials: "SB"
   }
 ];
@@ -2031,7 +2041,7 @@ function PartnerShowcaseSection({
       </div>
       <div className="partner-logo-grid">
         {partners.map((partner) => (
-          <article className={`partner-logo-card${partner.image ? "" : " is-text-mark"}`} key={partner.name}>
+          <article className={`partner-logo-card${partner.image ? "" : " is-text-mark"}${partner.largeMark ? " is-large-mark" : ""}`} key={partner.name}>
             <div className="partner-logo-mark">
               {partner.image
                 ? <img src={partner.image} alt={partner.name} loading="lazy" />
