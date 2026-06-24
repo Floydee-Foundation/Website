@@ -1089,6 +1089,7 @@ const expertAdvisors: TeamMember[] = [
   {
     name: "Dr. Suparna Biswas",
     role: "Expert Advisor",
+    bio: "An expert in obstetrics and gynaecology, Dr. Biswas helps bridge clinical practice with menstrual health, reproductive awareness, and preventive care for girls and women.",
     image: teamSuparnaBiswas,
     imageAlt: "Dr. Suparna Biswas, Expert Advisor",
     initials: "SB"
