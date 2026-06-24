@@ -261,6 +261,17 @@ function setMeta(name: string, value: string, property = false) {
   element.content = value;
 }
 
+function setStructuredData(id: string, payload: unknown) {
+  let script = document.getElementById(id) as HTMLScriptElement | null;
+  if (!script) {
+    script = document.createElement("script");
+    script.id = id;
+    script.type = "application/ld+json";
+    document.head.appendChild(script);
+  }
+  script.textContent = JSON.stringify(payload).replace(/</g, "\\u003c");
+}
+
 function useArticleMeta(post?: BlogPost) {
   useEffect(() => {
     if (!post) return;
@@ -277,6 +288,7 @@ function useArticleMeta(post?: BlogPost) {
     document.title = title;
     canonical.href = canonicalUrl;
     setMeta("description", description);
+    setMeta("robots", "index,follow");
     setMeta("og:title", title, true);
     setMeta("og:description", description, true);
     setMeta("og:type", "article", true);
@@ -287,11 +299,21 @@ function useArticleMeta(post?: BlogPost) {
     setMeta("twitter:title", title);
     setMeta("twitter:description", description);
     setMeta("twitter:image", shareImage);
+    setStructuredData("floydee-story-breadcrumbs", {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Home", item: window.location.origin },
+        { "@type": "ListItem", position: 2, name: "Our Stories", item: `${window.location.origin}/stories` },
+        { "@type": "ListItem", position: 3, name: post.title, item: canonicalUrl }
+      ]
+    });
 
     return () => {
       canonical?.remove();
       document.title = "Floydee Future Foundation";
       setMeta("og:type", "website", true);
+      document.getElementById("floydee-story-breadcrumbs")?.remove();
     };
   }, [post]);
 }
@@ -347,7 +369,7 @@ function StoriesSkeleton() {
 export function BlogArchive({
   basePath = "/stories",
   channel,
-  eyebrow = "From the field",
+  eyebrow = "Our Stories",
   fixedProgram,
   title = "Explore every story"
 }: {
@@ -501,7 +523,7 @@ export function BlogArchive({
         <div className="stories-library-heading">
           <div>
             <p className="section-label">{eyebrow}</p>
-            <h2 id="stories-library-title">{filters.q ? `Results for “${filters.q}”` : title}</h2>
+            <h2 id="stories-library-title">{filters.q ? `Results for “${filters.q}”` : "Field stories, beneficiary journeys, and program updates"}</h2>
           </div>
           <p aria-live="polite" className="stories-result-count">{resultLabel}</p>
         </div>
@@ -541,7 +563,16 @@ export function BlogArchive({
 }
 
 export function StoriesHubPage() {
-  return <main className="page"><BlogArchive /></main>;
+  return (
+    <main className="page">
+      <section className="page-band stories-hub-hero" aria-labelledby="stories-hub-title">
+        <p className="section-label">Our Stories</p>
+        <h1 id="stories-hub-title">Our Stories</h1>
+        <p>Read beneficiary journeys, field updates, and community voices from across Floydee Future Foundation programs.</p>
+      </section>
+      <BlogArchive />
+    </main>
+  );
 }
 
 function ArticleBlock({ block }: { block: BlogContentBlock }) {

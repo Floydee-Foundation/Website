@@ -3589,6 +3589,12 @@ section:not(.hero):not(.donation-band):not(.campaign-rail) {
   max-width: 860px;
 }
 
+.page-band h1 {
+  font-size: clamp(2.2rem, 3.7vw, 4.2rem);
+  margin: 0 0 18px;
+  max-width: 860px;
+}
+
 .page-section > h2,
 .page-band > h2 {
   margin-bottom: clamp(24px, 3.4vw, 44px);
