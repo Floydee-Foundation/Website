@@ -1652,7 +1652,7 @@ function HomePage() {
             <div className="hero-actions">
               <a className="button button-primary" href="#donate">Donate now</a>
               <a className="button button-secondary" href="#book">Collaborate With Us</a>
-              <a className="button button-text" href="/stories">Explore stories</a>
+              <a className="button button-text" href="/stories">Explore Our Stories</a>
             </div>
             <div className="hero-proof" aria-label="Foundation proof points">
               <span>Section 8 foundation</span>
@@ -1686,6 +1686,18 @@ function HomePage() {
             </p>
           </div>
           <a className="button button-primary" href="#donate">Fund the next camp</a>
+        </section>
+
+        <section className="page-band" aria-labelledby="priority-pages-title">
+          <p className="section-label">Explore key pages</p>
+          <h2 id="priority-pages-title">Start with the pages that define Floydee's public story.</h2>
+          <div className="page-grid three">
+            <article><h3>Our Stories</h3><p>Read beneficiary journeys, field updates, and community voices.</p><a href="/stories">Explore Our Stories</a></article>
+            <article><h3>Programs</h3><p>See how AAROHI, SAKHI, and VIDYA move potential into access.</p><a href="/programs">Explore Programs</a></article>
+            <article><h3>Donate</h3><p>Support care, learning, and dignity through the foundation's work.</p><a href="/donate">Donate to Floydee</a></article>
+            <article><h3>About Us</h3><p>Learn how the foundation works across health, well-being, and opportunity.</p><a href="/about">About Floydee</a></article>
+            <article><h3>AAROHI</h3><p>Explore Floydee's flagship health access and awareness program.</p><a href="/programs/aarohi">Explore AAROHI</a></article>
+          </div>
         </section>
 
         <section className="donation-band" id="donate" aria-labelledby="donate-title">
@@ -1936,9 +1948,9 @@ function HomePage() {
           <SocialLinks />
         </div>
         <div><h2>Join Us</h2><a href="#donate">Donate</a><a href="#partners">Partner With Us</a><a href="#volunteer">Volunteer</a><a href="#book">Collaborate With Us</a></div>
-        <div><h2>Programs</h2><a href="#aarohi">AAROHI</a><a href="#sakhi">SAKHI</a><a href="#vidya">VIDYA</a><a href="#programs">Pillars of Development</a></div>
-        <div><h2>Resources</h2><a href="/news">News</a><a href="/stories">Stories</a><a href="/resources">Media Centre</a><a href="#gallery">Gallery</a></div>
-        <div><h2>Contact</h2><p>New Town, Kolkata-700156</p><p>+91 91477 48064</p><p>contact@floydeefoundation.org</p></div>
+        <div><h2>Programs</h2><a href="/programs">Programs</a><a href="/programs/aarohi">AAROHI</a><a href="/programs/sakhi">SAKHI</a><a href="/programs/vidya">VIDYA</a></div>
+        <div><h2>Stories</h2><a href="/stories">Our Stories</a><a href="/news">News</a><a href="/resources">Resources</a><a href="/gallery">Gallery</a></div>
+        <div><h2>About</h2><a href="/about">About Us</a><a href="/impact">Impact</a><a href="/where-we-work">Where We Work</a><p>contact@floydeefoundation.org</p></div>
         <div className="footer-bottom"><span>© 2026 Floydee Future Foundation. All rights reserved.</span><FooterLegalLinks /></div>
       </footer>
     </>
@@ -1956,9 +1968,9 @@ function RouteFooter() {
           <SocialLinks />
         </div>
         <div><h2>Join Us</h2><a href="/donate">Donate</a><a href="/partner-with-us">Partner With Us</a><a href="/volunteer">Volunteer</a><a href="/book-a-program">Collaborate With Us</a></div>
-        <div><h2>Programs</h2><a href="/programs/aarohi">AAROHI</a><a href="/programs/sakhi">SAKHI</a><a href="/programs/vidya">VIDYA</a><a href="/programs">Pillars of Development</a></div>
-        <div><h2>Resources</h2><a href="/news">News</a><a href="/stories">Stories</a><a href="/resources">Media Centre</a><a href="/gallery">Gallery</a></div>
-        <div><h2>Contact</h2><p>New Town, Kolkata-700156</p><p>+91 91477 48064</p><p>contact@floydeefoundation.org</p></div>
+        <div><h2>Programs</h2><a href="/programs">Programs</a><a href="/programs/aarohi">AAROHI</a><a href="/programs/sakhi">SAKHI</a><a href="/programs/vidya">VIDYA</a></div>
+        <div><h2>Stories</h2><a href="/stories">Our Stories</a><a href="/news">News</a><a href="/resources">Resources</a><a href="/gallery">Gallery</a></div>
+        <div><h2>About</h2><a href="/about">About Us</a><a href="/impact">Impact</a><a href="/where-we-work">Where We Work</a><p>contact@floydeefoundation.org</p></div>
         <div className="footer-bottom"><span>© 2026 Floydee Future Foundation. All rights reserved.</span><FooterLegalLinks /></div>
       </footer>
     </>
@@ -2128,7 +2140,7 @@ function DonationPage({ path }: { path: string }) {
     <main className="page route-donate">
       <PageHero
         eyebrow="Donate"
-        title={isMonthly ? "Stand with access every month." : "Turn concern into access."}
+        title={isMonthly ? "Monthly giving for lasting access." : "Donate to Floydee Future Foundation."}
         text="Support a program, named campaign, workshop, or general foundation need through a donation enquiry. The Floydee team will connect with payment and 80G receipt details."
         image={heroDonateScreening}
       />
@@ -2164,7 +2176,7 @@ function ProgramsOverviewPage() {
     <main className="page">
       <PageHero
         eyebrow="What We Do"
-        title="We work where health, confidence, skills, and access meet."
+        title="Programs that move potential into access."
         text="Floydee Future Foundation designs practical, community-rooted programs that help girls, women, and youth move from potential to access."
         image={websiteProgramsHero}
         cta={["Partner with us", "/partner-with-us"]}
@@ -2557,7 +2569,7 @@ function AboutExperience() {
     <>
       <PageHero
         eyebrow="Who We Are"
-        title="Potential is everywhere. Access is the work."
+        title="About Floydee Future Foundation."
         text="Floydee Future Foundation is a Section 8 foundation working at the intersection of education, health, well-being, and social impact."
         image={websiteAboutHero}
         cta={["Meet our team", "#core-team"]}
@@ -2636,7 +2648,7 @@ function AboutPage({ view }: { view: "about" | "mission" | "history" | "leadersh
         <>
           <PageHero
             eyebrow="Who We Are"
-            title="Potential is everywhere. Access is the work."
+            title="About Floydee Future Foundation."
             text="Floydee Future Foundation is a Section 8 foundation working at the intersection of education, health, well-being, and social impact."
             image={heroMissionGroup}
             cta={["Contact us", "/contact"]}
@@ -2888,6 +2900,40 @@ const clientPageShareImages: Record<string, string> = {
   "/where-we-work": heroLatestField
 };
 
+const clientPageMeta: Record<string, { description: string; robots?: string; title: string }> = {
+  "/about": {
+    description: "About Floydee Future Foundation and how the organization works across health, well-being, education, and social impact.",
+    title: "About Us | Floydee Future Foundation"
+  },
+  "/accessibility": {
+    description: "Floydee Future Foundation accessibility information.",
+    robots: "noindex,follow",
+    title: "Accessibility | Floydee Future Foundation"
+  },
+  "/donate": {
+    description: "Donate to support Floydee programs, campaigns, workshops, or general foundation needs.",
+    title: "Donate | Floydee Future Foundation"
+  },
+  "/programs": {
+    description: "Programs from Floydee Future Foundation across health, confidence, skills, care, and access.",
+    title: "Programs | Floydee Future Foundation"
+  },
+  "/refund-policy": {
+    description: "Floydee Future Foundation refund policy.",
+    robots: "noindex,follow",
+    title: "Refund Policy | Floydee Future Foundation"
+  },
+  "/sitemap": {
+    description: "A public map of the Floydee Future Foundation website structure.",
+    robots: "noindex,follow",
+    title: "Sitemap | Floydee Future Foundation"
+  },
+  "/stories": {
+    description: "Our Stories from beneficiary journeys, field updates, and community voices at Floydee Future Foundation.",
+    title: "Our Stories | Floydee Future Foundation"
+  }
+};
+
 function NareeAppBannerContent({ onClose }: { onClose?: () => void }) {
   return (
     <div className="naree-app-bar-inner">
@@ -2941,6 +2987,16 @@ function setDocumentMeta(name: string, value: string, property = false) {
 
 function absoluteClientUrl(value: string) {
   return new URL(value, window.location.origin).toString();
+}
+
+function setCanonicalLink(url: string) {
+  let element = document.querySelector<HTMLLinkElement>('link[rel="canonical"]');
+  if (!element) {
+    element = document.createElement("link");
+    element.rel = "canonical";
+    document.head.appendChild(element);
+  }
+  element.href = url;
 }
 
 function StickyNareeAppBar({ path }: { path: string }) {
@@ -3088,12 +3144,15 @@ export function App() {
     if (path.startsWith("/stories/")) return;
     const programSlug = path.match(/^\/programs\/(aarohi|sakhi|vidya)$/)?.[1] as ProgramSlug | undefined;
     const programStory = programSlug ? programPages[programSlug].story : undefined;
-    document.title = t(programStory?.metaTitle ?? "Floydee Future Foundation");
-    const description = t(programStory?.metaDescription ?? "Floydee Future Foundation supports girls, women, and youth through health, emotional well-being, education, and employability programs.");
     const normalizedPath = path.length > 1 ? path.replace(/\/+$/, "") : path;
+    const staticMeta = clientPageMeta[normalizedPath];
+    document.title = t(programStory?.metaTitle ?? staticMeta?.title ?? "Floydee Future Foundation");
+    const description = t(programStory?.metaDescription ?? staticMeta?.description ?? "Floydee Future Foundation supports girls, women, and youth through health, emotional well-being, education, and employability programs.");
     const shareImage = absoluteClientUrl(clientPageShareImages[normalizedPath] ?? floydeeLogo);
     const shareUrl = absoluteClientUrl(normalizedPath);
+    setCanonicalLink(shareUrl);
     setDocumentMeta("description", description);
+    setDocumentMeta("robots", staticMeta?.robots ?? "index,follow");
     setDocumentMeta("og:title", document.title, true);
     setDocumentMeta("og:description", description, true);
     setDocumentMeta("og:type", "website", true);
