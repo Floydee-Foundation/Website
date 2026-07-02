@@ -3309,8 +3309,8 @@
     "section": "site copy",
     "context": "apps/web/src/App.tsx",
     "english": "Session with SOS Children's Village",
-    "hindi": "",
-    "bengali": "",
+    "hindi": "एसओएस चिल्ड्रen's विलेज के साथ सत्र",
+    "bengali": "SOS চিলড্রেন্স ভিলেজের সাথে সেশন",
     "status": "AI draft - review",
     "translatorNotes": ""
   },
@@ -3322,8 +3322,8 @@
     "section": "site copy",
     "context": "apps/web/src/App.tsx",
     "english": "Yoga Day at SOS Children's Village",
-    "hindi": "",
-    "bengali": "",
+    "hindi": "एसओएस चिल्ड्रen's विलेज में योग दिवस सत्र",
+    "bengali": "SOS চিলড্রেন্স ভিলেজে যোগ দিবস অধিবেশন",
     "status": "AI draft - review",
     "translatorNotes": ""
   },
@@ -3335,8 +3335,8 @@
     "section": "site copy",
     "context": "apps/web/src/App.tsx",
     "english": "Yoga Day session conducted at SOS Children's Village to promote health and well-being.",
-    "hindi": "",
-    "bengali": "",
+    "hindi": "स्वास्थ्य और कल्याण को बढ़ावा देने के लिए एसओएस चिल्ड्रen's विलेज में योग दिवस सत्र आयोजित किया गया।",
+    "bengali": "সুস্বাস্থ্য ও সুস্থতার প্রচারে SOS চিলড্রেন্স ভিলেজে যোগ দিবসের অধিবেশন অনুষ্ঠিত হয়েছে।",
     "status": "AI draft - review",
     "translatorNotes": ""
   },
@@ -3348,8 +3348,8 @@
     "section": "site copy",
     "context": "apps/web/src/App.tsx",
     "english": "Yoga Day session at SOS Children's Village to promote health and well-being",
-    "hindi": "",
-    "bengali": "",
+    "hindi": "स्वास्थ्य और कल्याण को बढ़ावा देने के लिए एसओएस चिल्ड्रen's विलेज में योग दिवस सत्र",
+    "bengali": "সুস্বাস্থ্য ও সুস্থতার প্রচারে SOS চিলড্রেন্স ভিলেজে যোগ দিবসের সেশন",
     "status": "AI draft - review",
     "translatorNotes": ""
   },
