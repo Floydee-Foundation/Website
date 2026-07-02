@@ -2,7 +2,7 @@ import { createContext, ReactNode, useContext, useEffect, useMemo, useRef, useSt
 import { getCatalog, isLocale, localeLabels, Locale, translate } from "@floydee/shared";
 
 const STORAGE_KEY = "floydee-locale";
-const TRANSLATED_ATTRIBUTES = ["aria-label", "placeholder", "title"];
+const TRANSLATED_ATTRIBUTES = ["aria-label", "alt", "placeholder", "title"];
 
 type LocaleContextValue = {
   locale: Locale;
