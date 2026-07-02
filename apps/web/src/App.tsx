@@ -2595,7 +2595,7 @@ function TeamDirectory({ members, startIndex = 1 }: { members: TeamMember[]; sta
             )}
           </div>
           <div className="team-profile-identity">
-            <h3>{member.name}</h3>
+            <h3 data-i18n-preserve="true">{member.name}</h3>
             <p className="role-label">{member.role}</p>
           </div>
           <div className="team-profile-bio">
