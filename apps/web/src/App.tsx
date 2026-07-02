@@ -91,6 +91,11 @@ import gallerySpkJain3 from "./assets/gallery/spk-jain-academy-03.jpg";
 import galleryUdayanCare1 from "./assets/gallery/udayan-care-01.jpg";
 import galleryUdayanCare2 from "./assets/gallery/udayan-care-02.jpg";
 import galleryUdayanCare3 from "./assets/gallery/udayan-care-03.jpg";
+import gallerySosChildrensVillage1 from "./assets/gallery/sos-childrens-village-session-01.jpg";
+import gallerySosChildrensVillage2 from "./assets/gallery/sos-childrens-village-session-02.jpg";
+import gallerySosChildrensVillage3 from "./assets/gallery/sos-childrens-village-session-03.jpg";
+import gallerySosChildrensVillage4 from "./assets/gallery/sos-childrens-village-session-04.jpg";
+import gallerySosChildrensVillage5 from "./assets/gallery/sos-childrens-village-session-05.jpg";
 import aarohiOrchids from "./assets/partners/aarohi/aarohi-partner-01.jpeg";
 import aarohiHarimatiMadrasah from "./assets/partners/aarohi/aarohi-partner-02.jpg";
 import aarohiDeSovrani from "./assets/partners/aarohi/aarohi-partner-03.jpg";
@@ -209,6 +214,7 @@ type GalleryImage = {
 type GallerySection = {
   category: GalleryCategory;
   images: GalleryImage[];
+  layout?: "three-two";
   summary: string;
   title: string;
 };
@@ -833,6 +839,39 @@ const gallerySections: GallerySection[] = [
     ],
     summary: "Awareness and dialogue moments with Udayan Care, Kolkata.",
     title: "Session with Udayan Care, Kolkata"
+  },
+  {
+    category: "Naree Health Awareness",
+    images: [
+      {
+        alt: "Yoga Day session at SOS Children's Village to promote health and well-being",
+        caption: "Yoga Day at SOS Children's Village",
+        image: gallerySosChildrensVillage1
+      },
+      {
+        alt: "Yoga Day session at SOS Children's Village to promote health and well-being",
+        caption: "Yoga Day at SOS Children's Village",
+        image: gallerySosChildrensVillage2
+      },
+      {
+        alt: "Yoga Day session at SOS Children's Village to promote health and well-being",
+        caption: "Yoga Day at SOS Children's Village",
+        image: gallerySosChildrensVillage3
+      },
+      {
+        alt: "Yoga Day session at SOS Children's Village to promote health and well-being",
+        caption: "Yoga Day at SOS Children's Village",
+        image: gallerySosChildrensVillage4
+      },
+      {
+        alt: "Yoga Day session at SOS Children's Village to promote health and well-being",
+        caption: "Yoga Day at SOS Children's Village",
+        image: gallerySosChildrensVillage5
+      }
+    ],
+    layout: "three-two",
+    summary: "Yoga Day session conducted at SOS Children's Village to promote health and well-being.",
+    title: "Session with SOS Children's Village"
   },
   {
     category: "Cervical Cancer Awareness",
@@ -2476,9 +2515,12 @@ function GalleryPage() {
                   </div>
                   <span>{section.summary}</span>
                 </div>
-                <div className="gallery-masonry-grid">
+                <div className={`gallery-masonry-grid${section.layout === "three-two" ? " gallery-masonry-grid-three-two" : ""}`}>
                   {section.images.map((item, index) => (
-                    <figure className={`gallery-tile gallery-tile-${(index % 6) + 1}`} key={`${section.title}-${item.image}`}>
+                    <figure
+                      className={`gallery-tile${section.layout === "three-two" ? "" : ` gallery-tile-${(index % 6) + 1}`}`}
+                      key={`${section.title}-${item.image}`}
+                    >
                       <img src={item.image} alt={item.alt} loading="lazy" />
                       <figcaption>
                         <span>{section.category}</span>
