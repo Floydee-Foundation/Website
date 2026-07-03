@@ -25,6 +25,10 @@ function translateDom(root: ParentNode, locale: Locale) {
   const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
   let node = walker.nextNode();
   while (node) {
+    if (node.parentElement?.closest("[data-i18n-preserve]")) {
+      node = walker.nextNode();
+      continue;
+    }
     const text = node.textContent ?? "";
     const source = (node as Text & { __floydeeSource?: string }).__floydeeSource ?? text.trim();
     if (source && (catalog[source] || (node as Text & { __floydeeSource?: string }).__floydeeSource)) {
