@@ -3559,6 +3559,13 @@ section:not(.hero):not(.donation-band):not(.campaign-rail) {
   width: 100%;
 }
 
+.page-hero-media--contain img {
+  height: 100%;
+  object-fit: contain;
+  object-position: left center;
+  width: 100%;
+}
+
 .page-section,
 .page-band {
   padding: clamp(50px, 6vw, 90px) var(--page-gutter) !important;
@@ -3751,6 +3758,15 @@ section:not(.hero):not(.donation-band):not(.campaign-rail) {
 .program-detail .page-hero-media::before,
 .program-detail .page-hero::after {
   background: var(--program-accent);
+}
+
+.program-detail .page-band .page-grid article {
+  padding: clamp(19px, 2.7vw, 29px);
+}
+
+.program-detail .page-band .page-grid article p {
+  font-size: 1.125rem;
+  line-height: 1.52;
 }
 
 .program-overview {
@@ -5256,6 +5272,16 @@ section:not(.hero):not(.donation-band):not(.campaign-rail) {
     min-height: 0;
   }
 
+  .page-hero--contain-image {
+    grid-template-rows: auto auto;
+    height: auto;
+    min-height: calc(100svh - 84px);
+  }
+
+  .page-hero--contain-image .page-hero-media--contain {
+    min-height: clamp(320px, 88vw, 560px);
+  }
+
   .split-section {
     background:
       linear-gradient(180deg, #ffffff 0%, #ffffff 56%, var(--mint) 56%, var(--mint) 100%);
@@ -5877,6 +5903,10 @@ section:not(.hero):not(.donation-band):not(.campaign-rail) {
     grid-template-rows: auto minmax(150px, 1fr);
     padding-bottom: 18px !important;
     padding-top: 14px !important;
+  }
+
+  .page-hero--contain-image {
+    grid-template-rows: auto auto;
   }
 }
 

@@ -22,7 +22,7 @@ export const pageMeta: Record<string, StaticPageMeta> = {
   "/programs": {
     asset: "src/assets/website-changes/programs-hero.png",
     description: "Programs from Floydee Future Foundation across health, confidence, skills, care, and access.",
-    title: "Programs | Floydee Future Foundation"
+    title: "Our Programs | Floydee Future Foundation"
   },
   "/programs/aarohi": {
     asset: "src/assets/website-changes/aarohi-hero.jpg",
@@ -227,7 +227,7 @@ export function breadcrumbName(pathname: string) {
     "/leadership": "Leadership",
     "/mission": "Mission",
     "/news": "News",
-    "/programs": "Programs",
+    "/programs": "Our Programs",
     "/programs/aarohi": "AAROHI",
     "/programs/sakhi": "SAKHI",
     "/programs/vidya": "VIDYA",
