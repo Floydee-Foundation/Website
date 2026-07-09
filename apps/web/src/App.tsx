@@ -9,8 +9,8 @@ import heroContactCare from "./assets/hero-contact-care.webp";
 import heroDonateScreening from "./assets/hero-donate-screening.webp";
 import heroGalleryStudents from "./assets/hero-gallery-students.webp";
 import heroInitiativesAchievement from "./assets/hero-initiatives-achievement.webp";
-import heroJoinCommunity from "./assets/hero-join-community.webp";
-import heroLatestField from "./assets/hero-latest-field.webp";
+import heroJoinCommunity from "./assets/hero-join-community.png";
+import heroLatestField from "./assets/hero-latest-field.png";
 import heroLegalFoundation from "./assets/hero-legal-foundation.webp";
 import heroMissionGroup from "./assets/hero-mission-group.webp";
 import heroNewsWorkshop from "./assets/hero-news-workshop.webp";
@@ -190,10 +190,34 @@ type ProgramPage = {
   intro: string;
   problem: string;
   audience: string;
-  activities: readonly string[];
+  activities: readonly ProgramActivityItem[];
   impact: string;
   story?: ProgramStory;
 };
+
+type ProgramActivityItem = string | { title: string; text: string };
+
+function resolveProgramActivity(activity: ProgramActivityItem): { title: string; text: string } {
+  if (typeof activity === "object") {
+    return activity;
+  }
+
+  const colonMatch = activity.match(/^([^:]+):\s*(.+)$/);
+  if (colonMatch) {
+    return { title: colonMatch[1].trim(), text: colonMatch[2].trim() };
+  }
+
+  const hyphenMatch = activity.match(/^([^-]+)-(.+)$/);
+  if (hyphenMatch) {
+    return { title: hyphenMatch[1].trim(), text: hyphenMatch[2].trim() };
+  }
+
+  return { title: activity, text: "" };
+}
+
+function formatActivityTitle(title: string) {
+  return title.endsWith(":") ? title : `${title}:`;
+}
 
 type ProgramSlug = "aarohi" | "sakhi" | "vidya";
 type TestimonialCategory = "VIDYA" | "AAROHI" | "HEALTH SCREENING CAMP";
@@ -414,10 +438,22 @@ const programPages: Record<ProgramSlug, ProgramPage> = {
       "Adolescents and women today face increasing emotional pressures arising from academic stress, social expectations, family challenges, workplace demands, digital exposure, and changing life circumstances. Despite these challenges, emotional well-being remains one of the most neglected areas of health. SAKHI creates safe and supportive spaces where individuals can learn, express themselves, seek guidance, and build resilience for healthier and happier lives.",
     audience: "Adolescent Girls, Women, Young adults, Teachers, Parents, and Community groups ",
     activities: [
-      "Emotional Well-being: Understanding emotions, self-awareness, emotional regulation.",
-      "Resilience Building-Developing coping skills and adaptability.",
-      "Life Skills & Self-Esteem: Confidence building, decision-making, communication.",
-      "Mental Health Literacy: Reducing stigma and promoting help-seeking behaviour."
+      {
+        title: "Emotional Well-being",
+        text: "Understanding emotions, self-awareness, emotional regulation."
+      },
+      {
+        title: "Resilience Building",
+        text: "Developing coping skills and adaptability."
+      },
+      {
+        title: "Life Skills & Self-Esteem",
+        text: "Confidence building, decision-making, communication."
+      },
+      {
+        title: "Mental Health Literacy",
+        text: "Reducing stigma and promoting help-seeking behaviour."
+      }
     ],
     impact: "Building emotionally safe, resilient, and empowered adolescents and women through well-being education, life skills, support systems, and resilience-building interventions"
   },
@@ -1988,7 +2024,7 @@ function HomePage() {
           <SocialLinks />
         </div>
         <div><h2>Join Us</h2><a href="#donate">Donate</a><a href="#partners">Partner With Us</a><a href="#volunteer">Volunteer</a><a href="#book">Collaborate With Us</a></div>
-        <div><h2>Programs</h2><a href="/programs">Programs</a><a href="/programs/aarohi">AAROHI</a><a href="/programs/sakhi">SAKHI</a><a href="/programs/vidya">VIDYA</a></div>
+        <div><h2>Programs</h2><a href="/programs">Our Programs</a><a href="/programs/aarohi">AAROHI</a><a href="/programs/sakhi">SAKHI</a><a href="/programs/vidya">VIDYA</a></div>
         <div><h2>Stories</h2><a href="/stories">Our Stories</a><a href="/news">News</a><a href="/resources">Resources</a><a href="/gallery">Gallery</a></div>
         <div><h2>About</h2><a href="/about">About Us</a><a href="/impact">Impact</a><a href="/where-we-work">Where We Work</a><p>contact@floydeefoundation.org</p></div>
         <div className="footer-bottom"><span>© 2026 Floydee Future Foundation. All rights reserved.</span><FooterLegalLinks /></div>
@@ -2008,7 +2044,7 @@ function RouteFooter() {
           <SocialLinks />
         </div>
         <div><h2>Join Us</h2><a href="/donate">Donate</a><a href="/partner-with-us">Partner With Us</a><a href="/volunteer">Volunteer</a><a href="/book-a-program">Collaborate With Us</a></div>
-        <div><h2>Programs</h2><a href="/programs">Programs</a><a href="/programs/aarohi">AAROHI</a><a href="/programs/sakhi">SAKHI</a><a href="/programs/vidya">VIDYA</a></div>
+        <div><h2>Programs</h2><a href="/programs">Our Programs</a><a href="/programs/aarohi">AAROHI</a><a href="/programs/sakhi">SAKHI</a><a href="/programs/vidya">VIDYA</a></div>
         <div><h2>Stories</h2><a href="/stories">Our Stories</a><a href="/news">News</a><a href="/resources">Resources</a><a href="/gallery">Gallery</a></div>
         <div><h2>About</h2><a href="/about">About Us</a><a href="/impact">Impact</a><a href="/where-we-work">Where We Work</a><p>contact@floydeefoundation.org</p></div>
         <div className="footer-bottom"><span>© 2026 Floydee Future Foundation. All rights reserved.</span><FooterLegalLinks /></div>
@@ -2045,7 +2081,7 @@ function SocialLinks() {
   );
 }
 
-function PageHero({ eyebrow, title, text, image, cta }: { eyebrow: string; title: string; text: string; image: string; cta?: [string, string] }) {
+function PageHero({ eyebrow, title, text, image, cta, imageFit = "cover" }: { eyebrow: string; title: string; text: string; image: string; cta?: [string, string]; imageFit?: "cover" | "contain" }) {
   const titleClassName = [
     "page-hero-title",
     title.length > 30 ? "is-long" : "",
@@ -2053,14 +2089,14 @@ function PageHero({ eyebrow, title, text, image, cta }: { eyebrow: string; title
   ].filter(Boolean).join(" ");
 
   return (
-    <section className="page-hero" aria-labelledby="page-title">
+    <section className={imageFit === "contain" ? "page-hero page-hero--contain-image" : "page-hero"} aria-labelledby="page-title">
       <div className="page-hero-copy">
         <p className="section-label">{eyebrow}</p>
         <h1 className={titleClassName} id="page-title">{title}</h1>
         <p>{text}</p>
         {cta ? <a className="button button-primary" href={cta[1]}>{cta[0]}</a> : null}
       </div>
-      <div className="page-hero-media">
+      <div className={imageFit === "contain" ? "page-hero-media page-hero-media--contain" : "page-hero-media"}>
         <img src={image} alt="" />
       </div>
     </section>
@@ -2335,9 +2371,15 @@ function ProgramDetailPage({ slug }: { slug: ProgramSlug }) {
           <section className="page-band">
             <h2>Activities and interventions</h2>
             <div className="page-grid two">
-              {program.activities.map((activity) => (
-                <article key={activity}><h3>{activity}</h3><p>Designed for practical delivery with partners, facilitators, and community-rooted follow-up.</p></article>
-              ))}
+              {program.activities.map((activity) => {
+                const { title, text } = resolveProgramActivity(activity);
+                return (
+                  <article key={`${title}-${text}`}>
+                    <h3>{formatActivityTitle(title)}</h3>
+                    {text ? <p>{text}</p> : null}
+                  </article>
+                );
+              })}
             </div>
           </section>
           <section className="page-section page-cta-panel">
@@ -2393,7 +2435,7 @@ function InitiativesPage() {
 function ImpactPage() {
   return (
     <main className="page">
-      <PageHero eyebrow="Impact" title="Measured in access opened, not promises made." text="Impact at Floydee is tracked through participation, partner engagement, program delivery, and the practical pathways opened for girls, women, and youth." image={websiteImpactHero} />
+      <PageHero eyebrow="Impact" title="Measured in access opened, not promises made." text="Impact at Floydee is tracked through participation, partner engagement, program delivery, and the practical pathways opened for girls, women, and youth." image={websiteImpactHero} imageFit="contain" />
       <section className="page-section">
         <div className="page-grid four">
           <article className="metric-card"><strong>150+</strong><span>girls supported in screening initiatives</span></article>
@@ -2409,7 +2451,7 @@ function ImpactPage() {
 function WhereWeWorkPage() {
   return (
     <main className="page">
-      <PageHero eyebrow="Where We Work" title="Programs designed to move through institutions and communities." text="Floydee's presence grows through schools, colleges, communities, and partner networks across India." image={heroLatestField} cta={["Collaborate With Us", "/book-a-program"]} />
+      <PageHero eyebrow="Where We Work" title="Programs designed to move through institutions and communities." text="Floydee's presence grows through schools, colleges, communities, and partner networks across India." image={heroLatestField} cta={["Collaborate With Us", "/book-a-program"]} imageFit="contain" />
       <section className="page-section page-map-showcase">
         <img src={programMapping} alt="Floydee program presence map across India" />
         <div>
@@ -2433,7 +2475,7 @@ function JoinPage({ kind }: { kind?: "volunteer" | "partner" | "book" | "campaig
 
   return (
     <main className="page">
-      <PageHero eyebrow="Join Us" title="Choose the door that matches your energy." text={text} image={heroJoinCommunity} cta={["Send enquiry", "#join-form"]} />
+      <PageHero eyebrow="Join Us" title="Choose the door that matches your energy." text={text} image={heroJoinCommunity} cta={["Send enquiry", "#join-form"]} imageFit="contain" />
       <section className="page-section">
         <div className="page-grid four">
           <article><h3>Volunteer</h3><p>Support outreach, program delivery, events, content, and community engagement.</p><a href="/volunteer">Sign up</a></article>
