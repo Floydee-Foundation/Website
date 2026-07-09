@@ -564,7 +564,7 @@ export function BlogArchive({
 
 export function StoriesHubPage() {
   return (
-    <main className="page">
+    <main className="page stories-hub-page">
       <section className="page-band stories-hub-hero" aria-labelledby="stories-hub-title">
         <p className="section-label">Our Stories</p>
         <h1 id="stories-hub-title">Our Stories</h1>
@@ -679,20 +679,18 @@ export function StoryArticlePage({ slug }: { slug: string }) {
       {message ? <div className="stories-connectivity story-article-notice">{message}</div> : null}
       <article>
         <header className={`story-article-hero${post.heroImage?.url ? "" : " story-article-hero-text"}`}>
-          <div className="story-article-heading">
-            <a className="story-back-link" href="/stories">← All stories</a>
-            <p className="story-meta">{postMeta(post, categories)}</p>
-            <h1>{post.title}</h1>
-            <p className="story-article-excerpt">{post.excerpt}</p>
-            <div className="story-byline">
-              <strong>{post.author || "Floydee Team"}</strong>
-              {post.location ? <span>Location: {post.location}</span> : null}
-              {post.eventDate ? <span>Event: {formatDate(post.eventDate)}</span> : null}
-              <span>Published: {formatDate(post.publishedAt)}</span>
-              <span>{readingTime(post)} min read</span>
-            </div>
+          <a className="story-back-link" href="/stories">← All stories</a>
+          <p className="story-meta">{postMeta(post, categories)}</p>
+          <h1>{post.title}</h1>
+          {post.heroImage?.url ? <figure className="story-article-hero-media"><StoryImage eager media={post.heroImage} sizes="(max-width: 1080px) 100vw, 50vw" />{post.heroImage.caption ? <figcaption>{post.heroImage.caption}</figcaption> : null}</figure> : <div className="story-article-program">{programLabels[post.programAssociation]}</div>}
+          <p className="story-article-excerpt">{post.excerpt}</p>
+          <div className="story-byline">
+            <strong>{post.author || "Floydee Team"}</strong>
+            {post.location ? <span>Location: {post.location}</span> : null}
+            {post.eventDate ? <span>Event: {formatDate(post.eventDate)}</span> : null}
+            <span>Published: {formatDate(post.publishedAt)}</span>
+            <span>{readingTime(post)} min read</span>
           </div>
-          {post.heroImage?.url ? <figure><StoryImage eager media={post.heroImage} sizes="(max-width: 1080px) 100vw, 50vw" />{post.heroImage.caption ? <figcaption>{post.heroImage.caption}</figcaption> : null}</figure> : <div className="story-article-program">{programLabels[post.programAssociation]}</div>}
         </header>
 
         <div className="story-article-layout">
