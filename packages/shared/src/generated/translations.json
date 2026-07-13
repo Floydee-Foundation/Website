@@ -1053,7 +1053,17 @@
     "About Us": "हमारे बारे में",
     "About": "परिचय",
     "Field stories, beneficiary journeys, and program updates": "क्षेत्र की कहानियाँ, लाभार्थी यात्राएँ और कार्यक्रम अपडेट",
-    "Programs that move potential into access.": "कार्यक्रम जो क्षमता को पहुँच में बदलते हैं।"
+    "Programs that move potential into access.": "कार्यक्रम जो क्षमता को पहुँच में बदलते हैं।",
+    "Sakhi Program": "सखी कार्यक्रम",
+    "Sakhi Launch Program at Govt School": "सरकारी स्कूल में सखी लॉन्च कार्यक्रम",
+    "Sakhi Program launched at a government school to support adolescent girls’ health and well-being.": "किशोरियों के स्वास्थ्य और कल्याण के समर्थन के लिए एक सरकारी स्कूल में सखी कार्यक्रम लॉन्च किया गया।",
+    "Sakhi- Emotional well-being program": "सखी- भावनात्मक कल्याण कार्यक्रम",
+    "Sakhi emotional well-being program at a government school": "सरकारी स्कूल में सखी भावनात्मक कल्याण कार्यक्रम",
+    "Moments from Sakhi Program": "सखी कार्यक्रम के क्षण",
+    "HPV vaccine Awareness in Hatiara Girls’ High Madrasa": "हटियारा गर्ल्स हाई मदरसा में एचपीवी टीका जागरूकता",
+    "HPV Vaccine Parent Awareness session with Hatiara Girls’ High Madrasa": "हटियारा गर्ल्स हाई मदरसा के साथ एचपीवी टीका अभिभावक जागरूकता सत्र",
+    "HPV vaccine Parent Awareness Session": "एचपीवी टीका अभिभावक जागरूकता सत्र",
+    "HPV vaccine parent awareness session with Hatiara Girls' High Madrasa": "हटियारा गर्ल्स हाई मदरसा के साथ एचपीवी टीका अभिभावक जागरूकता सत्र"
   },
   "bn": {
     "@floydee/shared": "@floydee/শেয়ার করা হয়েছে",
@@ -2109,6 +2119,16 @@
     "About Us": "আমাদের সম্পর্কে",
     "About": "পরিচিতি",
     "Field stories, beneficiary journeys, and program updates": "মাঠের গল্প, উপকারভোগীর যাত্রা এবং প্রোগ্রাম আপডেট",
-    "Programs that move potential into access.": "প্রোগ্রাম যা সম্ভাবনাকে অ্যাক্সেসে পরিণত করে।"
+    "Programs that move potential into access.": "প্রোগ্রাম যা সম্ভাবনাকে অ্যাক্সেসে পরিণত করে।",
+    "Sakhi Program": "সখী প্রোগ্রাম",
+    "Sakhi Launch Program at Govt School": "সরকারি স্কুলে সখী লঞ্চ প্রোগ্রাম",
+    "Sakhi Program launched at a government school to support adolescent girls’ health and well-being.": "কিশোরীদের স্বাস্থ্য ও সুস্থতা সহায়তার জন্য একটি সরকারি স্কুলে সখী প্রোগ্রাম চালু হয়েছে।",
+    "Sakhi- Emotional well-being program": "সখী- মানসিক সুস্থতা প্রোগ্রাম",
+    "Sakhi emotional well-being program at a government school": "সরকারি স্কুলে সখী মানসিক সুস্থতা প্রোগ্রাম",
+    "Moments from Sakhi Program": "সখী প্রোগ্রামের মুহূর্ত",
+    "HPV vaccine Awareness in Hatiara Girls’ High Madrasa": "হাতিয়ারা বালিকা উচ্চ মাদ্রাসায় এইচপিভি টিকা সচেতনতা",
+    "HPV Vaccine Parent Awareness session with Hatiara Girls’ High Madrasa": "হাতিয়ারা বালিকা উচ্চ মাদ্রাসার সাথে এইচপিভি টিকা অভিভাবক সচেতনতা সেশন",
+    "HPV vaccine Parent Awareness Session": "এইচপিভি টিকা অভিভাবক সচেতনতা সেশন",
+    "HPV vaccine parent awareness session with Hatiara Girls' High Madrasa": "হাতিয়ারা বালিকা উচ্চ মাদ্রাসার সাথে এইচপিভি টিকা অভিভাবক সচেতনতা সেশন"
   }
 }
