@@ -67,9 +67,6 @@ import galleryCohort1Bidhannagar2 from "./assets/gallery/cohort-1-bidhannagar-02
 import galleryCohort1Bidhannagar3 from "./assets/gallery/cohort-1-bidhannagar-03.jpg";
 import galleryCohort2Bidhannagar1 from "./assets/gallery/cohort-2-bidhannagar-01.jpg";
 import galleryCohort2Bidhannagar2 from "./assets/gallery/cohort-2-bidhannagar-02.jpg";
-import galleryHatiara1 from "./assets/gallery/hatiara-madrasa-01.jpg";
-import galleryHatiara2 from "./assets/gallery/hatiara-madrasa-02.jpg";
-import galleryHatiara3 from "./assets/gallery/hatiara-madrasa-03.jpg";
 import galleryHaydenHall1 from "./assets/gallery/hayden-hall-01.jpg";
 import galleryHaydenHall2 from "./assets/gallery/hayden-hall-02.jpg";
 import galleryHaydenHall3 from "./assets/gallery/hayden-hall-03.jpg";
@@ -96,6 +93,14 @@ import gallerySosChildrensVillage2 from "./assets/gallery/sos-childrens-village-
 import gallerySosChildrensVillage3 from "./assets/gallery/sos-childrens-village-session-03.jpg";
 import gallerySosChildrensVillage4 from "./assets/gallery/sos-childrens-village-session-04.jpg";
 import gallerySosChildrensVillage5 from "./assets/gallery/sos-childrens-village-session-05.jpg";
+import galleryTapForSakhi1 from "./assets/gallery/tap-for-sakhi-01.png";
+import galleryTapForSakhi2 from "./assets/gallery/tap-for-sakhi-02.png";
+import galleryTapForSakhi3 from "./assets/gallery/tap-for-sakhi-03.png";
+import galleryTapForSakhi4 from "./assets/gallery/tap-for-sakhi-04.png";
+import galleryHatiaraHpv1 from "./assets/gallery/hatiara-hpv-parent-awareness-01.png";
+import galleryHatiaraHpv2 from "./assets/gallery/hatiara-hpv-parent-awareness-02.png";
+import galleryHatiaraHpv3 from "./assets/gallery/hatiara-hpv-parent-awareness-03.png";
+import galleryHatiaraHpv4 from "./assets/gallery/hatiara-hpv-parent-awareness-04.png";
 import aarohiOrchids from "./assets/partners/aarohi/aarohi-partner-01.jpeg";
 import aarohiHarimatiMadrasah from "./assets/partners/aarohi/aarohi-partner-02.jpg";
 import aarohiDeSovrani from "./assets/partners/aarohi/aarohi-partner-03.jpg";
@@ -229,7 +234,7 @@ type StudentTestimonial = {
   program: string;
   quote: string;
 };
-type GalleryCategory = "Naree Health Awareness" | "Cervical Cancer Awareness" | "Health Screening Camp";
+type GalleryCategory = "Sakhi Program" | "Naree Health Awareness" | "Cervical Cancer Awareness" | "Health Screening Camp";
 type GalleryImage = {
   alt: string;
   caption: string;
@@ -807,74 +812,58 @@ const studentTestimonials: StudentTestimonial[] = [
 
 const gallerySections: GallerySection[] = [
   {
-    category: "Naree Health Awareness",
+    category: "Sakhi Program",
     images: [
-      { alt: "Session with Help Foundation", caption: "Help Foundation awareness session", image: galleryHelpFoundation1 },
-      { alt: "Session with Help Foundation", caption: "Help Foundation awareness session", image: galleryHelpFoundation2 },
-      { alt: "Session with Help Foundation", caption: "Help Foundation awareness session", image: galleryHelpFoundation3 }
+      {
+        alt: "Sakhi emotional well-being program at a government school",
+        caption: "Sakhi- Emotional well-being program",
+        image: galleryTapForSakhi1
+      },
+      {
+        alt: "Sakhi emotional well-being program at a government school",
+        caption: "Sakhi- Emotional well-being program",
+        image: galleryTapForSakhi2
+      },
+      {
+        alt: "Sakhi emotional well-being program at a government school",
+        caption: "Sakhi- Emotional well-being program",
+        image: galleryTapForSakhi3
+      },
+      {
+        alt: "Sakhi emotional well-being program at a government school",
+        caption: "Sakhi- Emotional well-being program",
+        image: galleryTapForSakhi4
+      }
     ],
-    summary: "Community health awareness moments with Help Foundation.",
-    title: "Session with Help Foundation"
+    summary: "Sakhi Program launched at a government school to support adolescent girls’ health and well-being.",
+    title: "Sakhi Launch Program at Govt School"
   },
   {
     category: "Naree Health Awareness",
     images: [
-      { alt: "Session with SPK Jain Academy", caption: "SPK Jain Academy awareness session", image: gallerySpkJain1 },
-      { alt: "Session with SPK Jain Academy", caption: "SPK Jain Academy awareness session", image: gallerySpkJain2 },
-      { alt: "Session with SPK Jain Academy", caption: "SPK Jain Academy awareness session", image: gallerySpkJain3 }
+      {
+        alt: "HPV vaccine parent awareness session with Hatiara Girls' High Madrasa",
+        caption: "HPV vaccine Parent Awareness Session",
+        image: galleryHatiaraHpv1
+      },
+      {
+        alt: "HPV vaccine parent awareness session with Hatiara Girls' High Madrasa",
+        caption: "HPV vaccine Parent Awareness Session",
+        image: galleryHatiaraHpv2
+      },
+      {
+        alt: "HPV vaccine parent awareness session with Hatiara Girls' High Madrasa",
+        caption: "HPV vaccine Parent Awareness Session",
+        image: galleryHatiaraHpv3
+      },
+      {
+        alt: "HPV vaccine parent awareness session with Hatiara Girls' High Madrasa",
+        caption: "HPV vaccine Parent Awareness Session",
+        image: galleryHatiaraHpv4
+      }
     ],
-    summary: "Student-facing health conversations with SPK Jain Academy.",
-    title: "Session with SPK Jain Academy"
-  },
-  {
-    category: "Naree Health Awareness",
-    images: [
-      { alt: "Session with JDMC under DU", caption: "JDMC under DU awareness session", image: galleryJdmc1 },
-      { alt: "Session with JDMC under DU", caption: "JDMC under DU awareness session", image: galleryJdmc2 },
-      { alt: "Session with JDMC under DU", caption: "JDMC under DU awareness session", image: galleryJdmc3 }
-    ],
-    summary: "College health awareness session with Janki Devi Memorial College under DU.",
-    title: "Session with JDMC under DU"
-  },
-  {
-    category: "Naree Health Awareness",
-    images: [
-      { alt: "Session with Hayden Hall", caption: "Hayden Hall awareness session", image: galleryHaydenHall1 },
-      { alt: "Session with Hayden Hall", caption: "Hayden Hall awareness session", image: galleryHaydenHall2 },
-      { alt: "Session with Hayden Hall", caption: "Hayden Hall awareness session", image: galleryHaydenHall3 }
-    ],
-    summary: "Community session moments with Hayden Hall.",
-    title: "Session with Hayden Hall"
-  },
-  {
-    category: "Naree Health Awareness",
-    images: [
-      { alt: "Session with Hatiara Girls' High Madrasa", caption: "Hatiara Girls' High Madrasa awareness session", image: galleryHatiara1 },
-      { alt: "Session with Hatiara Girls' High Madrasa", caption: "Hatiara Girls' High Madrasa awareness session", image: galleryHatiara2 },
-      { alt: "Session with Hatiara Girls' High Madrasa", caption: "Hatiara Girls' High Madrasa awareness session", image: galleryHatiara3 }
-    ],
-    summary: "School-based health awareness with Hatiara Girls' High Madrasa.",
-    title: "Session with Hatiara Girls' High Madrasa"
-  },
-  {
-    category: "Naree Health Awareness",
-    images: [
-      { alt: "Session with Bidhannagar Govt High School", caption: "Bidhannagar Govt High School awareness session", image: galleryBidhannagar1 },
-      { alt: "Session with Bidhannagar Govt High School", caption: "Bidhannagar Govt High School awareness session", image: galleryBidhannagar2 },
-      { alt: "Session with Bidhannagar Govt High School", caption: "Bidhannagar Govt High School awareness session", image: galleryBidhannagar3 }
-    ],
-    summary: "Awareness session moments with Bidhannagar Govt High School.",
-    title: "Session with Bidhannagar Govt High School"
-  },
-  {
-    category: "Naree Health Awareness",
-    images: [
-      { alt: "Session with Udayan Care, Kolkata", caption: "Udayan Care Kolkata awareness session", image: galleryUdayanCare1 },
-      { alt: "Session with Udayan Care, Kolkata", caption: "Udayan Care Kolkata awareness session", image: galleryUdayanCare2 },
-      { alt: "Session with Udayan Care, Kolkata", caption: "Udayan Care Kolkata awareness session", image: galleryUdayanCare3 }
-    ],
-    summary: "Awareness and dialogue moments with Udayan Care, Kolkata.",
-    title: "Session with Udayan Care, Kolkata"
+    summary: "HPV Vaccine Parent Awareness session with Hatiara Girls’ High Madrasa",
+    title: "Session with Hatiara Girls’ High Madrasa"
   },
   {
     category: "Naree Health Awareness",
@@ -908,6 +897,66 @@ const gallerySections: GallerySection[] = [
     layout: "three-two",
     summary: "Yoga Day session conducted at SOS Children's Village to promote health and well-being.",
     title: "Session with SOS Children's Village"
+  },
+  {
+    category: "Naree Health Awareness",
+    images: [
+      { alt: "Session with Udayan Care, Kolkata", caption: "Udayan Care Kolkata awareness session", image: galleryUdayanCare1 },
+      { alt: "Session with Udayan Care, Kolkata", caption: "Udayan Care Kolkata awareness session", image: galleryUdayanCare2 },
+      { alt: "Session with Udayan Care, Kolkata", caption: "Udayan Care Kolkata awareness session", image: galleryUdayanCare3 }
+    ],
+    summary: "Awareness and dialogue moments with Udayan Care, Kolkata.",
+    title: "Session with Udayan Care, Kolkata"
+  },
+  {
+    category: "Naree Health Awareness",
+    images: [
+      { alt: "Session with Bidhannagar Govt High School", caption: "Bidhannagar Govt High School awareness session", image: galleryBidhannagar1 },
+      { alt: "Session with Bidhannagar Govt High School", caption: "Bidhannagar Govt High School awareness session", image: galleryBidhannagar2 },
+      { alt: "Session with Bidhannagar Govt High School", caption: "Bidhannagar Govt High School awareness session", image: galleryBidhannagar3 }
+    ],
+    summary: "Awareness session moments with Bidhannagar Govt High School.",
+    title: "Session with Bidhannagar Govt High School"
+  },
+  {
+    category: "Naree Health Awareness",
+    images: [
+      { alt: "Session with Hayden Hall", caption: "Hayden Hall awareness session", image: galleryHaydenHall1 },
+      { alt: "Session with Hayden Hall", caption: "Hayden Hall awareness session", image: galleryHaydenHall2 },
+      { alt: "Session with Hayden Hall", caption: "Hayden Hall awareness session", image: galleryHaydenHall3 }
+    ],
+    summary: "Community session moments with Hayden Hall.",
+    title: "Session with Hayden Hall"
+  },
+  {
+    category: "Naree Health Awareness",
+    images: [
+      { alt: "Session with JDMC under DU", caption: "JDMC under DU awareness session", image: galleryJdmc1 },
+      { alt: "Session with JDMC under DU", caption: "JDMC under DU awareness session", image: galleryJdmc2 },
+      { alt: "Session with JDMC under DU", caption: "JDMC under DU awareness session", image: galleryJdmc3 }
+    ],
+    summary: "College health awareness session with Janki Devi Memorial College under DU.",
+    title: "Session with JDMC under DU"
+  },
+  {
+    category: "Naree Health Awareness",
+    images: [
+      { alt: "Session with SPK Jain Academy", caption: "SPK Jain Academy awareness session", image: gallerySpkJain1 },
+      { alt: "Session with SPK Jain Academy", caption: "SPK Jain Academy awareness session", image: gallerySpkJain2 },
+      { alt: "Session with SPK Jain Academy", caption: "SPK Jain Academy awareness session", image: gallerySpkJain3 }
+    ],
+    summary: "Student-facing health conversations with SPK Jain Academy.",
+    title: "Session with SPK Jain Academy"
+  },
+  {
+    category: "Naree Health Awareness",
+    images: [
+      { alt: "Session with Help Foundation", caption: "Help Foundation awareness session", image: galleryHelpFoundation1 },
+      { alt: "Session with Help Foundation", caption: "Help Foundation awareness session", image: galleryHelpFoundation2 },
+      { alt: "Session with Help Foundation", caption: "Help Foundation awareness session", image: galleryHelpFoundation3 }
+    ],
+    summary: "Community health awareness moments with Help Foundation.",
+    title: "Session with Help Foundation"
   },
   {
     category: "Cervical Cancer Awareness",
@@ -1289,9 +1338,14 @@ function CustomSelect({ invalid = false, label, name, onChange, options, placeho
   );
 }
 
-function Header() {
+function Header({ path }: { path: string }) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [activeMenu, setActiveMenu] = useState<string | null>(null);
+
+  useEffect(() => {
+    setActiveMenu(null);
+    setMobileOpen(false);
+  }, [path]);
 
   useEffect(() => {
     document.body.classList.toggle("menu-open", mobileOpen);
@@ -1321,11 +1375,13 @@ function Header() {
   const closeMenus = () => {
     setActiveMenu(null);
     setMobileOpen(false);
+    const active = document.activeElement;
+    if (active instanceof HTMLElement) active.blur();
   };
 
   return (
     <header className="site-header" id="top" onMouseLeave={() => setActiveMenu(null)}>
-      <a className="brand" href="/" aria-label="Floydee Future Foundation home">
+      <a className="brand" href="/" aria-label="Floydee Future Foundation home" onClick={closeMenus}>
         <img className="brand-logo header-logo" src={floydeeCircleLogo} alt="Floydee Foundation" />
         <span className="brand-title"><span>Floydee</span> <span className="brand-title-gold">Foundation</span></span>
       </a>
@@ -2497,11 +2553,18 @@ function JoinPage({ kind }: { kind?: "volunteer" | "partner" | "book" | "campaig
 }
 
 function GalleryPage() {
-  const categories: GalleryCategory[] = ["Naree Health Awareness", "Cervical Cancer Awareness", "Health Screening Camp"];
+  const categories: GalleryCategory[] = ["Sakhi Program", "Naree Health Awareness", "Cervical Cancer Awareness", "Health Screening Camp"];
   const categoryIds: Record<GalleryCategory, string> = {
     "Cervical Cancer Awareness": "cervical-cancer-awareness",
     "Health Screening Camp": "health-screening-camp",
-    "Naree Health Awareness": "naree-health-awareness"
+    "Naree Health Awareness": "naree-health-awareness",
+    "Sakhi Program": "sakhi-program"
+  };
+  const categoryLabels: Record<GalleryCategory, string> = {
+    "Cervical Cancer Awareness": "Moments from Cervical Cancer Awareness Session",
+    "Health Screening Camp": "Moments from Health Screening Camp",
+    "Naree Health Awareness": "Moments from Naree Health Awareness Session",
+    "Sakhi Program": "Moments from Sakhi Program"
   };
   const imageCount = gallerySections.reduce((total, section) => total + section.images.length, 0);
 
@@ -2526,7 +2589,7 @@ function GalleryPage() {
           <div className="gallery-stats" aria-label="Gallery content summary">
             <span><strong>{gallerySections.length}</strong> sections</span>
             <span><strong>{imageCount}</strong> field images</span>
-            <span><strong>3</strong> program themes</span>
+            <span><strong>{categories.length}</strong> program themes</span>
           </div>
         </div>
       </section>
@@ -2539,13 +2602,7 @@ function GalleryPage() {
         {categories.map((category) => (
           <div className="gallery-category-block" id={categoryIds[category]} key={category}>
             <div className="gallery-category-heading">
-              <p className="section-label">
-                {category === "Naree Health Awareness"
-                  ? "Moments from Naree Health Awareness Session"
-                  : category === "Cervical Cancer Awareness"
-                    ? "Moments from Cervical Cancer Awareness Session"
-                    : "Moments from Health Screening Camp"}
-              </p>
+              <p className="section-label">{categoryLabels[category]}</p>
               <h2>{category}</h2>
             </div>
             {gallerySections.filter((section) => section.category === category).map((section) => (
@@ -3252,7 +3309,7 @@ export function App() {
 
   return (
     <>
-      <Header />
+      <Header path={path} />
       {renderRoute(path)}
       <WhatsAppConnectButton path={path} />
       <StickyNareeAppBar path={path} />
