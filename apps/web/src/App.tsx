@@ -67,6 +67,9 @@ import galleryCohort1Bidhannagar2 from "./assets/gallery/cohort-1-bidhannagar-02
 import galleryCohort1Bidhannagar3 from "./assets/gallery/cohort-1-bidhannagar-03.jpg";
 import galleryCohort2Bidhannagar1 from "./assets/gallery/cohort-2-bidhannagar-01.jpg";
 import galleryCohort2Bidhannagar2 from "./assets/gallery/cohort-2-bidhannagar-02.jpg";
+import galleryHatiara1 from "./assets/gallery/hatiara-madrasa-01.jpg";
+import galleryHatiara2 from "./assets/gallery/hatiara-madrasa-02.jpg";
+import galleryHatiara3 from "./assets/gallery/hatiara-madrasa-03.jpg";
 import galleryHaydenHall1 from "./assets/gallery/hayden-hall-01.jpg";
 import galleryHaydenHall2 from "./assets/gallery/hayden-hall-02.jpg";
 import galleryHaydenHall3 from "./assets/gallery/hayden-hall-03.jpg";
@@ -863,7 +866,7 @@ const gallerySections: GallerySection[] = [
       }
     ],
     summary: "HPV Vaccine Parent Awareness session with Hatiara Girls’ High Madrasa",
-    title: "Session with Hatiara Girls’ High Madrasa"
+    title: "HPV vaccine Awareness in Hatiara Girls’ High Madrasa"
   },
   {
     category: "Naree Health Awareness",
@@ -917,6 +920,16 @@ const gallerySections: GallerySection[] = [
     ],
     summary: "Awareness session moments with Bidhannagar Govt High School.",
     title: "Session with Bidhannagar Govt High School"
+  },
+  {
+    category: "Naree Health Awareness",
+    images: [
+      { alt: "Session with Hatiara Girls' High Madrasa", caption: "Hatiara Girls' High Madrasa awareness session", image: galleryHatiara1 },
+      { alt: "Session with Hatiara Girls' High Madrasa", caption: "Hatiara Girls' High Madrasa awareness session", image: galleryHatiara2 },
+      { alt: "Session with Hatiara Girls' High Madrasa", caption: "Hatiara Girls' High Madrasa awareness session", image: galleryHatiara3 }
+    ],
+    summary: "School-based health awareness with Hatiara Girls' High Madrasa.",
+    title: "Session with Hatiara Girls' High Madrasa"
   },
   {
     category: "Naree Health Awareness",
