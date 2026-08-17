@@ -1352,6 +1352,7 @@ function CustomSelect({ invalid = false, label, name, onChange, options, placeho
 }
 
 function Header({ path }: { path: string }) {
+  const { t } = useLocale();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [activeMenu, setActiveMenu] = useState<string | null>(null);
 
@@ -1393,7 +1394,7 @@ function Header({ path }: { path: string }) {
   };
 
   return (
-    <header className="site-header" id="top" onMouseLeave={() => setActiveMenu(null)}>
+    <header className="site-header" id="top" data-i18n-preserve="true" onMouseLeave={() => setActiveMenu(null)}>
       <a className="brand" href="/" aria-label="Floydee Future Foundation home" onClick={closeMenus}>
         <img className="brand-logo header-logo" src={floydeeCircleLogo} alt="Floydee Foundation" />
         <span className="brand-title"><span>Floydee</span> <span className="brand-title-gold">Foundation</span></span>
@@ -1406,7 +1407,7 @@ function Header({ path }: { path: string }) {
             key={group.label}
           >
             {group.href ? (
-              <a className="nav-trigger nav-trigger-link" href={group.href} onClick={closeMenus}>{group.label}</a>
+              <a className="nav-trigger nav-trigger-link" href={group.href} onClick={closeMenus}>{t(group.label)}</a>
             ) : (
               <>
                 <button
@@ -1418,12 +1419,12 @@ function Header({ path }: { path: string }) {
                     setActiveMenu((current) => (current === group.label ? null : group.label));
                   }}
                 >
-                  {group.label}
+                  {t(group.label)}
                 </button>
                 <div className="nav-menu">
                   {group.links.map(([label, href, className]) => (
                     <a className={className} href={href} key={label} onClick={closeMenus}>
-                      {label}
+                      {t(label)}
                     </a>
                   ))}
                 </div>
@@ -2216,6 +2217,7 @@ function PartnerShowcaseSection({
 }
 
 function StudentTestimonialsSection() {
+  const { t } = useLocale();
   const headingId = useId();
   const featured = studentTestimonials[0];
   const categories: TestimonialCategory[] = ["VIDYA", "AAROHI", "HEALTH SCREENING CAMP"];
@@ -2234,13 +2236,13 @@ function StudentTestimonialsSection() {
       </div>
       <article className="testimonial-feature">
         <div className="testimonial-feature-media">
-          <img src={featured.image} alt={`${featured.name}, ${featured.program} participant`} loading="lazy" />
+          <img src={featured.image} alt={`${t(featured.name)}, ${featured.program} participant`} loading="lazy" />
         </div>
         <div className="testimonial-feature-copy">
           <p className="testimonial-tag">{featured.program}</p>
           <blockquote>"{featured.quote}"</blockquote>
           <div>
-            <strong>{featured.name}</strong>
+            <strong>{t(featured.name)}</strong>
             <span>{featured.detail}</span>
           </div>
         </div>
@@ -2258,10 +2260,10 @@ function StudentTestimonialsSection() {
               <div className="testimonial-card-grid">
                 {categoryTestimonials.map((testimonial) => (
                   <article className="testimonial-card" key={`${testimonial.program}-${testimonial.name}-${testimonial.quote.slice(0, 24)}`}>
-                    <img src={testimonial.image} alt={`${testimonial.name}, ${testimonial.program} participant`} loading="lazy" />
+                    <img src={testimonial.image} alt={`${t(testimonial.name)}, ${testimonial.program} participant`} loading="lazy" />
                     <div className="testimonial-card-copy">
                       <p className="testimonial-tag">{testimonial.program}</p>
-                      <h4>{testimonial.name}</h4>
+                      <h4>{t(testimonial.name)}</h4>
                       <span>{testimonial.detail}</span>
                       <blockquote>"{testimonial.quote}"</blockquote>
                     </div>
