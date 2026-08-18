@@ -14125,9 +14125,9 @@
     "section": "site copy",
     "context": "apps/web/src/App.tsx",
     "english": "Knowledge is the First Step Towards Prevention: Empowering Young Women Through Health Awareness",
-    "hindi": "ज्ञान रोकथाम की ओर पहला कदम है: स्वास्थ्य जागरूकता के माध्यम से युवा महिलाओं को सशक्त बनाना",
-    "bengali": "জ্ঞান প্রতিরোধের দিকে প্রথম পদক্ষেপ: স্বাস্থ্য সচেতনতার মাধ্যমে তরুণ মহিলাদের ক্ষমতায়ন",
-    "status": "AI draft - review",
+    "hindi": "",
+    "bengali": "",
+    "status": "pending translation",
     "translatorNotes": ""
   },
   {
@@ -14177,9 +14177,9 @@
     "section": "site copy",
     "context": "apps/web/src/StoriesPage.tsx",
     "english": "Why Women's Health Awareness Matters",
-    "hindi": "महिला स्वास्थ्य जागरूकता क्यों महत्वपूर्ण है",
-    "bengali": "কেন মহিলা স্বাস্থ্য সচেতনতা গুরুত্বপূর্ণ",
-    "status": "AI draft - review",
+    "hindi": "",
+    "bengali": "",
+    "status": "pending translation",
     "translatorNotes": "Example story title - may vary per story"
   },
   {
@@ -14190,9 +14190,9 @@
     "section": "site copy",
     "context": "apps/web/src/StoriesPage.tsx",
     "english": "Women's health is often surrounded by myths, hesitation, and a lack of awareness. Many young women are unsure where to find the right information or feel uncomfortable discussing health-related concerns. This is why awareness sessions like these are so important.",
-    "hindi": "महिलाओं का स्वास्थ्य अक्सर मिथक, संकोच और जागरूकता की कमी से घिरा होता है। कई युवा महिलाओं को सही जानकारी खोजने में असमंजस होता है या स्वास्थ्य संबंधी चिंताओं के बारे में बात करने में असहज महसूस होती हैं। यही कारण है कि ऐसे जागरूकता सत्र इतने महत्वपूर्ण हैं।",
-    "bengali": "মহিলা স্বাস্থ্য প্রায়শই পৌরাণিক কাহিনী, সংকোচ এবং সচেতনতার অভাব দ্বারা ঘিরে থাকে। অনেক তরুণ মহিলা সঠিক তথ্য খুঁজে পেতে অনিশ্চিত বা স্বাস্থ্য-সম্পর্কিত উদ্বেগ নিয়ে আলোচনায় অস্বস্তি বোধ করেন। এই কারণেই এই ধরনের সচেতনতা সেশন অত্যন্ত গুরুত্বপূর্ণ।",
-    "status": "AI draft - review",
+    "hindi": "",
+    "bengali": "",
+    "status": "pending translation",
     "translatorNotes": "Example story paragraph - may vary per story"
   },
   {
@@ -14242,9 +14242,9 @@
     "section": "site copy",
     "context": "apps/web/src/StoriesPage.tsx",
     "english": "Floydee Future Foundation, through its AAROHI Program, partnered with the Udayan Shalini Fellowship – North Kolkata Chapter to conduct the Cohort 3 Naree Health Awareness Session. Led by Dr. Suparna B., the session empowered young women with essential knowledge about HPV vaccination, cervical cancer prevention, menstrual health, nutrition, and preventive healthcare.",
-    "hindi": "फ्लोयडी भविष्य फाउंडेशन ने अपने आरोही कार्यक्रम के माध्यम से, उदयन शालिनी फेलोशिप – उत्तर कोलकाता अध्याय के साथ साझेदारी करके कोहोर्ट 3 नारी स्वास्थ्य जागरूकता सत्र का आयोजन किया। डॉ. सुपर्णा बी. के नेतृत्व में, सत्र ने महिलाओं को एचपीवी टीकाकरण, गर्भाशय ग्रीवा कैंसर की रोकथाम, मासिक धर्म स्वास्थ्य, पोषण और निवारक स्वास्थ्यसेवा के बारे में आवश्यक ज्ञान से सशक्त बनाया।",
-    "bengali": "ফ্লোইডি ভবিষ্যত ফাউন্ডেশন তার আরোহি প্রোগ্রামের মাধ্যমে, উদয়ন শালিনী ফেলোশিপ – উত্তর কলকাতা অধ্যায়ের সাথে অংশীদারিত্বে কোহর্ট ৩ নারী স্বাস্থ্য সচেতনতা সেশন পরিচালনা করেছে। ডাঃ সুপর্ণা বি. এর নেতৃত্বে, সেশনটি মহিলাদের এইচপিভি ভ্যাকসিনেশন, জরায়ুমুখের ক্যান্সার প্রতিরোধ, মাসিক স্বাস্থ্য, পুষ্টি এবং প্রতিরোধমূলক স্বাস্থ্যসেবা সম্পর্কে অপরিহার্য জ্ঞানের মাধ্যমে ক্ষমতায়িত করেছে।",
-    "status": "AI draft - review",
+    "hindi": "",
+    "bengali": "",
+    "status": "pending translation",
     "translatorNotes": "Full story paragraph example"
   },
   {
@@ -14255,9 +14255,9 @@
     "section": "site copy",
     "context": "apps/web/src/StoriesPage.tsx",
     "english": "HPV vaccination and why it is important.",
-    "hindi": "एचपीवी टीकाकरण और यह क्यों महत्वपूर्ण है।",
-    "bengali": "এইচপিভি টিকাকরণ এবং এটি কেন গুরুত্বপূর্ণ।",
-    "status": "AI draft - review",
+    "hindi": "",
+    "bengali": "",
+    "status": "pending translation",
     "translatorNotes": ""
   },
   {
@@ -14268,9 +14268,9 @@
     "section": "site copy",
     "context": "apps/web/src/StoriesPage.tsx",
     "english": "Cervical cancer prevention and early detection.",
-    "hindi": "गर्भाशय ग्रीवा कैंसर की रोकथाम और शीघ्र पता लगाना।",
-    "bengali": "জরায়ুমুখের ক্যান্সার প্রতিরোধ এবং প্রাথমিক সনাক্তকরণ।",
-    "status": "AI draft - review",
+    "hindi": "",
+    "bengali": "",
+    "status": "pending translation",
     "translatorNotes": ""
   },
   {
@@ -14281,9 +14281,9 @@
     "section": "site copy",
     "context": "apps/web/src/StoriesPage.tsx",
     "english": "The difference between common myths and medical facts.",
-    "hindi": "सामान्य मिथकों और चिकित्सा तथ्यों के बीच अंतर।",
-    "bengali": "সাধারণ মিথ এবং চিকিৎসা তথ্যের মধ্যে পার্থক্য।",
-    "status": "AI draft - review",
+    "hindi": "",
+    "bengali": "",
+    "status": "pending translation",
     "translatorNotes": ""
   },
   {
@@ -14294,9 +14294,9 @@
     "section": "site copy",
     "context": "apps/web/src/StoriesPage.tsx",
     "english": "Menstrual health and hygiene.",
-    "hindi": "मासिक धर्म स्वास्थ्य और स्वच्छता।",
-    "bengali": "মাসিক স্বাস্থ্য এবং স্বাস্থ্যবিধি।",
-    "status": "AI draft - review",
+    "hindi": "",
+    "bengali": "",
+    "status": "pending translation",
     "translatorNotes": ""
   },
   {
@@ -14307,9 +14307,9 @@
     "section": "site copy",
     "context": "apps/web/src/StoriesPage.tsx",
     "english": "Healthy eating and nutrition.",
-    "hindi": "स्वस्थ भोजन और पोषण।",
-    "bengali": "স্বাস্থ্যকর খাওয়া এবং পুষ্টি।",
-    "status": "AI draft - review",
+    "hindi": "",
+    "bengali": "",
+    "status": "pending translation",
     "translatorNotes": ""
   },
   {
@@ -14320,9 +14320,9 @@
     "section": "site copy",
     "context": "apps/web/src/StoriesPage.tsx",
     "english": "Building healthy lifestyle habits.",
-    "hindi": "स्वस्थ जीवनशैली की आदतें बनाना।",
-    "bengali": "স্বাস্থ্যকর জীবনযাত্রার অভ্যাস গড়ে তোলা।",
-    "status": "AI draft - review",
+    "hindi": "",
+    "bengali": "",
+    "status": "pending translation",
     "translatorNotes": ""
   },
   {
@@ -14333,9 +14333,9 @@
     "section": "site copy",
     "context": "apps/web/src/StoriesPage.tsx",
     "english": "The importance of timely vaccination for adolescents and eligible women.",
-    "hindi": "किशोरों और पात्र महिलाओं के लिए समय पर टीकाकरण का महत्व।",
-    "bengali": "কিশোর এবং যোগ্য মহিলাদের জন্য সময়মত টিকাকরণের গুরুত্ব।",
-    "status": "AI draft - review",
+    "hindi": "",
+    "bengali": "",
+    "status": "pending translation",
     "translatorNotes": ""
   },
   {
@@ -14346,9 +14346,9 @@
     "section": "site copy",
     "context": "apps/web/src/StoriesPage.tsx",
     "english": "Each topic was explained in simple language, making it easy for everyone to understand. Instead of creating fear, the discussion focused on prevention, healthy choices, and the importance of seeking medical advice whenever needed.",
-    "hindi": "प्रत्येक विषय को सरल भाषा में समझाया गया, जिससे सभी के लिए समझना आसान हो गया। भय पैदा करने के बजाय, चर्चा रोकथाम, स्वस्थ विकल्प और जरूरत पड़ने पर चिकित्सा सलाह लेने के महत्व पर केंद्रित थी।",
-    "bengali": "প्রতিটি বিষয় সহজ ভাষায় ব্যাখ্যা করা হয়েছিল, যা সবার জন্য বোঝা সহজ করে তোলে। ভয় সৃষ্টি করার পরিবর্তে, আলোচনা প্রতিরোধ, স্বাস্থ্যকর পছন্দ এবং প্রয়োজন অনুযায়ী চিকিৎসা পরামর্শ নেওয়ার গুরুত্বের উপর দৃষ্টি নিবদ্ধ করেছিল।",
-    "status": "AI draft - review",
+    "hindi": "",
+    "bengali": "",
+    "status": "pending translation",
     "translatorNotes": ""
   },
   {
@@ -14359,9 +14359,9 @@
     "section": "site copy",
     "context": "apps/web/src/StoriesPage.tsx",
     "english": "The session reminded everyone that taking care of health should become a regular habit, not something we think about only when problems arise.",
-    "hindi": "सत्र ने सभी को याद दिलाया कि स्वास्थ्य की देखभाल एक नियमित आदत बनना चाहिए, न कि केवल तब जब समस्याएं आएं।",
-    "bengali": "সেশনটি সবাইকে মনে করিয়ে দিয়েছে যে স্বাস্থ্যের যত্ন নেওয়া একটি নিয়মিত অভ্যাস হওয়া উচিত, শুধুমাত্র সমস্যা দেখা দিলে নয়।",
-    "status": "AI draft - review",
+    "hindi": "",
+    "bengali": "",
+    "status": "pending translation",
     "translatorNotes": ""
   },
   {
@@ -14372,9 +14372,9 @@
     "section": "site copy",
     "context": "apps/web/src/StoriesPage.tsx",
     "english": "Learning Together Through",
-    "hindi": "के माध्यम से एक साथ सीखना",
-    "bengali": "এর মাধ্যমে একসাথে শেখা",
-    "status": "AI draft - review",
+    "hindi": "",
+    "bengali": "",
+    "status": "pending translation",
     "translatorNotes": "Section heading for story"
   }
 ]
