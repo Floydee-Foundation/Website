@@ -110,6 +110,9 @@ import aarohiDeSovrani from "./assets/partners/aarohi/aarohi-partner-03.jpg";
 import aarohiSchoolSeal from "./assets/partners/aarohi/aarohi-partner-04.jpg";
 import aarohiSpkJain from "./assets/partners/aarohi/aarohi-partner-09.webp";
 import aarohiSosChildrensVillage from "./assets/partners/aarohi/sos-childrens-village.png";
+import aarohiVictoriaInstitute from "./assets/partners/aarohi/victoria-institute.jpg";
+import aarohiAnandaSundari from "./assets/partners/aarohi/ananda-sundari-hindu-balika-vidyalaya.jpg";
+import aarohiStXaviers from "./assets/partners/aarohi/st-xaviers-college-kolkata.png";
 import aarohiHaydenHall from "./assets/partners/aarohi/hayden-hall.png";
 import aarohiHelpFoundation from "./assets/partners/aarohi/help-foundation.png";
 import aarohiJankiDevi from "./assets/partners/aarohi/janki-devi-memorial-college.jpeg";
@@ -135,6 +138,7 @@ import vidyaSitamarhi from "./assets/partners/vidya/sitamarhi-institute-of-engin
 import vidyaSndt from "./assets/partners/vidya/sndt-womens-university.png";
 import vidyaUemJaipur from "./assets/partners/vidya/uem-jaipur.png";
 import vidyaVemana from "./assets/partners/vidya/vemana-institute-of-technology.png";
+import vidyaOrchids from "./assets/partners/vidya/orchids-the-international-school.jpg";
 import teamDisha from "./assets/team-disha.jpg";
 import teamHimanshu from "./assets/team-himanshu.png";
 import teamIpsito from "./assets/team-ipsito.jpg";
@@ -571,6 +575,9 @@ const programAcademicPartners: Partial<Record<keyof typeof programPages, Partner
     { name: "Help Foundation", image: aarohiHelpFoundation, note: "Community partner" },
     { name: "Hayden Hall", image: aarohiHaydenHall, note: "Community partner" },
     { name: "SPK Jain Futuristic Academy", image: aarohiSpkJain, note: "Academic partner" },
+    { name: "Victoria Institute", image: aarohiVictoriaInstitute, note: "Academic partner" },
+    { name: "Ananda Sunadri Hindu Balika Vidyalaya", image: aarohiAnandaSundari, note: "Academic partner" },
+    { name: "St. Xavier's College (Autonomous), Kolkata", image: aarohiStXaviers, note: "Academic partner" },
     { name: "SOS Children's Village", image: aarohiSosChildrensVillage, note: "NGO partner", largeMark: true },
   ],
   vidya: [
@@ -591,7 +598,8 @@ const programAcademicPartners: Partial<Record<keyof typeof programPages, Partner
     { name: "University of Engineering and Management, Jaipur", image: vidyaUemJaipur, note: "Academic partner" },
     { name: "Ram-Eesh Institute of Technology", image: vidyaRamEesh, note: "Academic partner" },
     { name: "Bharati Vidyapeeth University", image: vidyaBharatiVidyapeeth, note: "Academic partner" },
-    { name: "The Oxford College of Engineering", image: vidyaOxford, note: "Academic partner" }
+    { name: "The Oxford College of Engineering", image: vidyaOxford, note: "Academic partner" },
+    { name: "Orchids The International School", image: vidyaOrchids, note: "Academic partner" }
   ]
 };
 
@@ -2290,6 +2298,7 @@ function DonationPage({ path }: { path: string }) {
         title={isMonthly ? "Monthly giving for lasting access." : "Donate to Floydee Future Foundation."}
         text="Support a program, named campaign, workshop, or general foundation need through a donation enquiry. The Floydee team will connect with payment and 80G receipt details."
         image={heroDonateScreening}
+        imageFit="contain"
       />
       <section className="page-section page-donation-layout" aria-labelledby="donation-page-title">
         <div>
@@ -2365,7 +2374,7 @@ function ProgramDetailPage({ slug }: { slug: ProgramSlug }) {
 
   return (
     <main className={`page program-detail program-detail-${slug}`}>
-      <PageHero eyebrow={program.eyebrow} title={`${program.title}: ${program.tagline}`} text={program.statement} image={program.image} cta={["Collaborate With Us", "/book-a-program"]} />
+      <PageHero eyebrow={program.eyebrow} title={`${program.title}: ${program.tagline}`} text={program.statement} image={program.image} cta={["Collaborate With Us", "/book-a-program"]} imageFit={slug === "sakhi" || slug === "vidya" ? "contain" : "cover"} />
       <section className="page-section program-overview">
         <div className="program-overview-lead">
           <p className="section-label">Program overview</p>
