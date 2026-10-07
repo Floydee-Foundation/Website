@@ -4420,15 +4420,15 @@
     "translatorNotes": "Protected term; keep unchanged."
   },
   {
-    "key": "copy.32755f784671",
+    "key": "copy.706b2a7cb647",
     "surface": "website",
     "pageName": "Shared website content",
     "route": "/",
     "section": "site copy",
     "context": "apps/web/src/App.tsx",
-    "english": "Founder Director",
-    "hindi": "संस्थापक निदेशक",
-    "bengali": "প্রতিষ্ঠাতা পরিচালক",
+    "english": "Founder and Director",
+    "hindi": "संस्थापक और निदेशक",
+    "bengali": "প্রতিষ্ঠাতা ও পরিচালক",
     "status": "AI draft - review",
     "translatorNotes": ""
   },
@@ -4446,15 +4446,15 @@
     "translatorNotes": ""
   },
   {
-    "key": "copy.189545849429",
+    "key": "copy.d771816c8b87",
     "surface": "website",
     "pageName": "Shared website content",
     "route": "/",
     "section": "site copy",
     "context": "apps/web/src/App.tsx",
-    "english": "Subhodyuti Chakraborty, Founder Director",
-    "hindi": "सुभोद्युति चक्रवर्ती, संस्थापक निदेशक",
-    "bengali": "সুবোধদ্যুতি চক্রবর্তী, প্রতিষ্ঠাতা পরিচালক মো",
+    "english": "Subhodyuti Chakraborty, Founder and Director",
+    "hindi": "सुभोद्युति चक्रवर्ती, संस्थापक और निदेशक",
+    "bengali": "সুবোধ্যুতি চক্রবর্তী, প্রতিষ্ঠাতা ও পরিচালক",
     "status": "AI draft - review",
     "translatorNotes": ""
   },
@@ -4485,15 +4485,15 @@
     "translatorNotes": "Protected term; keep unchanged."
   },
   {
-    "key": "copy.292883a89705",
+    "key": "copy.965f662a227f",
     "surface": "website",
     "pageName": "Shared website content",
     "route": "/",
     "section": "site copy",
     "context": "apps/web/src/App.tsx",
-    "english": "Chief Technical Officer",
-    "hindi": "मुख्य तकनीकी अधिकारी",
-    "bengali": "প্রধান কারিগরি কর্মকর্তা",
+    "english": "Head of Technology",
+    "hindi": "तकनीकी प्रमुख",
+    "bengali": "প্রযুক্তি প্রধান",
     "status": "AI draft - review",
     "translatorNotes": ""
   },
@@ -4511,15 +4511,15 @@
     "translatorNotes": ""
   },
   {
-    "key": "copy.14f56f89e370",
+    "key": "copy.fcc0a514d73a",
     "surface": "website",
     "pageName": "Shared website content",
     "route": "/",
     "section": "site copy",
     "context": "apps/web/src/App.tsx",
-    "english": "Ipsito Ghosh, Chief Technical Officer",
-    "hindi": "इप्सिटो घोष, मुख्य तकनीकी अधिकारी",
-    "bengali": "ইপসিতো ঘোষ, চিফ টেকনিক্যাল অফিসার মো",
+    "english": "Ipsito Ghosh, Head of Technology",
+    "hindi": "इप्सिटो घोष, तकनीकी प्रमुख",
+    "bengali": "ইপসিতো ঘোষ, প্রযুক্তি প্রধান",
     "status": "AI draft - review",
     "translatorNotes": ""
   },
@@ -4615,15 +4615,15 @@
     "translatorNotes": "Protected term; keep unchanged."
   },
   {
-    "key": "copy.75bac1c4d239",
+    "key": "copy.8e9d24f41e0b",
     "surface": "website",
     "pageName": "Shared website content",
     "route": "/",
     "section": "site copy",
     "context": "apps/web/src/App.tsx",
-    "english": "Marketing Head",
+    "english": "Head of Marketing",
     "hindi": "विपणन प्रमुख",
-    "bengali": "মার্কেটিং প্রধান",
+    "bengali": "বিপণন প্রধান",
     "status": "AI draft - review",
     "translatorNotes": ""
   },
@@ -4641,15 +4641,15 @@
     "translatorNotes": ""
   },
   {
-    "key": "copy.ea8236945869",
+    "key": "copy.205705e5d184",
     "surface": "website",
     "pageName": "Shared website content",
     "route": "/",
     "section": "site copy",
     "context": "apps/web/src/App.tsx",
-    "english": "Sreeparna Roy, Marketing Head",
-    "hindi": "श्रीपर्णा रॉय, मार्केटिंग प्रमुख",
-    "bengali": "শ্রীপর্ণা রায়, মার্কেটিং হেড",
+    "english": "Sreeparna Roy, Head of Marketing",
+    "hindi": "श्रीपर्णा रॉय, विपणन प्रमुख",
+    "bengali": "শ্রীপর্ণা রায়, বিপণন প্রধান",
     "status": "AI draft - review",
     "translatorNotes": ""
   },
@@ -8433,6 +8433,19 @@
     "english": "Who We Are",
     "hindi": "हम जो हैं",
     "bengali": "আমরা যারা",
+    "status": "AI draft - review",
+    "translatorNotes": ""
+  },
+  {
+    "key": "copy.e235e048abc6",
+    "surface": "website",
+    "pageName": "About / Mission / History / Leadership",
+    "route": "/about",
+    "section": "site copy",
+    "context": "apps/web/src/App.tsx",
+    "english": "About Floydee Future Foundation.",
+    "hindi": "फ्लोयडी भविष्य फाउंडेशन के बारे में।",
+    "bengali": "ফ্লোইডি ভবিষ্যত ফাউন্ডেশন সম্পর্কে।",
     "status": "AI draft - review",
     "translatorNotes": ""
   },
