@@ -4460,9 +4460,12 @@ section:not(.hero):not(.donation-band):not(.campaign-rail) {
 }
 
 .gallery-category-heading h2 {
+  font-family: var(--font-display);
   font-size: clamp(2.8rem, 6vw, 7rem);
+  font-weight: 700;
   line-height: 0.88;
   max-width: 1000px;
+  text-transform: uppercase;
 }
 
 .gallery-section {
@@ -4481,6 +4484,7 @@ section:not(.hero):not(.donation-band):not(.campaign-rail) {
   text-transform: uppercase;
 }
 
+.gallery-section-heading h2,
 .gallery-section-heading h3 {
   font-family: var(--font-display);
   font-size: clamp(1.8rem, 3.2vw, 3.8rem);
