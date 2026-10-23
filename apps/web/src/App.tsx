@@ -79,6 +79,12 @@ import galleryHealthCamp3 from "./assets/gallery/health-screening-camp-03.jpg";
 import galleryHealthCamp4 from "./assets/gallery/health-screening-camp-04.jpg";
 import galleryHealthCamp5 from "./assets/gallery/health-screening-camp-05.jpg";
 import galleryHealthCamp6 from "./assets/gallery/health-screening-camp-06.jpg";
+import galleryHealthCamp2nd1 from "./assets/gallery/health-screening-camp-2-01.jpg";
+import galleryHealthCamp2nd2 from "./assets/gallery/health-screening-camp-2-02.jpg";
+import galleryHealthCamp2nd3 from "./assets/gallery/health-screening-camp-2-03.jpg";
+import galleryHealthCamp2nd4 from "./assets/gallery/health-screening-camp-2-04.jpg";
+import galleryHealthCamp2nd5 from "./assets/gallery/health-screening-camp-2-05.jpg";
+import galleryHealthCamp2nd6 from "./assets/gallery/health-screening-camp-2-06.jpg";
 import galleryHelpFoundation1 from "./assets/gallery/help-foundation-01.jpg";
 import galleryHelpFoundation2 from "./assets/gallery/help-foundation-02.jpg";
 import galleryHelpFoundation3 from "./assets/gallery/help-foundation-03.jpg";
@@ -96,6 +102,10 @@ import gallerySosChildrensVillage2 from "./assets/gallery/sos-childrens-village-
 import gallerySosChildrensVillage3 from "./assets/gallery/sos-childrens-village-session-03.jpg";
 import gallerySosChildrensVillage4 from "./assets/gallery/sos-childrens-village-session-04.jpg";
 import gallerySosChildrensVillage5 from "./assets/gallery/sos-childrens-village-session-05.jpg";
+import galleryMentalHealthSummit1 from "./assets/gallery/mental-health-summit-2026-01.jpg";
+import galleryMentalHealthSummit2 from "./assets/gallery/mental-health-summit-2026-02.jpg";
+import galleryMentalHealthSummit3 from "./assets/gallery/mental-health-summit-2026-03.jpg";
+import galleryMentalHealthSummit4 from "./assets/gallery/mental-health-summit-2026-04.jpg";
 import galleryTapForSakhi1 from "./assets/gallery/tap-for-sakhi-01.png";
 import galleryTapForSakhi2 from "./assets/gallery/tap-for-sakhi-02.png";
 import galleryTapForSakhi3 from "./assets/gallery/tap-for-sakhi-03.png";
@@ -241,7 +251,7 @@ type StudentTestimonial = {
   program: string;
   quote: string;
 };
-type GalleryCategory = "Sakhi Program" | "Naree Health Awareness" | "Cervical Cancer Awareness" | "Health Screening Camp";
+type GalleryCategory = "Mental Health Summit 2026" | "Sakhi Program" | "AAROHI Program" | "Cervical Cancer Awareness" | "Health Screening Camp";
 type GalleryImage = {
   alt: string;
   caption: string;
@@ -823,6 +833,17 @@ const studentTestimonials: StudentTestimonial[] = [
 
 const gallerySections: GallerySection[] = [
   {
+    category: "Mental Health Summit 2026",
+    images: [
+      { alt: "Group photo of participants at the Mental Health Summit 2026", caption: "Mental Health Summit 2026", image: galleryMentalHealthSummit1 },
+      { alt: "Panel discussion on stage at the Mental Health Summit 2026", caption: "Mental Health Summit 2026", image: galleryMentalHealthSummit2 },
+      { alt: "Audience seated at the Mental Health Summit 2026", caption: "Mental Health Summit 2026", image: galleryMentalHealthSummit3 },
+      { alt: "Speakers in a panel at the Mental Health Summit 2026", caption: "Mental Health Summit 2026", image: galleryMentalHealthSummit4 }
+    ],
+    summary: "Glimpses from the Mental Health Summit 2026",
+    title: "Mental Health Summit 2026"
+  },
+  {
     category: "Sakhi Program",
     images: [
       {
@@ -850,7 +871,7 @@ const gallerySections: GallerySection[] = [
     title: "Sakhi Launch Program at Govt School"
   },
   {
-    category: "Naree Health Awareness",
+    category: "AAROHI Program",
     images: [
       {
         alt: "HPV vaccine parent awareness session with Hatiara Girls' High Madrasa",
@@ -877,7 +898,7 @@ const gallerySections: GallerySection[] = [
     title: "HPV vaccine Awareness in Hatiara Girls’ High Madrasa"
   },
   {
-    category: "Naree Health Awareness",
+    category: "AAROHI Program",
     images: [
       {
         alt: "Yoga Day session at SOS Children's Village to promote health and well-being",
@@ -910,7 +931,7 @@ const gallerySections: GallerySection[] = [
     title: "Session with SOS Children's Village"
   },
   {
-    category: "Naree Health Awareness",
+    category: "AAROHI Program",
     images: [
       { alt: "Session with Udayan Care, Kolkata", caption: "Udayan Care Kolkata awareness session", image: galleryUdayanCare1 },
       { alt: "Session with Udayan Care, Kolkata", caption: "Udayan Care Kolkata awareness session", image: galleryUdayanCare2 },
@@ -920,7 +941,7 @@ const gallerySections: GallerySection[] = [
     title: "Session with Udayan Care, Kolkata"
   },
   {
-    category: "Naree Health Awareness",
+    category: "AAROHI Program",
     images: [
       { alt: "Session with Bidhannagar Govt High School", caption: "Bidhannagar Govt High School awareness session", image: galleryBidhannagar1 },
       { alt: "Session with Bidhannagar Govt High School", caption: "Bidhannagar Govt High School awareness session", image: galleryBidhannagar2 },
@@ -930,7 +951,7 @@ const gallerySections: GallerySection[] = [
     title: "Session with Bidhannagar Govt High School"
   },
   {
-    category: "Naree Health Awareness",
+    category: "AAROHI Program",
     images: [
       { alt: "Session with Hatiara Girls' High Madrasa", caption: "Hatiara Girls' High Madrasa awareness session", image: galleryHatiara1 },
       { alt: "Session with Hatiara Girls' High Madrasa", caption: "Hatiara Girls' High Madrasa awareness session", image: galleryHatiara2 },
@@ -940,7 +961,7 @@ const gallerySections: GallerySection[] = [
     title: "Session with Hatiara Girls' High Madrasa"
   },
   {
-    category: "Naree Health Awareness",
+    category: "AAROHI Program",
     images: [
       { alt: "Session with Hayden Hall", caption: "Hayden Hall awareness session", image: galleryHaydenHall1 },
       { alt: "Session with Hayden Hall", caption: "Hayden Hall awareness session", image: galleryHaydenHall2 },
@@ -950,7 +971,7 @@ const gallerySections: GallerySection[] = [
     title: "Session with Hayden Hall"
   },
   {
-    category: "Naree Health Awareness",
+    category: "AAROHI Program",
     images: [
       { alt: "Session with JDMC under DU", caption: "JDMC under DU awareness session", image: galleryJdmc1 },
       { alt: "Session with JDMC under DU", caption: "JDMC under DU awareness session", image: galleryJdmc2 },
@@ -960,7 +981,7 @@ const gallerySections: GallerySection[] = [
     title: "Session with JDMC under DU"
   },
   {
-    category: "Naree Health Awareness",
+    category: "AAROHI Program",
     images: [
       { alt: "Session with SPK Jain Academy", caption: "SPK Jain Academy awareness session", image: gallerySpkJain1 },
       { alt: "Session with SPK Jain Academy", caption: "SPK Jain Academy awareness session", image: gallerySpkJain2 },
@@ -970,7 +991,7 @@ const gallerySections: GallerySection[] = [
     title: "Session with SPK Jain Academy"
   },
   {
-    category: "Naree Health Awareness",
+    category: "AAROHI Program",
     images: [
       { alt: "Session with Help Foundation", caption: "Help Foundation awareness session", image: galleryHelpFoundation1 },
       { alt: "Session with Help Foundation", caption: "Help Foundation awareness session", image: galleryHelpFoundation2 },
@@ -997,6 +1018,19 @@ const gallerySections: GallerySection[] = [
     ],
     summary: "Cervical cancer awareness session with Cohort 2 at Bidhannagar Govt High School.",
     title: "Cohort 2 with Bidhannagar Govt High School"
+  },
+  {
+    category: "Health Screening Camp",
+    images: [
+      { alt: "Wide view of the second health screening camp with students and care teams", caption: "2nd Health Screening Camp", image: galleryHealthCamp2nd1 },
+      { alt: "A health worker checking a student during the second health screening camp", caption: "2nd Health Screening Camp", image: galleryHealthCamp2nd2 },
+      { alt: "Students and facilitators reviewing forms at the second health screening camp", caption: "2nd Health Screening Camp", image: galleryHealthCamp2nd3 },
+      { alt: "A student beside the Floydee banner at the second health screening camp", caption: "2nd Health Screening Camp", image: galleryHealthCamp2nd4 },
+      { alt: "A consultation conversation during the second health screening camp", caption: "2nd Health Screening Camp", image: galleryHealthCamp2nd5 },
+      { alt: "Facilitators helping students complete forms at the second health screening camp", caption: "2nd Health Screening Camp", image: galleryHealthCamp2nd6 }
+    ],
+    summary: "Checkups, conversations, and care from the second Health Screening Camp.",
+    title: "Moments from 2nd Health Screening Camp"
   },
   {
     category: "Health Screening Camp",
@@ -2577,17 +2611,19 @@ function JoinPage({ kind }: { kind?: "volunteer" | "partner" | "book" | "campaig
 }
 
 function GalleryPage() {
-  const categories: GalleryCategory[] = ["Sakhi Program", "Naree Health Awareness", "Cervical Cancer Awareness", "Health Screening Camp"];
+  const categories: GalleryCategory[] = ["Mental Health Summit 2026", "Sakhi Program", "AAROHI Program", "Cervical Cancer Awareness", "Health Screening Camp"];
   const categoryIds: Record<GalleryCategory, string> = {
     "Cervical Cancer Awareness": "cervical-cancer-awareness",
     "Health Screening Camp": "health-screening-camp",
-    "Naree Health Awareness": "naree-health-awareness",
+    "Mental Health Summit 2026": "mental-health-summit-2026",
+    "AAROHI Program": "aarohi-program",
     "Sakhi Program": "sakhi-program"
   };
   const categoryLabels: Record<GalleryCategory, string> = {
     "Cervical Cancer Awareness": "Moments from Cervical Cancer Awareness Session",
     "Health Screening Camp": "Moments from Health Screening Camp",
-    "Naree Health Awareness": "Moments from Naree Health Awareness Session",
+    "Mental Health Summit 2026": "Moments from Mental Health Summit 2026",
+    "AAROHI Program": "Moments from AAROHI Program",
     "Sakhi Program": "Moments from Sakhi Program"
   };
   const imageCount = gallerySections.reduce((total, section) => total + section.images.length, 0);
@@ -2623,13 +2659,15 @@ function GalleryPage() {
         ))}
       </nav>
       <section className="page-section gallery-archive" aria-label="Floydee gallery archive">
-        {categories.map((category) => (
+        {categories.map((category) => {
+          const sections = gallerySections.filter((section) => section.category === category);
+          return (
           <div className="gallery-category-block" id={categoryIds[category]} key={category}>
             <div className="gallery-category-heading">
               <p className="section-label">{categoryLabels[category]}</p>
               <h2>{category}</h2>
             </div>
-            {gallerySections.filter((section) => section.category === category).map((section) => (
+            {sections.map((section) => (
               <section className="gallery-section" key={section.title} aria-labelledby={`${categoryIds[category]}-${section.title.replace(/[^a-z0-9]+/gi, "-").toLowerCase()}`}>
                 <div className="gallery-section-heading">
                   <div>
@@ -2655,7 +2693,8 @@ function GalleryPage() {
               </section>
             ))}
           </div>
-        ))}
+          );
+        })}
       </section>
     </main>
   );
